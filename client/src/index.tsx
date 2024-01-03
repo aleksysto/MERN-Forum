@@ -8,6 +8,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import RegisterPage from './components/RegisterPage/RegisterPage';
+import LoginPage from './components/LoginPage/LoginPage';
 
 const root: Root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -20,7 +21,11 @@ const router = createBrowserRouter([
   {
     path: "/register",
     element: <RegisterPage />,
-  }
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
+  },
 ]);
 
 root.render(

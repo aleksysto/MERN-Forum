@@ -29,7 +29,7 @@ export default function RegisterPage(): JSX.Element {
         <>
             <div>Create your account</div>
             <div>
-                <form>
+                <form onSubmit={formik.handleSubmit}>
                     <label htmlFor="login">Your username: </label>
                     <input type="text" id="login" {...formik.getFieldProps('login')} />
                     {formik.touched.login && formik.errors.login ? (
@@ -59,6 +59,8 @@ export default function RegisterPage(): JSX.Element {
                     {formik.touched.tos && formik.errors.tos ? (
                         <div>{formik.errors.tos}</div>
                     ) : null}
+
+                    <button type="submit">Submit</button>
                 </form>
             </div>
         </>
