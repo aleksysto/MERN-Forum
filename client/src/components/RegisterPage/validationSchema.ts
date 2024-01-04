@@ -1,5 +1,5 @@
 import * as Yup from 'yup'
-import { userRegisterValidation } from '../Types/RegisterUserTypes'
+import { userRegisterValidation } from '../interfaces/RegisterUserTypes'
 
 const validationSchema: userRegisterValidation = Yup.object({
     login: Yup.string().required('* Required').min(3, 'Must be 3 characters or more').max(20, 'Must be 20 characters or less'),

@@ -7,6 +7,7 @@ interface UserObject {
     password: string
     posts: number
     comments: number
+    type: "user" | "moderator" | "admin"
     lastActive: Date
     entryDate: Date
 }
@@ -31,6 +32,10 @@ const userSchema = new Schema<UserObject>({
     comments: {
         type: Number,
         default: 0
+    },
+    type: {
+        type: String,
+        default: "user"
     },
     lastActive: {
         type: Date,

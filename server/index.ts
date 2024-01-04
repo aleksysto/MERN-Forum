@@ -1,16 +1,15 @@
-import { corsOptionsObject } from "./interfaces/corsOptions"
 import { Express, Request, Response } from "express";
 import { Server, IncomingMessage, ServerResponse } from 'http';
+import cors from 'cors';
 const router = require('./routes/router')
 const express = require('express')
-const cors = require('cors')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 require('dotenv/config')
 
 const app: Express = express()
 
-const corsOptions: corsOptionsObject = {
+const corsOptions: cors.CorsOptions = {
     origin: '*',
     credentials: true,
     optionSuccessStatus: 200
