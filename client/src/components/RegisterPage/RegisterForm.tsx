@@ -1,9 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { FormikProps, useFormik} from 'formik';
 import axios, { AxiosError, AxiosResponse } from 'axios'
 import validationSchema from './validationSchema';
 import { RegisterUserObject, registerFormValues } from '../interfaces/RegisterUserTypes';
-import useRegisterSuccess from '../hooks/useRegisterSuccess';
 import { RegisterHookValues } from '../interfaces/useRegisterSuccessTypes';
 export default function RegisterForm({setRegisterSuccess}: RegisterHookValues): JSX.Element {
     const formik: FormikProps<registerFormValues> = useFormik<registerFormValues>({

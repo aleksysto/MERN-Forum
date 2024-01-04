@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import {useState} from 'react'
 import { useRegisterSuccessHook } from '../interfaces/useRegisterSuccessTypes'
 
 export default function useRegisterSuccess (): useRegisterSuccessHook {

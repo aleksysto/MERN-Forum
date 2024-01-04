@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import useRegisterSuccess from "../hooks/useRegisterSuccess";
 import RegisterForm from "./RegisterForm";
 import { RegisterHookValues } from "../interfaces/useRegisterSuccessTypes";

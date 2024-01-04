@@ -1,6 +1,6 @@
 import { Express, Request, Response } from "express";
 import { Server, IncomingMessage, ServerResponse } from 'http';
-import cors from 'cors';
+import cors, { CorsOptions } from 'cors';
 const router = require('./routes/router')
 const express = require('express')
 const bodyParser = require('body-parser')
@@ -9,10 +9,10 @@ require('dotenv/config')
 
 const app: Express = express()
 
-const corsOptions: cors.CorsOptions = {
+const corsOptions: CorsOptions = {
     origin: '*',
     credentials: true,
-    optionSuccessStatus: 200
+    optionsSuccessStatus: 200
 }
 
 app.use(bodyParser.json())
