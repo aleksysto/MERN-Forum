@@ -6,11 +6,10 @@ import {
     FormikTouched,
     useFormik,
 } from 'formik';
-
+import axios from 'axios'
 import * as Yup from 'yup'
 import validationSchema from './validationSchema';
-import { registerFormValues } from '../Types/RegisterUserTypes';
-
+import { RegisterUserObject, registerFormValues } from '../Types/RegisterUserTypes';
 export default function RegisterPage(): JSX.Element {
     const formik: FormikProps<registerFormValues> = useFormik<registerFormValues>({
         initialValues: {
@@ -21,8 +20,20 @@ export default function RegisterPage(): JSX.Element {
             tos: false
         },
         validationSchema: validationSchema,
-        onSubmit: (values: registerFormValues): void => {
-            console.log(values)
+        onSubmit: async (values: registerFormValues): Promise<void> => {
+            const {login, email, password}: RegisterUserObject = values
+            const reqBody: RegisterUserObject = {
+                login: login,
+                email: email,
+                password: password
+            }
+            axios.post('http://localhost:4000/api/register', reqBody)
+                .then((res) => {
+                    console.log(res)
+                })
+                .catch((err): void => {
+                    console.log(err)
+                })
         }
     })
     return (
@@ -30,7 +41,7 @@ export default function RegisterPage(): JSX.Element {
             <div>Create your account</div>
             <div>
                 <form onSubmit={formik.handleSubmit}>
-                    <label htmlFor="login">Your username: </label>
+                    <label htmlFor="login">Your login: </label>
                     <input type="text" id="login" {...formik.getFieldProps('login')} />
                     {formik.touched.login && formik.errors.login ? (
                         <div>{formik.errors.login}</div>

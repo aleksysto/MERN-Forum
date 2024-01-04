@@ -13,3 +13,9 @@ export interface registerFormValues {
     confirmPassword: string
     tos: boolean
 }
+
+export interface RegisterUserObject {
+    login: string
+    email: string
+    password: string
+}
