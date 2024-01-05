@@ -14,6 +14,7 @@ export default function RegisterForm({setRegisterSuccess}: RegisterHookValues): 
             tos: false
         },
         validationSchema: validationSchema,
+        validateOnChange: false,
         onSubmit: async (values: registerFormValues): Promise<void> => {
             const {login, email, password}: RegisterUserObject = values
             const reqBody: RegisterUserObject = {
