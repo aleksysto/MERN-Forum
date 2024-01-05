@@ -24,10 +24,10 @@ export default function RegisterForm({setRegisterSuccess}: RegisterHookValues): 
             }
             axios.post('http://localhost:4000/api/register', reqBody)
                 .then((res: AxiosResponse): void => {
-                    setRegisterSuccess(!true)
+                    setRegisterSuccess(true)
                 })
                 .catch((err: AxiosError): void => {
-                    setRegisterSuccess(!false)
+                    setRegisterSuccess(false)
                 })
             formik.resetForm()
         }

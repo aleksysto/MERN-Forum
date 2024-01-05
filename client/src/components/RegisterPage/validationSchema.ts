@@ -1,11 +1,11 @@
 import * as Yup from 'yup'
 import { userRegisterValidation } from '../interfaces/RegisterUserTypes'
 import axios, {AxiosResponse} from 'axios'
-async function testLoginAvailability(value: string) {
+async function testLoginAvailability(value: string): Promise<boolean> {
     const response: AxiosResponse = await axios.get(`/api/register/checkAvailability?value=${value}&type=login`)
     return response.data.available
 }
-async function testEmailAvailability(value: string) {
+async function testEmailAvailability(value: string): Promise<boolean> {
     const response: AxiosResponse = await axios.get(`/api/register/checkAvailability?value=${value}&type=email`)
     return response.data.available
 }

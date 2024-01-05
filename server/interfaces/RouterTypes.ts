@@ -14,3 +14,10 @@ export interface CheckAvailabilityRequest extends Request {
       value: string;
     };
   }
+
+export interface LoginRequest extends Request {
+    body: {
+      login: string;
+      password: string;
+    };
+  }

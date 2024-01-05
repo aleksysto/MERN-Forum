@@ -1,4 +1,4 @@
-import { Express, Request, Response } from "express";
+import { Express } from "express";
 import { Server, IncomingMessage, ServerResponse } from 'http';
 import cors, { CorsOptions } from 'cors';
 const router = require('./routes/router')

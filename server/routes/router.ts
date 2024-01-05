@@ -40,13 +40,25 @@ router.get(
   "/api/register/checkAvailability",
   async (req: CheckAvailabilityRequest, res: Response): Promise<void> => {
     const { type, value }: { type: string; value: string } = req.query;
-    const foundData: InferSchemaType<typeof schemas.Users> = await schemas.Users.findOne({ [type]: value });
+    const foundData: InferSchemaType<typeof schemas.Users> = await schemas.Users.findOne({ [type]: value }, 'login email');
     if (foundData) {
       res.json({ available: false });
     } else {
       res.json({ available: true });
     }
+    console.log(foundData)
   }
 );
+
+// HTTP POST for logging in
+router.post('/api/login', async (req, res: Response) => {
+    const {login, password}: {login: string, password: string}= req.body
+    const foundUser: InferSchemaType<typeof schemas.Users> = await schemas.Users.findOne({login: login, password: password})
+    if(foundUser){
+        res.json({message: 'User logged in successfully', user: foundUser})
+    } else {
+        res.status(400).json({message: 'Failed to login user'})
+    }
+})
 
 module.exports = router;

@@ -9,6 +9,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import RegisterPage from './components/RegisterPage/RegisterPage';
 import LoginPage from './components/LoginPage/LoginPage';
+import UserProvider from './components/contexts/UserContext';
 
 const root: Root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -30,7 +31,9 @@ const router = createBrowserRouter([
 
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router}/>
+    <UserProvider>
+      <RouterProvider router={router}/>
+    </UserProvider>
   </React.StrictMode>
 );
 

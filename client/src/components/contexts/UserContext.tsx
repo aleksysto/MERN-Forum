@@ -1,13 +1,17 @@
 import React, {createContext, useContext, useState} from 'react'
 
-type UserContextType = {
+interface UserContextType {
     loggedIn: boolean
     setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>
     userInfo: Object
     setUserInfo: React.Dispatch<React.SetStateAction<Object>>
-} | null
+}
 
-export const userContext: React.Context<UserContextType> = createContext<UserContextType>(null)
+export const userContext: React.Context<UserContextType> = createContext<UserContextType>({
+    loggedIn: false,
+    setLoggedIn: () => {},
+    userInfo: {},
+    setUserInfo: () => {}})
 export function useUserContext() {
     return useContext(userContext);
 }
