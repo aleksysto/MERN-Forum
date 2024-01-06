@@ -10,6 +10,8 @@ import reportWebVitals from './reportWebVitals';
 import RegisterPage from './components/RegisterPage/RegisterPage';
 import LoginPage from './components/LoginPage/LoginPage';
 import UserProvider from './components/contexts/UserContext';
+import AccountPage from './components/AccountPage/AccountPage';
+import PrivateRoute from './components/utils/PrivateRoute';
 
 const root: Root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -26,6 +28,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <LoginPage />,
+  },
+  {
+    path: "/account",
+    element: <PrivateRoute><AccountPage /></PrivateRoute>,
   },
 ]);
 

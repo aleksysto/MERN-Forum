@@ -53,7 +53,7 @@ router.get(
 // HTTP POST for logging in
 router.post('/api/login', async (req, res: Response) => {
     const {login, password}: {login: string, password: string}= req.body
-    const foundUser: InferSchemaType<typeof schemas.Users> = await schemas.Users.findOne({login: login, password: password})
+    const foundUser: InferSchemaType<typeof schemas.Users> = await schemas.Users.findOne({login: login, password: password}, {_id:0, password:0, __v: 0 })
     if(foundUser){
         res.json({message: 'User logged in successfully', user: foundUser})
     } else {

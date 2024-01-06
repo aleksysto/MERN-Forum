@@ -1,16 +1,18 @@
-import React, {createContext, useContext, useState} from 'react'
+import React, {createContext, useContext, useEffect, useState} from 'react'
+import { UserContextType, UserObject } from '../interfaces/UserObjectContext';
 
-interface UserContextType {
-    loggedIn: boolean
-    setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>
-    userInfo: Object
-    setUserInfo: React.Dispatch<React.SetStateAction<Object>>
-}
 
 export const userContext: React.Context<UserContextType> = createContext<UserContextType>({
     loggedIn: false,
     setLoggedIn: () => {},
-    userInfo: {},
+    userInfo: {
+        login: "",
+        email: "",
+        posts: 0,
+        comments: 0,
+        type: "user",
+        lastActive: new Date(),
+        entryDate: new Date()},
     setUserInfo: () => {}})
 export function useUserContext() {
     return useContext(userContext);
@@ -18,7 +20,24 @@ export function useUserContext() {
 
 export default function UserProvider ({children}: {children: JSX.Element}): JSX.Element{
     const [loggedIn, setLoggedIn] = useState<boolean>(false)
-    const [userInfo, setUserInfo] = useState<Object>({})
+    const [userInfo, setUserInfo] = useState<UserObject>(
+        {
+            login: "",
+            email: "",
+            posts: 0,
+            comments: 0,
+            type: "user",
+            lastActive: new Date(),
+            entryDate: new Date()
+        })
+    useEffect((): void => {
+        if(localStorage.getItem("token")){
+            setLoggedIn(true)
+        }
+        if(localStorage.getItem("user")){
+            setUserInfo(JSON.parse(localStorage.getItem("user") as string))
+        }
+    }, [])
     return (
         <userContext.Provider value={{loggedIn, setLoggedIn, userInfo, setUserInfo}}>
             {children}

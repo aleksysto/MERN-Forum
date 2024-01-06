@@ -19,8 +19,9 @@ export default function LoginForm (): JSX.Element {
         axios.post('http://localhost:4000/api/login', {login, password})
             .then((res: AxiosResponse): void => {
                 setLoggedIn(true)
-                setUserInfo(res.data)
-                console.log(res.data)
+                setUserInfo(res.data.user)
+                localStorage.setItem("token", res.data.login)
+                localStorage.setItem("user", JSON.stringify(res.data.user))
             })
             .catch((err: AxiosError): void => {
                 setLoggedIn(false)
