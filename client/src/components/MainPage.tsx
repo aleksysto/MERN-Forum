@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useUserContext } from './contexts/UserContext';
 import LogoutButton from './utils/LogoutButton';
+import PostEditor from './CreatePost/PostEditor';
+import axios from 'axios';
 
 export default function MainPage(): JSX.Element {
     const {loggedIn} = useUserContext()

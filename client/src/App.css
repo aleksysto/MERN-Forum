@@ -1,3 +1,4 @@
+@import "~quill/dist/quill.snow.css";
 .App {
   text-align: center;
 }
@@ -35,4 +36,9 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+#editor-container {
+  width: 50%;
+  height: 50%;
 }
