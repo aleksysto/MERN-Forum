@@ -9,15 +9,18 @@ export default function AccountData(): JSX.Element {
         <>
             <div>
                 <table>
+                    <tbody>
                     {Object.keys(userInfo).map((key: string, idx: number) => {
-                        console.log(typeof userInfo[key as keyof UserObject])
                         return (
-                            <tr>
-                                <th>{key}:</th>
-                                <td>{userInfo[key as keyof UserObject].toString()}</td>
-                            </tr>
+                            <AccountTableRow
+                                key={idx}
+                                propKey={key}
+                                idx={idx}
+                                userInfo={userInfo[key as keyof UserObject]}
+                            />
                         )
                     })}
+                    </tbody>
                 </table>
             </div>
         </>
