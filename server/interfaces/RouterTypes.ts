@@ -8,6 +8,12 @@ export interface RegisterUserObject {
   email: string;
   password: string;
 }
+export interface CreatePostObject {
+  category?: string
+  title: string;
+  content: string;
+  author: string;
+}
 export interface RegisterUserRequest extends Request {
   body: RegisterUserObject;
 }
@@ -51,7 +57,16 @@ export interface UsersLatestRequest extends Request {
     username: string;
   };
 }
-
+export interface CreatePostRequest extends Request {
+  body: {
+    title: string;
+    content: string;
+    author: string;
+  };
+  params: {
+    category: string
+  }
+}
 export interface TypedResponse<ResBody> extends Response {
   json: Send<ResBody, this>;
 }

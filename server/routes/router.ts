@@ -36,25 +36,6 @@ router.post(
   }
 );
 
-// HTTP GET to check for available username/email
-router.get(
-  "/api/register/checkAvailability",
-  async (
-    req: types.CheckAvailabilityRequest,
-    res: types.TypedResponse<types.AvailableResBody>
-  ): Promise<void> => {
-    const { type, value }: { type: string; value: string } = req.query;
-    const foundData: InferSchemaType<typeof schemas.Users> =
-      await schemas.Users.findOne({ [type]: value }, "login email");
-    if (foundData) {
-      res.json({ available: false });
-    } else {
-      res.json({ available: true });
-    }
-    console.log(foundData);
-  }
-);
-
 // HTTP POST for logging in
 router.post(
   "/api/login",
@@ -76,10 +57,58 @@ router.post(
   }
 );
 
+// HTTP POST for creating new posts
+router.post(
+  "/api/posts/:category",
+  async (
+    req: types.CreatePostRequest,
+    res: Response
+  ): Promise<void> => {
+    const { title, content, author }: types.CreatePostObject = req.body;
+    const category: string = req.params.category;
+    const postData: types.CreatePostObject = {
+      category: category,
+      title: title,
+      content: content,
+      author: author
+    };
+    const newPost: InferSchemaType<typeof schemas.Posts> =
+      new schemas.Posts(postData);
+    const savedPost: InferSchemaType<typeof schemas.Posts> = await newPost.save();
+    if (savedPost) {
+      res.json({ message: "Post created"});
+    } else {
+      res.status(500).json({ message: "Error creating post" });
+    }
+  }
+);
+
+// HTTP GET to check for available username/email
+router.get(
+  "/api/register/checkAvailability",
+  async (
+    req: types.CheckAvailabilityRequest,
+    res: types.TypedResponse<types.AvailableResBody>
+  ): Promise<void> => {
+    const { type, value }: { type: string; value: string } = req.query;
+    const foundData: InferSchemaType<typeof schemas.Users> =
+      await schemas.Users.findOne({ [type]: value }, "login email");
+    if (foundData) {
+      res.json({ available: false });
+    } else {
+      res.json({ available: true });
+    }
+    console.log(foundData);
+  }
+);
+
 // HTTP GET for getting all posts
 router.get(
   "/api/posts",
-  async (req: Request, res: types.TypedResponse<types.PostsResBody>): Promise<void> => {
+  async (
+    req: Request,
+    res: types.TypedResponse<types.PostsResBody>
+  ): Promise<void> => {
     const posts: InferSchemaType<typeof schemas.Posts> =
       await schemas.Posts.find({});
     if (posts) {
@@ -151,7 +180,10 @@ router.get(
 // HTTP GET for 5 newest posts
 router.get(
   "/api/posts/newest",
-  async (req: Request, res: types.TypedResponse<types.PostsResBody>): Promise<void> => {
+  async (
+    req: Request,
+    res: types.TypedResponse<types.PostsResBody>
+  ): Promise<void> => {
     const posts: InferSchemaType<typeof schemas.Posts> =
       await schemas.Posts.find({}).sort({ date: -1 }).limit(5);
     if (posts) {
@@ -165,10 +197,13 @@ router.get(
 // HTTP GET for users latest post
 router.get(
   "/api/posts/:username/latest",
-  async (req: types.UsersLatestRequest, res: types.TypedResponse<types.PostsResBody>): Promise<void> => {
+  async (
+    req: types.UsersLatestRequest,
+    res: types.TypedResponse<types.PostsResBody>
+  ): Promise<void> => {
     const username: string = req.params.username;
     const posts: InferSchemaType<typeof schemas.Posts> =
-      await schemas.Posts.findOne({author: username}).sort({ date: -1 });
+      await schemas.Posts.findOne({ author: username }).sort({ date: -1 });
     if (posts) {
       res.json({ message: `The latest post`, posts: [posts] });
     } else {
@@ -179,10 +214,13 @@ router.get(
 // HTTP GET for users latest comment
 router.get(
   "/api/comments/:username/latest",
-  async (req: types.UsersLatestRequest, res: types.TypedResponse<types.CommentsResBody>): Promise<void> => {
+  async (
+    req: types.UsersLatestRequest,
+    res: types.TypedResponse<types.CommentsResBody>
+  ): Promise<void> => {
     const username: string = req.params.username;
     const comments: InferSchemaType<typeof schemas.Comments> =
-      await schemas.Comments.findOne({author: username}).sort({ date: -1 });
+      await schemas.Comments.findOne({ author: username }).sort({ date: -1 });
     if (comments) {
       res.json({ message: `The latest comment`, comments: [comments] });
     } else {
@@ -194,7 +232,10 @@ router.get(
 // HTTP GET for all posts comments
 router.get(
   "/api/posts/:id/comments",
-  async (req: types.IdPostsRequest, res: types.TypedResponse<types.CommentsResBody>): Promise<void> => {
+  async (
+    req: types.IdPostsRequest,
+    res: types.TypedResponse<types.CommentsResBody>
+  ): Promise<void> => {
     const id: string = req.params.id;
     if (!checkIfCorrectId(id)) {
       res.status(400).json({ message: "Invalid ID" });
@@ -212,13 +253,16 @@ router.get(
 // HTTP GET for posts comment page
 router.get(
   "/api/posts/:id/comments/:page",
-  async (req: types.CommentsPageRequest, res: types.TypedResponse<types.CommentsResBody>): Promise<void> => {
+  async (
+    req: types.CommentsPageRequest,
+    res: types.TypedResponse<types.CommentsResBody>
+  ): Promise<void> => {
     const id: string = req.params.id;
     if (!checkIfCorrectId(id)) {
       res.status(400).json({ message: "Invalid ID" });
     } else {
       const page: number = parseInt(req.params.page);
-      const skipValue: number = (page-1)*10
+      const skipValue: number = (page - 1) * 10;
       const comments: InferSchemaType<typeof schemas.Comments> =
         await schemas.Comments.find({ postId: id }).skip(skipValue).limit(10);
       if (comments) {
@@ -233,10 +277,13 @@ router.get(
 // HTTP GET for users comments
 router.get(
   "/api/comments/:username",
-  async (req: types.UsersLatestRequest, res: types.TypedResponse<types.CommentsResBody>): Promise<void> => {
+  async (
+    req: types.UsersLatestRequest,
+    res: types.TypedResponse<types.CommentsResBody>
+  ): Promise<void> => {
     const username: string = req.params.username;
     const comments: InferSchemaType<typeof schemas.Comments> =
-      await schemas.Comments.find({author: username});
+      await schemas.Comments.find({ author: username });
     if (comments) {
       res.json({ message: `${comments.length} found`, comments: comments });
     } else {
@@ -247,7 +294,7 @@ router.get(
 
 function checkIfCorrectId(id: string): boolean {
   if (ObjectId.isValid(id)) {
-    if ((String)(new ObjectId(id)) === id) {
+    if (String(new ObjectId(id)) === id) {
       return true;
     } else {
       return false;
