@@ -33,6 +33,13 @@ const router = createBrowserRouter([
     path: "/account",
     element: <PrivateRoute><AccountPage /></PrivateRoute>,
   },
+  {
+    path: "/posts/",
+    children: [{
+      path: ":category",
+      element: <App />
+    }]
+  }
 ]);
 
 root.render(

@@ -90,4 +90,6 @@ export type PostsResBody =
   | { message: string; posts: Array<PostObject> }
   | { message: string };
 
-  export type CommentsResBody = {message: string, comments: Array<CommentObject>} | {message: string}
+export type CommentsResBody = {message: string, comments: Array<CommentObject>} | {message: string}
+
+export type CountResBody = {count: number} | {message: string}

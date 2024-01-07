@@ -4,6 +4,7 @@ import { useUserContext } from './contexts/UserContext';
 import LogoutButton from './utils/LogoutButton';
 import PostEditor from './CreatePost/PostEditor';
 import axios from 'axios';
+import CategoryList from './CategoryList/CategoryList';
 
 export default function MainPage(): JSX.Element {
     const {loggedIn} = useUserContext()
@@ -23,6 +24,9 @@ export default function MainPage(): JSX.Element {
                 <br />
                 <LogoutButton />
                 </nav>
+                <div>
+                    <CategoryList />
+                </div>
             </div>
         </>
     ) 

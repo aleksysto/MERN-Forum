@@ -118,7 +118,16 @@ router.get(
     }
   }
 );
-
+// HTTP GET for number of posts in category
+router.get("/api/posts/category/:category/count", async (req: types.CategoryPostsRequest, res: types.TypedResponse<types.CountResBody>): Promise<void> => {
+  const category: string = req.params.category;
+  const count: InferSchemaType<typeof schemas.Posts> = await schemas.Posts.countDocuments({ category: category })
+  if (count) { 
+    res.json({ count: count });
+  } else {
+    res.status(400).json({ message: "Something went wrong" });
+  }
+})
 // HTTP GET for specific post category
 router.get(
   "/api/posts/category/:category",

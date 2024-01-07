@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useUserContext } from '../contexts/UserContext'
 import axios, { AxiosError, AxiosResponse } from 'axios'
+import { UserObject } from '../interfaces/UserObjectContext'
 
 export default function LoginForm (): JSX.Element {
     const [login, setLogin] = useState<string>('')
@@ -17,10 +18,10 @@ export default function LoginForm (): JSX.Element {
     function handleSubmit (event: React.FormEvent<HTMLFormElement>): void {
         event.preventDefault()
         axios.post('http://localhost:4000/api/login', {login, password})
-            .then((res: AxiosResponse): void => {
+            .then((res: AxiosResponse<{token: string, user: UserObject}>): void => {
                 setLoggedIn(true)
                 setUserInfo(res.data.user)
-                localStorage.setItem("token", res.data.login)
+                localStorage.setItem("token", res.data.user.login)
                 localStorage.setItem("user", JSON.stringify(res.data.user))
             })
             .catch((err: AxiosError): void => {
