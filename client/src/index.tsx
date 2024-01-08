@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM, {Root} from 'react-dom/client';
+import ReactDOM, { Root } from 'react-dom/client';
 import {
   createBrowserRouter,
   RouterProvider
@@ -12,6 +12,8 @@ import LoginPage from './components/LoginPage/LoginPage';
 import UserProvider from './components/contexts/UserContext';
 import AccountPage from './components/AccountPage/AccountPage';
 import PrivateRoute from './components/utils/PrivateRoute';
+import PostList from './components/PostList/PostList';
+import PostPage from './components/PostPage/PostPage';
 
 const root: Root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -37,7 +39,10 @@ const router = createBrowserRouter([
     path: "/posts/",
     children: [{
       path: ":category",
-      element: <App />
+      element: <PostList />
+    }, {
+      path: "post/:id",
+      element: <PostPage />
     }]
   }
 ]);
@@ -45,7 +50,7 @@ const router = createBrowserRouter([
 root.render(
   <React.StrictMode>
     <UserProvider>
-      <RouterProvider router={router}/>
+      <RouterProvider router={router} />
     </UserProvider>
   </React.StrictMode>
 );

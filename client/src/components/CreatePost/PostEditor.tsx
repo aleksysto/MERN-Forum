@@ -1,14 +1,19 @@
 import React, { useState } from 'react'
 import ReactQuill from 'react-quill'
 import DOMPurify from 'dompurify'
-import axios from 'axios'
+import axios, { AxiosError, AxiosResponse } from 'axios'
 import { useUserContext } from '../contexts/UserContext'
-export default function PostEditor(): JSX.Element {
+import { UploadPost } from '../interfaces/ForumPosts'
+interface PostEditorProps {
+    setCreated: React.Dispatch<React.SetStateAction<boolean>>
+    setMessage: React.Dispatch<React.SetStateAction<string>>
+}
+export default function PostEditor( {setCreated, setMessage}: PostEditorProps ): JSX.Element {
     const [content, setContent] = useState<string>('')
     const [title, setTitle] = useState<string>('')
     const [errors, setErrors] = useState<null | string>(null)
     const { userInfo } = useUserContext()
-    function handleQuillChange(value: any) {
+    function handleQuillChange(value: string): void {
         setContent(value)
         if (value.length < 32) {
             setErrors('Content must be at least 25 characters long')
@@ -30,12 +35,19 @@ export default function PostEditor(): JSX.Element {
         if (!errors) {
             const sanitizedContent: string = DOMPurify.sanitize(content)
             const author: string = userInfo.login
-            const submitPost: any = {
+            const submitPost: UploadPost = {
                 title: title,
                 author: author,
                 content: sanitizedContent
             }
-            axios.post('http://localhost:4000/api/posts/category', submitPost).catch((err) => console.log(err))
+            axios.post('http://localhost:4000/api/posts/category', submitPost)
+                .then((res: AxiosResponse<{message: string}>): void => {
+                    setCreated(true)
+                    setMessage(res.data.message)
+                })
+                .catch((err: AxiosError): void => {
+                    console.log(err)
+                })
             console.log(submitPost)
             console.log(content)
         } else {
@@ -44,7 +56,8 @@ export default function PostEditor(): JSX.Element {
     }
     return (
         <>
-            <div>{errors ? <>{errors}</> : null}
+            <div>
+                <div>{errors ? <>{errors}</> : null}</div>
                 <form onSubmit={handleSubmit}>
                     <label htmlFor="title">Post title: </label>
                     <input type="text" id='title' onChange={handleTitleChange} />

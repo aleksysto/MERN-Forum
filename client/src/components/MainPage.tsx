@@ -5,6 +5,7 @@ import LogoutButton from './utils/LogoutButton';
 import PostEditor from './CreatePost/PostEditor';
 import axios from 'axios';
 import CategoryList from './CategoryList/CategoryList';
+import PostCreator from './CreatePost/PostCreator';
 
 export default function MainPage(): JSX.Element {
     const {loggedIn} = useUserContext()
