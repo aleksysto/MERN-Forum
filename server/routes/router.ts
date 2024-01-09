@@ -3,6 +3,20 @@ import { Schema, InferSchemaType } from "mongoose";
 const ObjectId = require("mongoose").Types.ObjectId;
 import * as types from "../interfaces/RouterTypes";
 import { PostObject, UserObject } from "../interfaces/ModelTypes";
+import jwt from "jsonwebtoken";
+const secretKey: string = "kluczpodwannom";
+function generateToken(user: types.GenerateTokenArgs) {
+  const payload: types.GenerateTokenArgs = {
+    _id: user._id,
+    login: user.login,
+    email: user.email,
+    type: user.type,
+  };
+  // 7 days -> 7days*24h*60min*60sec
+  const expiresIn: number = 7 * 24 * 60 * 60;
+  const token: string = jwt.sign(payload, secretKey, { expiresIn });
+  return token;
+}
 
 const express = require("express");
 const schemas = require("../models/schemas");
@@ -369,6 +383,20 @@ router.get(
       res.json({ message: `${comments.length} found`, comments: comments });
     } else {
       res.status(404).json({ message: "No comments found" });
+    }
+  }
+);
+
+// HTTP GET for top 15 most active users
+router.get(
+  "/api/users/mostActive",
+  async (req: Request, res): Promise<void> => {
+    const users: InferSchemaType<typeof schemas.Users> =
+      await schemas.Users.find({}).sort({ posts: -1, comments: -1 }).limit(15);
+    if (users) {
+      res.json({ message: `${users.length} found`, users: users });
+    } else {
+      res.status(404).json({ message: "No users found" });
     }
   }
 );

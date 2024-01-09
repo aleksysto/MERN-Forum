@@ -8,7 +8,6 @@ export default function CategoryListItem({ category, index }: { category: string
         axios.get(`http://localhost:4000/api/posts/category/${category}/count`)
             .then((res: AxiosResponse<{ count: number }>) => {
                 setPostsNumber(res.data.count)
-                console.log(res.data.count)
             })
             .catch((err) => {
                 console.log(err)

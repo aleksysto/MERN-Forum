@@ -3,6 +3,12 @@ import { Send } from "express-serve-static-core";
 import { CommentObject, PostObject, UserObject } from "./ModelTypes";
 import { InferSchemaType } from "mongoose";
 const schemas = require("../models/schemas");
+export interface GenerateTokenArgs {
+  _id: string;
+  login: string;
+  email: string;
+  type: "user" | "admin" | "moderator";
+}
 export interface RegisterUserObject {
   login: string;
   email: string;
