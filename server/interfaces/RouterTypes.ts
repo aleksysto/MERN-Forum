@@ -9,7 +9,7 @@ export interface RegisterUserObject {
   password: string;
 }
 export interface CreatePostObject {
-  category?: string
+  category?: string;
   title: string;
   content: string;
   author: string;
@@ -64,8 +64,8 @@ export interface CreatePostRequest extends Request {
     author: string;
   };
   params: {
-    category: string
-  }
+    category: string;
+  };
 }
 export interface TypedResponse<ResBody> extends Response {
   json: Send<ResBody, this>;
@@ -90,6 +90,12 @@ export type PostsResBody =
   | { message: string; posts: Array<PostObject> }
   | { message: string };
 
-export type CommentsResBody = {message: string, comments: Array<CommentObject>} | {message: string}
+export type SinglePostResBody =
+  | { message: string; post: PostObject }
+  | { message: string };
 
-export type CountResBody = {count: number} | {message: string}
+export type CommentsResBody =
+  | { message: string; comments: Array<CommentObject> }
+  | { message: string };
+
+export type CountResBody = { count: number } | { message: string };
