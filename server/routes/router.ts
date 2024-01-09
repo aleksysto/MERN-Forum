@@ -26,10 +26,14 @@ router.post(
       userData
     );
 
-    const saveUser: InferSchemaType<typeof schemas.Users> =
-      await newUser.save();
-    if (saveUser) {
-      res.json({ message: "User registered successfully", user: saveUser });
+    if (login && email && password) {
+      const saveUser: InferSchemaType<typeof schemas.Users> =
+        await newUser.save();
+      if (saveUser) {
+        res.json({ message: "User registered successfully", user: saveUser });
+      } else {
+        res.status(400).json({ message: "Failed to register user" });
+      }
     } else {
       res.status(400).json({ message: "Failed to register user" });
     }
@@ -44,13 +48,17 @@ router.post(
     res: types.TypedResponse<types.LoginResBody>
   ): Promise<void> => {
     const { login, password }: { login: string; password: string } = req.body;
-    const foundUser: InferSchemaType<typeof schemas.Users> =
-      await schemas.Users.findOne(
-        { login: login, password: password },
-        { _id: 0, password: 0, __v: 0 }
-      );
-    if (foundUser) {
-      res.json({ message: "User logged in successfully", user: foundUser });
+    if (login && password) {
+      const foundUser: InferSchemaType<typeof schemas.Users> =
+        await schemas.Users.findOne(
+          { login: login, password: password },
+          { _id: 0, password: 0, __v: 0 }
+        );
+      if (foundUser) {
+        res.json({ message: "User logged in successfully", user: foundUser });
+      } else {
+        res.status(400).json({ message: "Failed to login user" });
+      }
     } else {
       res.status(400).json({ message: "Failed to login user" });
     }
@@ -72,12 +80,48 @@ router.post(
     const newPost: InferSchemaType<typeof schemas.Posts> = new schemas.Posts(
       postData
     );
-    const savedPost: InferSchemaType<typeof schemas.Posts> =
-      await newPost.save();
-    if (savedPost) {
-      res.json({ message: "Post created" });
+    if (title && content && author) {
+      const savedPost: InferSchemaType<typeof schemas.Posts> =
+        await newPost.save();
+      if (savedPost) {
+        res.json({ message: "Post created" });
+      } else {
+        res.status(500).json({ message: "Error creating post" });
+      }
     } else {
       res.status(500).json({ message: "Error creating post" });
+    }
+  }
+);
+
+// HTTP POST to post comments
+router.post(
+  "/api/posts/id/:postId/comment",
+  async (
+    req: types.CreateCommentRequest,
+    res: types.TypedResponse<types.PostCommentResBody>
+  ): Promise<void> => {
+    const { content, author }: { content: string; author: string } = req.body;
+    const postId: string = req.params.postId;
+    const newComment = {
+      postId: postId,
+      content: content,
+      author: author,
+    };
+    if (!checkIfCorrectId(postId)) {
+      res.status(400).json({ message: "Invalid ID" });
+    } else {
+      if (content && author && postId) {
+        const savedComment: InferSchemaType<typeof schemas.Comments> =
+          await new schemas.Comments(newComment).save();
+        if (savedComment) {
+          res.json({ message: "Comment created", comment: savedComment });
+        } else {
+          res.status(500).json({ message: "Error creating comment" });
+        }
+      } else {
+        res.status(500).json({ message: "Bad request" });
+      }
     }
   }
 );
@@ -184,10 +228,32 @@ router.get(
     const author: string = req.params.author;
     const posts: InferSchemaType<typeof schemas.Posts> =
       await schemas.Posts.find({ author: author });
-    if (posts) {
+    if (posts && posts.length > 0) {
       res.json({ message: `${posts.length} found`, posts: posts });
     } else {
       res.status(404).json({ message: "No posts found" });
+    }
+  }
+);
+
+// HTTP GET posts sorted by date/user (asc/desc)
+router.get(
+  "/api/posts/sort/",
+  async (req: types.OrderByRequest, res: Response) => {
+    const { orderBy, order }: { orderBy: string; order: string } = req.query;
+    if (
+      (orderBy === "date" || orderBy === "author") &&
+      (order === "asc" || order === "desc")
+    ) {
+      const posts: InferSchemaType<typeof schemas.Posts> =
+        await schemas.Posts.find({}).sort({ [orderBy]: order });
+      if (posts) {
+        res.json({ message: `${posts.length} found`, posts: posts });
+      } else {
+        res.status(404).json({ message: "No posts found" });
+      }
+    } else {
+      res.status(400).json({ message: "Invalid request" });
     }
   }
 );

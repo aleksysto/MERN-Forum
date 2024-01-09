@@ -67,6 +67,23 @@ export interface CreatePostRequest extends Request {
     category: string;
   };
 }
+export interface CreateCommentRequest extends Request {
+  body: {
+    content: string;
+    author: string;
+  };
+  params: {
+    postId: string;
+  };
+}
+
+export interface OrderByRequest extends Request {
+  query: {
+    orderBy: string;
+    order: string;
+  };
+}
+
 export interface TypedResponse<ResBody> extends Response {
   json: Send<ResBody, this>;
 }
@@ -99,3 +116,7 @@ export type CommentsResBody =
   | { message: string };
 
 export type CountResBody = { count: number } | { message: string };
+
+export type PostCommentResBody =
+  | { message: string; comment: CommentObject }
+  | { message: string };
