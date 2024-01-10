@@ -3,17 +3,23 @@ import { Send } from "express-serve-static-core";
 import { CommentObject, PostObject, UserObject } from "./ModelTypes";
 import { InferSchemaType } from "mongoose";
 const schemas = require("../models/schemas");
-export interface GenerateTokenArgs {
+export interface DbUserObject extends UserObject {
   _id: string;
+}
+
+export interface GenerateTokenPayload {
+  id: string;
   login: string;
   email: string;
-  type: "user" | "admin" | "moderator";
+  type: string;
 }
+
 export interface RegisterUserObject {
   login: string;
   email: string;
   password: string;
 }
+
 export interface CreatePostObject {
   category?: string;
   title: string;
@@ -90,6 +96,15 @@ export interface OrderByRequest extends Request {
   };
 }
 
+export interface DeletePostRequest extends Request {
+  params: {
+    id: string;
+  };
+  headers: {
+    authorization: string;
+  };
+}
+
 export interface TypedResponse<ResBody> extends Response {
   json: Send<ResBody, this>;
 }
@@ -98,6 +113,7 @@ export type LoginResBody =
   | {
       message: string;
       user: UserObject;
+      token: string;
     }
   | { message: string };
 

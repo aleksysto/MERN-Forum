@@ -2,12 +2,17 @@ import { Router, Request, Response } from "express";
 import { Schema, InferSchemaType } from "mongoose";
 const ObjectId = require("mongoose").Types.ObjectId;
 import * as types from "../interfaces/RouterTypes";
-import { PostObject, UserObject } from "../interfaces/ModelTypes";
-import jwt from "jsonwebtoken";
+import {
+  CommentObject,
+  PostObject,
+  UserObject,
+} from "../interfaces/ModelTypes";
+import jwt, { JwtPayload, TokenExpiredError } from "jsonwebtoken";
+
 const secretKey: string = "kluczpodwannom";
-function generateToken(user: types.GenerateTokenArgs) {
-  const payload: types.GenerateTokenArgs = {
-    _id: user._id,
+function generateToken(user: types.DbUserObject) {
+  const payload: types.GenerateTokenPayload = {
+    id: user._id,
     login: user.login,
     email: user.email,
     type: user.type,
@@ -66,10 +71,16 @@ router.post(
       const foundUser: InferSchemaType<typeof schemas.Users> =
         await schemas.Users.findOne(
           { login: login, password: password },
-          { _id: 0, password: 0, __v: 0 }
+          { password: 0, __v: 0 }
         );
       if (foundUser) {
-        res.json({ message: "User logged in successfully", user: foundUser });
+        console.log(foundUser);
+        const token: string = generateToken(foundUser);
+        res.json({
+          message: "User logged in successfully",
+          user: foundUser,
+          token: token,
+        });
       } else {
         res.status(400).json({ message: "Failed to login user" });
       }
@@ -401,6 +412,59 @@ router.get(
   }
 );
 
+// HTTP DELETE for deleting posts
+router.delete(
+  "/api/posts/id/:id",
+  async (req: Request, res: Response): Promise<void> => {
+    const id: string = req.params.id;
+    const token: string | undefined = req.headers.authorization
+      ?.split(" ")[1]
+      .split('"')[1];
+    if (token) {
+      if (checkIfCorrectId(id)) {
+        if (checkTokenValidity(token)) {
+          const decodedToken: string | JwtPayload = jwt.verify(
+            token,
+            secretKey
+          );
+          if (typeof decodedToken !== "string") {
+            const userId = decodedToken.id;
+
+            const post: InferSchemaType<typeof schemas.Posts> =
+              await schemas.Posts.findOne({ _id: id });
+
+            const user: InferSchemaType<typeof schemas.Users> =
+              await schemas.Users.findOne({ _id: userId });
+
+            if (post && user) {
+              if (checkIfUserIsAuthorOrAdmin(user, post)) {
+                await schemas.Posts.findOneAndDelete({ _id: id });
+                res.json({ message: `Post ${id} deleted` });
+              } else {
+                res.status(401).json({ message: "Unauthorized" });
+              }
+            } else {
+              res.status(500).json({ message: "User or Post not found" });
+            }
+          } else {
+            res.status(500).json({ message: "Server error" });
+          }
+        } else {
+          res.status(400).json({ message: "Invalid token" });
+        }
+      } else {
+        res.status(400).json({ message: "Invalid ID" });
+      }
+    }
+  }
+);
+
+// HTTP DELETE for deleting comments
+// HTTP DELETE for deleting users
+
+// HTTP PATCH for editing post
+// HTTP PATCH for editing user
+// HTTP PATCH for editing comment
 function checkIfCorrectId(id: string): boolean {
   if (ObjectId.isValid(id)) {
     if (String(new ObjectId(id)) === id) {
@@ -412,4 +476,28 @@ function checkIfCorrectId(id: string): boolean {
     return false;
   }
 }
+
+function checkIfUserIsAuthorOrAdmin(
+  user: UserObject,
+  object: PostObject | CommentObject
+): boolean {
+  if (user.type === "admin" || user.type === "moderator") {
+    return true;
+  } else if (user.login === object.author) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function checkTokenValidity(token: string): boolean {
+  try {
+    jwt.verify(token, secretKey);
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
 module.exports = router;
