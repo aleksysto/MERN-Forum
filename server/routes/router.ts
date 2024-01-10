@@ -8,6 +8,7 @@ import {
   UserObject,
 } from "../interfaces/ModelTypes";
 import jwt, { JwtPayload, TokenExpiredError } from "jsonwebtoken";
+import { emitKeypressEvents } from "readline";
 
 const secretKey: string = "kluczpodwannom";
 function generateToken(user: types.DbUserObject) {
@@ -417,9 +418,7 @@ router.delete(
   "/api/posts/id/:id",
   async (req: Request, res: Response): Promise<void> => {
     const id: string = req.params.id;
-    const token: string | undefined = req.headers.authorization
-      ?.split(" ")[1]
-      .split('"')[1];
+    const token = req.headers.authorization;
     if (token) {
       if (checkIfCorrectId(id)) {
         if (checkTokenValidity(token)) {
@@ -460,7 +459,92 @@ router.delete(
 );
 
 // HTTP DELETE for deleting comments
+router.delete(
+  "/api/comments/id/:id",
+  async (req: Request, res: Response): Promise<void> => {
+    const id: string = req.params.id;
+    const token: string | undefined = req.headers.authorization;
+    if (token) {
+      if (checkIfCorrectId(id)) {
+        if (checkTokenValidity(token)) {
+          const decodedToken: string | JwtPayload = jwt.verify(
+            token,
+            secretKey
+          );
+          if (typeof decodedToken !== "string") {
+            const userId = decodedToken.id;
+
+            const comment: InferSchemaType<typeof schemas.Comments> =
+              await schemas.Comments.findOne({ _id: id });
+
+            const user: InferSchemaType<typeof schemas.Users> =
+              await schemas.Users.findOne({ _id: userId });
+
+            if (comment && user) {
+              if (checkIfUserIsAuthorOrAdmin(user, comment)) {
+                await schemas.Comments.findOneAndDelete({ _id: id });
+                res.json({ message: `Comment ${id} deleted` });
+              } else {
+                res.status(401).json({ message: "Unauthorized" });
+              }
+            } else {
+              res.status(500).json({ message: "User or Post not found" });
+            }
+          } else {
+            res.status(500).json({ message: "Server error" });
+          }
+        } else {
+          res.status(400).json({ message: "Invalid token" });
+        }
+      } else {
+        res.status(400).json({ message: "Invalid ID" });
+      }
+    }
+  }
+);
+
 // HTTP DELETE for deleting users
+router.delete(
+  "/api/users/id/:id",
+  async (req: Request, res: Response): Promise<void> => {
+    const id: string = req.params.id;
+    const token: string | undefined = req.headers.authorization;
+    if (token) {
+      if (checkIfCorrectId(id)) {
+        if (checkTokenValidity(token)) {
+          const decodedToken: string | JwtPayload = jwt.verify(
+            token,
+            secretKey
+          );
+          if (typeof decodedToken !== "string") {
+            const userId = decodedToken.id;
+            const deletingUser: InferSchemaType<typeof schemas.Users> =
+              await schemas.Users.findOne({ _id: userId });
+            const deletedUser: InferSchemaType<typeof schemas.Users> =
+              await schemas.Users.findOne({ _id: id });
+
+            if (deletedUser && deletingUser) {
+              if (checkIfUserIsAccOwnerOrAdmin(id, deletingUser)) {
+                await schemas.Users.findOneAndDelete({ _id: id });
+                res.json({ message: `Comment ${id} deleted` });
+              } else {
+                res.status(401).json({ message: "Unauthorized" });
+              }
+            } else {
+              res.status(500).json({ message: "User not found" });
+            }
+          } else {
+            res.status(500).json({ message: "Server error" });
+          }
+        } else {
+          res.status(400).json({ message: "Invalid token" });
+        }
+      } else {
+        res.status(400).json({ message: "Invalid ID" });
+      }
+    }
+  }
+);
 
 // HTTP PATCH for editing post
 // HTTP PATCH for editing user
@@ -484,6 +568,18 @@ function checkIfUserIsAuthorOrAdmin(
   if (user.type === "admin" || user.type === "moderator") {
     return true;
   } else if (user.login === object.author) {
+    return true;
+  } else {
+    return false;
+  }
+}
+function checkIfUserIsAccOwnerOrAdmin(
+  userId: string,
+  user: types.DbUserObject
+): boolean {
+  if (userId === String(new ObjectId(user._id))) {
+    return true;
+  } else if (user.type === "admin" || user.type === "moderator") {
     return true;
   } else {
     return false;
