@@ -26,6 +26,11 @@ export interface CreatePostObject {
   content: string;
   author: string;
 }
+export interface CreateCommentObject {
+  postId: string;
+  content: string;
+  author: string;
+}
 export interface RegisterUserRequest extends Request {
   body: RegisterUserObject;
 }

@@ -25,24 +25,6 @@ function generateToken(user: types.DbUserObject) {
 
 const router: Router = express.Router();
 
-// HTTP GET to check for available username/email
-router.get(
-  "/api/register/checkAvailability",
-  async (
-    req: types.CheckAvailabilityRequest,
-    res: types.TypedResponse<types.AvailableResBody>
-  ): Promise<void> => {
-    const { type, value }: { type: string; value: string } = req.query;
-    const foundData: InferSchemaType<typeof schemas.Users> =
-      await schemas.Users.findOne({ [type]: value }, "login email");
-    if (foundData) {
-      res.json({ available: false });
-    } else {
-      res.json({ available: true });
-    }
-  }
-);
-
 // HTTP POST for registering users
 router.post(
   "/api/register",
@@ -101,6 +83,24 @@ router.post(
       }
     } else {
       res.status(400).json({ message: "Failed to login user" });
+    }
+  }
+);
+
+// HTTP GET to check for available username/email
+router.get(
+  "/api/register/checkAvailability",
+  async (
+    req: types.CheckAvailabilityRequest,
+    res: types.TypedResponse<types.AvailableResBody>
+  ): Promise<void> => {
+    const { type, value }: { type: string; value: string } = req.query;
+    const foundData: InferSchemaType<typeof schemas.Users> =
+      await schemas.Users.findOne({ [type]: value }, "login email");
+    if (foundData) {
+      res.json({ available: false });
+    } else {
+      res.json({ available: true });
     }
   }
 );

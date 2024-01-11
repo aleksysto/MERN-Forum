@@ -19,25 +19,55 @@ router.post(
     res: types.TypedResponse<types.PostCommentResBody>
   ): Promise<void> => {
     const { content, author }: { content: string; author: string } = req.body;
+    const token: string | undefined = req.headers.authorization;
     const postId: string = req.params.postId;
-    const newComment = {
+    const commentData: types.CreateCommentObject = {
       postId: postId,
       content: content,
       author: author,
     };
+    const newComment: InferSchemaType<typeof schemas.Comments> =
+      new schemas.Comments(commentData);
     if (!checkIfCorrectId(postId)) {
       res.status(400).json({ message: "Invalid ID" });
     } else {
-      if (content && author && postId) {
-        const savedComment: InferSchemaType<typeof schemas.Comments> =
-          await new schemas.Comments(newComment).save();
-        if (savedComment) {
-          res.json({ message: "Comment created", comment: savedComment });
+      if (token) {
+        if (checkTokenValidity(token)) {
+          const decodedToken: string | JwtPayload = jwt.verify(
+            token,
+            secretKey
+          );
+          if (typeof decodedToken !== "string") {
+            const postingUser: types.DbUserObject = await schemas.Users.findOne(
+              {
+                _id: decodedToken.id,
+              }
+            );
+            if (
+              content &&
+              author &&
+              postId &&
+              postingUser &&
+              postingUser.login === author
+            ) {
+              const savedComment: InferSchemaType<typeof schemas.Comments> =
+                await new schemas.Comments(newComment).save();
+              if (savedComment) {
+                res.json({ message: "Comment created", comment: savedComment });
+              } else {
+                res.status(500).json({ message: "Error creating comment" });
+              }
+            } else {
+              res.status(500).json({ message: "Bad request" });
+            }
+          } else {
+            res.status(401).json({ message: "Server error" });
+          }
         } else {
-          res.status(500).json({ message: "Error creating comment" });
+          res.status(401).json({ message: "Invalid token" });
         }
       } else {
-        res.status(500).json({ message: "Bad request" });
+        res.status(401).json({ message: "Unauthorized" });
       }
     }
   }

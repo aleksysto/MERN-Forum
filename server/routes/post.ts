@@ -17,6 +17,7 @@ router.post(
   "/api/posts/:category",
   async (req: types.CreatePostRequest, res: Response): Promise<void> => {
     const { title, content, author }: types.CreatePostObject = req.body;
+    const token: string | undefined = req.headers.authorization;
     const category: string = req.params.category;
     const postData: types.CreatePostObject = {
       category: category,
@@ -27,16 +28,38 @@ router.post(
     const newPost: InferSchemaType<typeof schemas.Posts> = new schemas.Posts(
       postData
     );
-    if (title && content && author) {
-      const savedPost: InferSchemaType<typeof schemas.Posts> =
-        await newPost.save();
-      if (savedPost) {
-        res.json({ message: "Post created" });
+    if (token) {
+      if (checkTokenValidity(token)) {
+        const decodedToken: string | JwtPayload = jwt.verify(token, secretKey);
+        if (typeof decodedToken !== "string") {
+          const postingUser: types.DbUserObject = await schemas.Users.findOne({
+            _id: decodedToken.id,
+          });
+          if (
+            content &&
+            author &&
+            title &&
+            postingUser &&
+            postingUser.login === author
+          ) {
+            const savedPost: InferSchemaType<typeof schemas.Posts> =
+              await new schemas.Posts(newPost).save();
+            if (savedPost) {
+              res.json({ message: "Post created", comment: savedPost });
+            } else {
+              res.status(500).json({ message: "Error creating comment" });
+            }
+          } else {
+            res.status(500).json({ message: "Bad request" });
+          }
+        } else {
+          res.status(401).json({ message: "Server error" });
+        }
       } else {
-        res.status(500).json({ message: "Error creating post" });
+        res.status(401).json({ message: "Invalid token" });
       }
     } else {
-      res.status(500).json({ message: "Error creating post" });
+      res.status(401).json({ message: "Unauthorized" });
     }
   }
 );
