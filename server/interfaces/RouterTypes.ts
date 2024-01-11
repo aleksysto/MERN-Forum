@@ -130,6 +130,14 @@ export interface EditUserRequest extends Request {
     type?: string;
   };
 }
+export interface SearchRequest extends Request {
+  query: {
+    field: string;
+    q: string;
+    category?: string;
+    keywords?: string;
+  };
+}
 
 export interface TypedResponse<ResBody> extends Response {
   json: Send<ResBody, this>;
