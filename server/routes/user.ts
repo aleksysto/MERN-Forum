@@ -9,19 +9,9 @@ import {
   checkIfCorrectId,
   checkIfAdmin,
 } from "./utils/ValidityCheck";
+import generateToken from "./utils/TokenGeneration";
 import jwt, { JwtPayload } from "jsonwebtoken";
-function generateToken(user: types.DbUserObject) {
-  const payload: types.GenerateTokenPayload = {
-    id: user._id,
-    login: user.login,
-    email: user.email,
-    type: user.type,
-  };
-  // 7 days -> 7days*24h*60min*60sec
-  const expiresIn: number = 7 * 24 * 60 * 60;
-  const token: string = jwt.sign(payload, secretKey, { expiresIn });
-  return token;
-}
+import { comparePassword, encryptPassword } from "./utils/PasswordEncryption";
 
 const router: Router = express.Router();
 
@@ -33,10 +23,11 @@ router.post(
     res: types.TypedResponse<types.RegisterResBody>
   ): Promise<void> => {
     const { login, email, password }: types.RegisterUserObject = req.body;
+    const encryptedPassword: string = await encryptPassword(password);
     const userData: types.RegisterUserObject = {
       login: login,
       email: email,
-      password: password,
+      password: encryptedPassword,
     };
 
     const newUser: InferSchemaType<typeof schemas.Users> = new schemas.Users(
@@ -67,22 +58,27 @@ router.post(
     const { login, password }: { login: string; password: string } = req.body;
     if (login && password) {
       const foundUser: InferSchemaType<typeof schemas.Users> =
-        await schemas.Users.findOne(
-          { login: login, password: password },
-          { password: 0, __v: 0 }
-        );
+        await schemas.Users.findOne({ login: login }, { __v: 0 });
       if (foundUser) {
-        const token: string = generateToken(foundUser);
-        res.json({
-          message: "User logged in successfully",
-          user: foundUser,
-          token: token,
-        });
+        const comparedPasswords: boolean = await comparePassword(
+          password,
+          foundUser.password
+        );
+        if (comparedPasswords) {
+          const token: string = generateToken(foundUser);
+          res.json({
+            message: "User logged in successfully",
+            user: foundUser,
+            token: token,
+          });
+        } else {
+          res.status(401).json({ message: "Wrong password" });
+        }
       } else {
-        res.status(400).json({ message: "Failed to login user" });
+        res.status(404).json({ message: "User not found" });
       }
     } else {
-      res.status(400).json({ message: "Failed to login user" });
+      res.status(400).json({ message: "Bad request" });
     }
   }
 );
