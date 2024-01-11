@@ -75,7 +75,6 @@ router.post(
           { password: 0, __v: 0 }
         );
       if (foundUser) {
-        console.log(foundUser);
         const token: string = generateToken(foundUser);
         res.json({
           message: "User logged in successfully",
@@ -167,7 +166,6 @@ router.get(
     } else {
       res.json({ available: true });
     }
-    console.log(foundData);
   }
 );
 
@@ -402,7 +400,10 @@ router.get(
 // HTTP GET for top 15 most active users
 router.get(
   "/api/users/mostActive",
-  async (req: Request, res): Promise<void> => {
+  async (
+    req: Request,
+    res: types.TypedResponse<types.ActiveUsersResBody>
+  ): Promise<void> => {
     const users: InferSchemaType<typeof schemas.Users> =
       await schemas.Users.find({}).sort({ posts: -1, comments: -1 }).limit(15);
     if (users) {
@@ -416,9 +417,12 @@ router.get(
 // HTTP DELETE for deleting posts
 router.delete(
   "/api/posts/id/:id",
-  async (req: Request, res: Response): Promise<void> => {
+  async (
+    req: types.DeleteRequest,
+    res: types.TypedResponse<types.PatchResBody>
+  ): Promise<void> => {
     const id: string = req.params.id;
-    const token = req.headers.authorization;
+    const token: string | undefined = req.headers.authorization;
     if (token) {
       if (checkIfCorrectId(id)) {
         if (checkTokenValidity(token)) {
@@ -427,7 +431,7 @@ router.delete(
             secretKey
           );
           if (typeof decodedToken !== "string") {
-            const userId = decodedToken.id;
+            const userId: string = decodedToken.id;
 
             const post: InferSchemaType<typeof schemas.Posts> =
               await schemas.Posts.findOne({ _id: id });
@@ -461,7 +465,10 @@ router.delete(
 // HTTP DELETE for deleting comments
 router.delete(
   "/api/comments/id/:id",
-  async (req: Request, res: Response): Promise<void> => {
+  async (
+    req: types.DeleteRequest,
+    res: types.TypedResponse<types.PatchResBody>
+  ): Promise<void> => {
     const id: string = req.params.id;
     const token: string | undefined = req.headers.authorization;
     if (token) {
@@ -472,7 +479,7 @@ router.delete(
             secretKey
           );
           if (typeof decodedToken !== "string") {
-            const userId = decodedToken.id;
+            const userId: string = decodedToken.id;
 
             const comment: InferSchemaType<typeof schemas.Comments> =
               await schemas.Comments.findOne({ _id: id });
@@ -506,7 +513,10 @@ router.delete(
 // HTTP DELETE for deleting users
 router.delete(
   "/api/users/id/:id",
-  async (req: Request, res: Response): Promise<void> => {
+  async (
+    req: types.DeleteRequest,
+    res: types.TypedResponse<types.PatchResBody>
+  ): Promise<void> => {
     const id: string = req.params.id;
     const token: string | undefined = req.headers.authorization;
     if (token) {
@@ -517,7 +527,7 @@ router.delete(
             secretKey
           );
           if (typeof decodedToken !== "string") {
-            const userId = decodedToken.id;
+            const userId: string = decodedToken.id;
             const deletingUser: InferSchemaType<typeof schemas.Users> =
               await schemas.Users.findOne({ _id: userId });
             const deletedUser: InferSchemaType<typeof schemas.Users> =
@@ -526,7 +536,7 @@ router.delete(
             if (deletedUser && deletingUser) {
               if (checkIfUserIsAccOwnerOrAdmin(id, deletingUser)) {
                 await schemas.Users.findOneAndDelete({ _id: id });
-                res.json({ message: `Comment ${id} deleted` });
+                res.json({ message: `User ${id} deleted` });
               } else {
                 res.status(401).json({ message: "Unauthorized" });
               }
@@ -547,8 +557,198 @@ router.delete(
 );
 
 // HTTP PATCH for editing post
-// HTTP PATCH for editing user
+router.patch(
+  "/api/posts/id/:id",
+  async (
+    req: types.EditPostRequest,
+    res: types.TypedResponse<types.PatchResBody>
+  ): Promise<void> => {
+    const id: string = req.params.id;
+    const {
+      title,
+      content,
+      category,
+    }: { title?: string; content?: string; category?: string } = req.body;
+    const token: string | undefined = req.headers.authorization;
+    if (token) {
+      if (checkIfCorrectId(id)) {
+        if (checkTokenValidity(token)) {
+          const decodedToken: string | JwtPayload = jwt.verify(
+            token,
+            secretKey
+          );
+          if (typeof decodedToken !== "string") {
+            const userId: string = decodedToken.id;
+            const user: InferSchemaType<typeof schemas.Users> =
+              await schemas.Users.findOne({ _id: userId });
+            const post: InferSchemaType<typeof schemas.Posts> =
+              await schemas.Posts.findOne({ _id: id });
+            if (user && post) {
+              if (checkIfUserIsAuthorOrAdmin(user, post)) {
+                if (title) {
+                  await schemas.Posts.findOneAndUpdate(
+                    { _id: id },
+                    { title: title }
+                  );
+                }
+                if (content) {
+                  await schemas.Posts.findOneAndUpdate(
+                    { _id: id },
+                    { content: content }
+                  );
+                }
+                if (category) {
+                  await schemas.Posts.findOneAndUpdate(
+                    { _id: id },
+                    { category: category }
+                  );
+                }
+                res.json({ message: `Post ${id} updated` });
+              } else {
+                res.status(401).json({ message: "Unauthorized" });
+              }
+            } else {
+              res.status(404).json({ message: "User or Post not found" });
+            }
+          } else {
+            res.status(500).json({ message: "Server error" });
+          }
+        } else {
+          res.status(400).json({ message: "Invalid token" });
+        }
+      } else {
+        res.status(400).json({ message: "Invalid ID" });
+      }
+    } else {
+      res.status(400).json({ message: "Invalid token" });
+    }
+  }
+);
+
 // HTTP PATCH for editing comment
+router.patch(
+  "/api/comments/id/:id",
+  async (
+    req: types.EditCommentRequest,
+    res: types.TypedResponse<types.PatchResBody>
+  ) => {
+    const id: string = req.params.id;
+    const { content }: { content: string } = req.body;
+    const token: string | undefined = req.headers.authorization;
+    if (token) {
+      if (checkIfCorrectId(id)) {
+        if (checkTokenValidity(token)) {
+          const decodedToken: string | JwtPayload = jwt.verify(
+            token,
+            secretKey
+          );
+          if (typeof decodedToken !== "string") {
+            const userId: string = decodedToken.id;
+            const user: InferSchemaType<typeof schemas.Users> =
+              await schemas.Users.findOne({ _id: userId });
+            const comment: InferSchemaType<typeof schemas.Comments> =
+              await schemas.Comments.findOne({ _id: id });
+            if (user && comment) {
+              if (checkIfUserIsAuthorOrAdmin(user, comment)) {
+                if (content) {
+                  await schemas.Comments.findOneAndUpdate(
+                    { _id: id },
+                    { content: content }
+                  );
+                }
+                res.json({ message: `Comment ${id} updated` });
+              } else {
+                res.status(401).json({ message: "Unauthorized" });
+              }
+            } else {
+              res.status(404).json({ message: "User or Post not found" });
+            }
+          } else {
+            res.status(500).json({ message: "Server error" });
+          }
+        } else {
+          res.status(400).json({ message: "Invalid token" });
+        }
+      } else {
+        res.status(400).json({ message: "Invalid ID" });
+      }
+    } else {
+      res.status(400).json({ message: "Invalid token" });
+    }
+  }
+);
+
+// HTTP PATCH for editing user
+router.patch(
+  "/api/users/id/:id",
+  async (
+    req: types.EditUserRequest,
+    res: types.TypedResponse<types.PatchResBody>
+  ): Promise<void> => {
+    const { login, password, email, type } = req.body;
+    const id: string = req.params.id;
+    const token: string | undefined = req.headers.authorization;
+    if (token) {
+      if (checkIfCorrectId(id)) {
+        if (checkTokenValidity(token)) {
+          const decodedToken: string | JwtPayload = jwt.verify(
+            token,
+            secretKey
+          );
+          if (typeof decodedToken !== "string") {
+            const userId: string = decodedToken.id;
+            const editingUser: InferSchemaType<typeof schemas.Users> =
+              await schemas.Users.findOne({ _id: userId });
+            const editedUser: InferSchemaType<typeof schemas.Users> =
+              await schemas.Users.findOne({ _id: id });
+            if (editingUser && editedUser) {
+              if (checkIfUserIsAccOwnerOrAdmin(id, editingUser)) {
+                if (login) {
+                  await schemas.Users.findOneAndUpdate(
+                    { _id: id },
+                    { login: login }
+                  );
+                }
+                if (password) {
+                  await schemas.Users.findOneAndUpdate(
+                    { _id: id },
+                    { password: password }
+                  );
+                }
+                if (email) {
+                  await schemas.Users.findOneAndUpdate(
+                    { _id: id },
+                    { email: email }
+                  );
+                }
+                if (checkIfAdmin(editingUser)) {
+                  if (type) {
+                    await schemas.Users.findOneAndUpdate(
+                      { _id: id },
+                      { type: type }
+                    );
+                  }
+                }
+                res.json({ message: `User ${id} updated` });
+              } else {
+                res.status(401).json({ message: "Unauthorized" });
+              }
+            } else {
+              res.status(500).json({ message: "User not found" });
+            }
+          } else {
+            res.status(500).json({ message: "Server error" });
+          }
+        } else {
+          res.status(400).json({ message: "Invalid token" });
+        }
+      } else {
+        res.status(400).json({ message: "Invalid ID" });
+      }
+    }
+  }
+);
+
 function checkIfCorrectId(id: string): boolean {
   if (ObjectId.isValid(id)) {
     if (String(new ObjectId(id)) === id) {
@@ -562,10 +762,10 @@ function checkIfCorrectId(id: string): boolean {
 }
 
 function checkIfUserIsAuthorOrAdmin(
-  user: UserObject,
+  user: types.DbUserObject,
   object: PostObject | CommentObject
 ): boolean {
-  if (user.type === "admin" || user.type === "moderator") {
+  if (checkIfAdmin(user)) {
     return true;
   } else if (user.login === object.author) {
     return true;
@@ -575,11 +775,11 @@ function checkIfUserIsAuthorOrAdmin(
 }
 function checkIfUserIsAccOwnerOrAdmin(
   userId: string,
-  user: types.DbUserObject
+  editingUser: types.DbUserObject
 ): boolean {
-  if (userId === String(new ObjectId(user._id))) {
+  if (userId === String(new ObjectId(editingUser._id))) {
     return true;
-  } else if (user.type === "admin" || user.type === "moderator") {
+  } else if (checkIfAdmin(editingUser)) {
     return true;
   } else {
     return false;
@@ -591,7 +791,14 @@ function checkTokenValidity(token: string): boolean {
     jwt.verify(token, secretKey);
     return true;
   } catch (error) {
-    console.log(error);
+    return false;
+  }
+}
+
+function checkIfAdmin(user: types.DbUserObject): boolean {
+  if (user.type === "admin" || user.type === "moderator") {
+    return true;
+  } else {
     return false;
   }
 }

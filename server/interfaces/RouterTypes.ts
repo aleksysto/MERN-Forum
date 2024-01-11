@@ -96,12 +96,38 @@ export interface OrderByRequest extends Request {
   };
 }
 
-export interface DeletePostRequest extends Request {
+export interface DeleteRequest extends Request {
   params: {
     id: string;
   };
-  headers: {
-    authorization: string;
+}
+export interface EditCommentRequest extends Request {
+  params: {
+    id: string;
+  };
+  body: {
+    content: string;
+  };
+}
+export interface EditPostRequest extends Request {
+  params: {
+    id: string;
+  };
+  body: {
+    title?: string;
+    content?: string;
+    category?: string;
+  };
+}
+export interface EditUserRequest extends Request {
+  params: {
+    id: string;
+  };
+  body: {
+    login?: string;
+    password?: string;
+    email?: string;
+    type?: string;
   };
 }
 
@@ -142,3 +168,12 @@ export type CountResBody = { count: number } | { message: string };
 export type PostCommentResBody =
   | { message: string; comment: CommentObject }
   | { message: string };
+export type ActiveUsersResBody =
+  | {
+      message: string;
+      users: Array<DbUserObject>;
+    }
+  | { message: string };
+export type PatchResBody = {
+  message: string;
+};
