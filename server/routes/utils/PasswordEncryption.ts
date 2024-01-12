@@ -17,6 +17,5 @@ export async function comparePassword(
   hash: string
 ): Promise<boolean> {
   const match: boolean = await bcrypt.compare(password, hash);
-  console.log(match, password, hash);
   return match;
 }

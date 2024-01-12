@@ -10,6 +10,7 @@ import {
   checkTokenValidity,
 } from "./utils/ValidityCheck";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import getCategoryPosts from "./utils/GetCategoryPosts";
 
 const router: Router = express.Router();
 // HTTP POST for creating new posts
@@ -100,22 +101,7 @@ router.get(
 );
 
 // HTTP GET for specific post category
-router.get(
-  "/api/posts/category/:category",
-  async (
-    req: types.CategoryPostsRequest,
-    res: types.TypedResponse<types.PostsResBody>
-  ): Promise<void> => {
-    const category: string = req.params.category;
-    const posts: InferSchemaType<typeof schemas.Posts> =
-      await schemas.Posts.find({ category: category });
-    if (posts) {
-      res.json({ message: `${posts.length} found`, posts: posts });
-    } else {
-      res.status(404).json({ message: "No posts found" });
-    }
-  }
-);
+router.get("/api/posts/category/:category", getCategoryPosts);
 
 // HTTP GET for specific post by id
 router.get(
