@@ -39,8 +39,13 @@ router.post(
     if (login && email && password) {
       const saveUser: InferSchemaType<typeof schemas.Users> =
         await newUser.save();
-      if (saveUser) {
-        res.json({ message: "User registered successfully", user: saveUser });
+      const user: InferSchemaType<typeof schemas.Users> =
+        await schemas.Users.findOne({ login: login }, { password: 0 });
+      if (saveUser && user) {
+        res.json({
+          message: "User registered successfully",
+          user: user,
+        });
       } else {
         res.status(400).json({ message: "Failed to register user" });
       }
@@ -60,17 +65,19 @@ router.post(
     const { login, password }: { login: string; password: string } = req.body;
     if (login && password) {
       const foundUser: InferSchemaType<typeof schemas.Users> =
-        await schemas.Users.findOne({ login: login }, { __v: 0 });
+        await schemas.Users.findOne({ login: login }, { password: 1 });
       if (foundUser) {
         const comparedPasswords: boolean = await comparePassword(
           password,
           foundUser.password
         );
         if (comparedPasswords) {
-          const token: string = generateToken(foundUser);
+          const user: InferSchemaType<typeof schemas.Users> =
+            await schemas.Users.findOne({ login: login }, { password: 0 });
+          const token: string = generateToken(user);
           res.json({
             message: "User logged in successfully",
-            user: foundUser,
+            user: user,
             token: token,
           });
         } else {
@@ -86,10 +93,7 @@ router.post(
 );
 
 // HTTP GET to check for available username/email
-router.get(
-  "/api/register/checkAvailability",
-  checkAvailable
-);
+router.get("/api/register/checkAvailability", checkAvailable);
 
 // HTTP GET for top 15 most active users
 router.get(
@@ -99,7 +103,37 @@ router.get(
     res: types.TypedResponse<types.ActiveUsersResBody>
   ): Promise<void> => {
     const users: InferSchemaType<typeof schemas.Users> =
-      await schemas.Users.find({}).sort({ posts: -1, comments: -1 }).limit(15);
+      await schemas.Users.find({}, { password: 0 })
+        .sort({ posts: -1, comments: -1 })
+        .limit(15);
+    if (users) {
+      res.json({ message: `${users.length} found`, users: users });
+    } else {
+      res.status(404).json({ message: "No users found" });
+    }
+  }
+);
+// HTTP GET for top 15 of combined activity users
+router.get(
+  "/api/users/combinedActivity",
+  async (
+    req: Request,
+    res: types.TypedResponse<types.ActiveUsersResBody>
+  ): Promise<void> => {
+    const users: InferSchemaType<typeof schemas.Users> =
+      await schemas.Users.aggregate([
+        {
+          $project: {
+            _id: 1,
+            posts: 1,
+            comments: 1,
+            login: "$login",
+            combinedActivity: { $add: ["$posts", "$comments"] },
+          },
+        },
+        { $sort: { combinedActivity: -1 } },
+        { $limit: 15 },
+      ]);
     if (users) {
       res.json({ message: `${users.length} found`, users: users });
     } else {
