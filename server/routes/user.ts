@@ -12,6 +12,8 @@ import {
 import generateToken from "./utils/TokenGeneration";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { comparePassword, encryptPassword } from "./utils/PasswordEncryption";
+import { Resolver } from "dns/promises";
+import checkAvailable from "./utils/CheckAvailable";
 
 const router: Router = express.Router();
 
@@ -86,19 +88,7 @@ router.post(
 // HTTP GET to check for available username/email
 router.get(
   "/api/register/checkAvailability",
-  async (
-    req: types.CheckAvailabilityRequest,
-    res: types.TypedResponse<types.AvailableResBody>
-  ): Promise<void> => {
-    const { type, value }: { type: string; value: string } = req.query;
-    const foundData: InferSchemaType<typeof schemas.Users> =
-      await schemas.Users.findOne({ [type]: value }, "login email");
-    if (foundData) {
-      res.json({ available: false });
-    } else {
-      res.json({ available: true });
-    }
-  }
+  checkAvailable
 );
 
 // HTTP GET for top 15 most active users

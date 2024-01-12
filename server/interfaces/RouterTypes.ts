@@ -36,7 +36,7 @@ export interface RegisterUserRequest extends Request {
 }
 export interface CheckAvailabilityRequest extends Request {
   query: {
-    type: string;
+    type: "email" | "login";
     value: string;
   };
 }
