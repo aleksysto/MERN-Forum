@@ -4,3 +4,8 @@ export interface Comment {
   author: string;
   date: Date;
 }
+
+export interface CommentListItemProps {
+  comment: Comment;
+  index: number;
+}

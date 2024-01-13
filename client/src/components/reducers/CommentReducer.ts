@@ -10,8 +10,8 @@ import { GetCommentsPayload, StateObject } from "../interfaces/ReducerTypes";
 
 const initialState: StateObject = {
   message: "",
-  comments: [],
-  printedComments: [],
+  comments: [] as Comment[],
+  printedComments: [] as Comment[],
 };
 
 const commentsReducer: Reducer<StateObject> = createReducer<StateObject>(
@@ -26,7 +26,12 @@ const commentsReducer: Reducer<StateObject> = createReducer<StateObject>(
         const message: string = action.payload.message;
         const comments: Comment[] = action.payload.comments;
         console.log("in reducer", message, comments);
-        return { ...state, comments: comments, message: message };
+        return {
+          ...state,
+          comments: comments,
+          message: message,
+          printedComments: comments,
+        };
       }
     );
     builder.addCase(

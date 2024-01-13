@@ -85,7 +85,7 @@ router.get(
       res.status(400).json({ message: "Invalid ID" });
     } else {
       const comments: InferSchemaType<typeof schemas.Comments> =
-        await schemas.Comments.find({ postId: id });
+        await schemas.Comments.find({ postId: id }).sort({ date: 1 });
       if (comments) {
         res.json({ message: `${comments.length} found`, comments: comments });
       } else {

@@ -20,7 +20,7 @@ export function getCommentsAction(
   message: string
 ): PayloadAction<GetCommentsPayload> {
   return {
-    type: "setCommentsSuccess",
+    type: "setComments",
     payload: { comments, message },
   };
 }
