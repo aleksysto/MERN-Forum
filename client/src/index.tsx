@@ -14,6 +14,8 @@ import AccountPage from './components/AccountPage/AccountPage';
 import PrivateRoute from './components/utils/PrivateRoute';
 import PostList from './components/PostList/PostList';
 import PostPage from './components/PostPage/PostPage';
+import commentsStore from './components/reducers/store/store';
+import { Provider } from 'react-redux';
 
 const root: Root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -21,7 +23,7 @@ const root: Root = ReactDOM.createRoot(
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <Provider store={commentsStore}><App /></Provider>,
   },
   {
     path: "/register",
