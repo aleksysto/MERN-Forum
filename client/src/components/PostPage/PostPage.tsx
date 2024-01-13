@@ -16,18 +16,16 @@ export default function PostPage(): JSX.Element {
         </>
     ) : (
         <>
-
-            <PostPageGenerator setError={setError} />
-
             <div>
-                comments:
-                <Provider store={commentsStore}>
-                    <CommentList />
-                </Provider>
+                <div>
+                    <PostPageGenerator setError={setError} />
+                </div>
+                <div>
+                    <Provider store={commentsStore}>
+                        <CommentList />
+                    </Provider>
+                </div>
             </div>
-
-
         </>
-
     )
 }

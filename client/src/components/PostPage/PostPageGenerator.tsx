@@ -19,12 +19,11 @@ export default function PostPage({ setError }: { setError: React.Dispatch<React.
             })
     })
     return post ? (
-        <div>
-            <div>{post.author}</div>
+        <>
+            <div><div>{post.author}</div><div><DateCreator date={post.date} /></div></div>
             <div>{post.title}</div>
-            <div><DateCreator date={post.date} /></div>
             <div><div dangerouslySetInnerHTML={{ __html: post.content }}></div></div>
-        </div>
+        </>
     ) : (
         <div>Loading...</div>
     )
