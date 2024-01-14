@@ -24,9 +24,7 @@ export default function CommentList(): JSX.Element {
                 <ul style={{ listStyle: "none" }}>
                     {comments.map((comment: Comment, index) => {
                         return (
-                            <li key={index}>
-                                <CommentListItem comment={comment} index={index} />
-                            </li>
+                            <CommentListItem comment={comment} index={index} />
                         )
                     })}
                 </ul>

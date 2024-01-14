@@ -16,6 +16,7 @@ import PostList from './components/PostList/PostList';
 import PostPage from './components/PostPage/PostPage';
 import commentsStore from './components/reducers/stores/store';
 import { Provider } from 'react-redux';
+import CommentEditor from './components/CreateComment/CommentEditor';
 
 const root: Root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

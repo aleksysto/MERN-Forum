@@ -6,6 +6,7 @@ import PostPageGenerator from './PostPageGenerator'
 import CommentList from '../PostComments/CommentList'
 import commentsStore from '../reducers/stores/store'
 import { Provider } from 'react-redux'
+import CommentCreator from '../CreateComment/CommentCreator'
 
 export default function PostPage(): JSX.Element {
     const [error, setError] = useState<string | null>(null)
@@ -26,6 +27,7 @@ export default function PostPage(): JSX.Element {
                     </Provider>
                 </div>
             </div>
+            <CommentCreator />
         </>
     )
 }
