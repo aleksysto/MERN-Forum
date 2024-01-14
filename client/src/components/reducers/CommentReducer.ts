@@ -4,9 +4,17 @@ import {
   Reducer,
   createReducer,
 } from "@reduxjs/toolkit";
-import { commentsSetPage, setComments } from "./actions/CommentActions";
+import {
+  commentsSetPage,
+  setComments,
+  setMessage,
+} from "./actions/CommentActions";
 import { Comment } from "../interfaces/PostComments";
-import { GetCommentsPayload, StateObject } from "../interfaces/ReducerTypes";
+import {
+  GetCommentsPayload,
+  SetMessagePayload,
+  StateObject,
+} from "../interfaces/ReducerTypes";
 
 const initialState: StateObject = {
   message: "",
@@ -43,6 +51,20 @@ const commentsReducer: Reducer<StateObject> = createReducer<StateObject>(
           skipValue + 10
         );
         return { ...state, printedComments: newComments };
+      }
+    );
+    builder.addCase(
+      setMessage,
+      (
+        state: StateObject,
+        action: PayloadAction<SetMessagePayload>
+      ): StateObject => {
+        const message: string = action.payload.message;
+        console.log("in reducer", message);
+        return {
+          ...state,
+          message: message,
+        };
       }
     );
   }

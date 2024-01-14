@@ -7,7 +7,11 @@ import {
 } from "@reduxjs/toolkit";
 import { Comment } from "../../interfaces/PostComments";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { GetCommentsPayload, StateObject } from "../../interfaces/ReducerTypes";
+import {
+  GetCommentsPayload,
+  SetMessagePayload,
+  StateObject,
+} from "../../interfaces/ReducerTypes";
 
 export const setComments: ActionCreatorWithPayload<GetCommentsPayload, string> =
   createAction<GetCommentsPayload>("setComments");
@@ -15,21 +19,28 @@ export const setComments: ActionCreatorWithPayload<GetCommentsPayload, string> =
 export const commentsSetPage: ActionCreatorWithPayload<number, string> =
   createAction<number>("commentsSetPage");
 
+export const setMessage: ActionCreatorWithPayload<SetMessagePayload, string> =
+  createAction<SetMessagePayload>("setMessage");
+
+export function setMessageAction(
+  message: string
+): PayloadAction<SetMessagePayload> {
+  return setMessage({ message });
+}
+
 export function getCommentsAction(
   comments: Comment[],
   message: string
 ): PayloadAction<GetCommentsPayload> {
-  return {
-    type: "setComments",
-    payload: { comments, message },
-  };
+  return setComments({ comments, message });
 }
 export function getComments(
   url: string
 ): ThunkAction<void, StateObject, unknown, PayloadAction<GetCommentsPayload>> {
   return async (
-    dispatch: Dispatch<PayloadAction<GetCommentsPayload>>
+    dispatch: Dispatch<PayloadAction<GetCommentsPayload | SetMessagePayload>>
   ): Promise<void> => {
+    dispatch(setMessageAction("Loading..."));
     axios
       .get(url)
       .then((res: AxiosResponse<GetCommentsPayload>): void => {
@@ -37,7 +48,7 @@ export function getComments(
         dispatch(getCommentsAction(comments, message));
       })
       .catch((error: AxiosError): void => {
-        console.log(error.message);
+        dispatch(setMessageAction("Server error..."));
       });
   };
 }

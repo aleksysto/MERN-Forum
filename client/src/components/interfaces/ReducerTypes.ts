@@ -1,7 +1,10 @@
 import { Comment } from "./PostComments";
 
-export interface GetCommentsPayload {
+export interface GetCommentsPayload extends SetMessagePayload {
   comments: Comment[];
+}
+
+export interface SetMessagePayload {
   message: string;
 }
 
