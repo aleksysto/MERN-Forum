@@ -16,12 +16,14 @@ export interface GenerateTokenPayload {
   type: "user" | "moderator" | "admin";
   lastActive: Date;
   entryDate: Date;
+  profilePicture: string;
 }
 
 export interface RegisterUserObject {
   login: string;
   email: string;
   password: string;
+  profilePicture: string;
 }
 
 export interface CreatePostObject {

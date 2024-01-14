@@ -24,12 +24,14 @@ router.post(
     req: types.RegisterUserRequest,
     res: types.TypedResponse<types.RegisterResBody>
   ): Promise<void> => {
-    const { login, email, password }: types.RegisterUserObject = req.body;
+    const { login, email, password, profilePicture }: types.RegisterUserObject =
+      req.body;
     const encryptedPassword: string = await encryptPassword(password);
     const userData: types.RegisterUserObject = {
       login: login,
       email: email,
       password: encryptedPassword,
+      profilePicture: profilePicture,
     };
 
     const newUser: InferSchemaType<typeof schemas.Users> = new schemas.Users(

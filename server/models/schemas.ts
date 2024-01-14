@@ -40,6 +40,10 @@ const userSchema = new Schema<UserObject>({
     type: Date,
     default: Date.now,
   },
+  profilePicture: {
+    type: String,
+    default: null,
+  },
 });
 const Users: InferSchemaType<typeof userSchema> = mongoose.model(
   "Users",

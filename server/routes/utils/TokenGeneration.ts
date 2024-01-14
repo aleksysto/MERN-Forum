@@ -11,6 +11,7 @@ export default function generateToken(user: types.DbUserObject) {
     type: user.type,
     lastActive: user.lastActive,
     entryDate: user.entryDate,
+    profilePicture: user.profilePicture,
   };
   // 7 days -> 7days*24h*60min*60sec
   const expiresIn: number = 7 * 24 * 60 * 60;
