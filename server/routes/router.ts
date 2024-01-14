@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router, Request, Response } from "express";
 const express = require("express");
 const user = require("./user");
 const post = require("./post");
@@ -149,6 +149,27 @@ router.get(
     }
   }
 );
+
+import { storage, upload } from "./utils/Multer";
+import path from "path";
+const multer = require("multer");
+
+// HTTP POST for uploading images
+router.post(
+  "/api/uploadImage/:id",
+  upload.single("image"),
+  async (req: Request, res: Response): Promise<void> => {
+    if (req.file) {
+      res.status(200).json({ message: "File uploaded" });
+    } else {
+      res.status(400).json({ message: "Bad request" });
+    }
+  }
+);
+
+router.get("/api/getImage/:id", (req: Request, res: Response): void => {
+  res.sendFile(path.join(__dirname, "../../uploads/" + req.params.id));
+});
 
 router.use(user);
 router.use(post);

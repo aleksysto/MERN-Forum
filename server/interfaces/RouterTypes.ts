@@ -38,6 +38,11 @@ export interface CreateCommentObject {
 export interface RegisterUserRequest extends Request {
   body: RegisterUserObject;
 }
+export interface ImageRequest extends Request {
+  body: {
+    image: string;
+  };
+}
 export interface CheckAvailabilityRequest extends Request {
   query: {
     type: "email" | "login";

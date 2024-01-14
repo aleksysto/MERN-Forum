@@ -17,7 +17,6 @@ const corsOptions: CorsOptions = {
 
 app.use(bodyParser.urlencoded({ limit: "100mb", extended: true }));
 app.use(bodyParser.json({ limit: "100mb" }));
-
 mongoose
   .connect(process.env.DB_URI)
   .then(() => console.log("DB Connected"))
