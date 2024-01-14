@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import ReactQuill from 'react-quill'
+import ReactQuill, { Quill } from 'react-quill'
 import DOMPurify from 'dompurify'
 import axios, { AxiosError, AxiosResponse } from 'axios'
 import { useUserContext } from '../contexts/UserContext'
@@ -8,7 +8,7 @@ interface PostEditorProps {
     setCreated: React.Dispatch<React.SetStateAction<boolean>>
     setMessage: React.Dispatch<React.SetStateAction<string>>
 }
-export default function PostEditor( {setCreated, setMessage}: PostEditorProps ): JSX.Element {
+export default function PostEditor({ setCreated, setMessage }: PostEditorProps): JSX.Element {
     const [content, setContent] = useState<string>('')
     const [title, setTitle] = useState<string>('')
     const [errors, setErrors] = useState<null | string>(null)
@@ -21,6 +21,7 @@ export default function PostEditor( {setCreated, setMessage}: PostEditorProps ):
             setErrors(null)
         }
     }
+
     function handleTitleChange(event: React.ChangeEvent<HTMLInputElement>): void {
         event.preventDefault()
         setTitle(event.target.value)
@@ -40,8 +41,8 @@ export default function PostEditor( {setCreated, setMessage}: PostEditorProps ):
                 author: author,
                 content: sanitizedContent
             }
-            axios.post('http://localhost:4000/api/posts/category', submitPost)
-                .then((res: AxiosResponse<{message: string}>): void => {
+            axios.post('http://localhost:4000/api/posts/category', submitPost, { headers: { 'Authorization': `${localStorage.getItem('token')}` } })
+                .then((res: AxiosResponse<{ message: string }>): void => {
                     setCreated(true)
                     setMessage(res.data.message)
                 })
@@ -66,13 +67,15 @@ export default function PostEditor( {setCreated, setMessage}: PostEditorProps ):
                             value={content}
                             onChange={handleQuillChange}
                             modules={{
-                                toolbar: [
-                                    [{ 'header': [1, 2, false] }],
-                                    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                                    [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-                                    ['link', 'image'],
-                                    ['clean']
-                                ]
+                                toolbar: {
+                                    container: [
+                                        [{ 'header': [1, 2, false] }],
+                                        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                                        [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+                                        ['link', 'image'],
+                                        ['clean']
+                                    ],
+                                }
                             }}
                             formats={[
                                 'header',

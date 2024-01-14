@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { CommentsDispatch, useCommentsDispatch } from '../reducers/store/store'
+import { CommentsDispatch, useCommentsDispatch } from '../reducers/stores/store'
 import { Comment } from '../interfaces/PostComments'
 import { useSelector } from 'react-redux'
 import { StateObject } from '../interfaces/ReducerTypes'
@@ -12,7 +12,7 @@ export default function CommentList(): JSX.Element {
     console.log(id, url)
     const dispatch: CommentsDispatch = useCommentsDispatch()
     const comments = useSelector((state: StateObject): Comment[] => { return state.printedComments })
-
+    const message = useSelector((state: StateObject): string => { return state.message })
     useEffect((): void => {
         dispatch(getComments(url))
     }, [])
@@ -20,6 +20,7 @@ export default function CommentList(): JSX.Element {
     return (
         <>
             <div style={{ margin: "auto", width: "35%" }}>
+                <div>{message}</div>
                 <ul style={{ listStyle: "none" }}>
                     {comments.map((comment: Comment, index) => {
                         return (

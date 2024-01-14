@@ -6,7 +6,11 @@ export default function generateToken(user: types.DbUserObject) {
     id: user._id,
     login: user.login,
     email: user.email,
+    posts: user.posts,
+    comments: user.comments,
     type: user.type,
+    lastActive: user.lastActive,
+    entryDate: user.entryDate,
   };
   // 7 days -> 7days*24h*60min*60sec
   const expiresIn: number = 7 * 24 * 60 * 60;

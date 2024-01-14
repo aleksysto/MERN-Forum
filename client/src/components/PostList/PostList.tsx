@@ -18,7 +18,8 @@ export default function PostList() {
             .catch((err) => {
                 console.log(err)
             })
-    })
+    }, [])
+
     return (
         <>
             <div>

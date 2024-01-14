@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom'
 import DateCreator from '../DateCreator/DateCreator'
 
 export default function PostListItem({ post, index }: PostItemProps): JSX.Element {
-
     return (
         <li key={index}>
             <Link to={{ pathname: `/posts/post/${post._id}` }}>

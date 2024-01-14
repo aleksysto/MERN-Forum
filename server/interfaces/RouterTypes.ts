@@ -11,7 +11,11 @@ export interface GenerateTokenPayload {
   id: string;
   login: string;
   email: string;
-  type: string;
+  posts: number;
+  comments: number;
+  type: "user" | "moderator" | "admin";
+  lastActive: Date;
+  entryDate: Date;
 }
 
 export interface RegisterUserObject {

@@ -4,7 +4,7 @@ import { PostObject } from '../interfaces/ForumPosts'
 import axios, { AxiosError, AxiosResponse } from 'axios'
 import PostPageGenerator from './PostPageGenerator'
 import CommentList from '../PostComments/CommentList'
-import commentsStore from '../reducers/store/store'
+import commentsStore from '../reducers/stores/store'
 import { Provider } from 'react-redux'
 
 export default function PostPage(): JSX.Element {
