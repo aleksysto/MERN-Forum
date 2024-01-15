@@ -5,7 +5,6 @@ import AccountTableRow from './AccountTableRow'
 export default function AccountData(): JSX.Element {
     const { userInfo } = useUserContext()
     const avatarUrl: string = `http://localhost:4000/api/getImage/${userInfo.profilePicture}`
-    console.log(`http://localhost:4000/api/getImage/${userInfo.profilePicture}`)
     return (
         <>
             <div>

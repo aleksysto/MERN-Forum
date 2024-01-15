@@ -70,10 +70,31 @@ router.get(
   "/api/posts",
   async (
     req: Request,
-    res: types.TypedResponse<types.PostsResBody>
+    res: types.TypedResponse<types.AggregatePostsResBody>
   ): Promise<void> => {
     const posts: InferSchemaType<typeof schemas.Posts> =
-      await schemas.Posts.find({});
+      await schemas.Posts.aggregate([
+        {
+          $lookup: {
+            from: "users",
+            localField: "author",
+            foreignField: "login",
+            as: "user",
+          },
+        },
+        {
+          $project: {
+            _id: 1,
+            category: 1,
+            title: 1,
+            content: 1,
+            author: 1,
+            date: 1,
+            userId: { $arrayElemAt: ["$user._id", 0] },
+            userProfilePicture: { $arrayElemAt: ["$user.profilePicture", 0] },
+          },
+        },
+      ]);
     if (posts) {
       res.json({ message: `${posts.length} found`, posts: posts });
     } else {
@@ -108,14 +129,40 @@ router.get(
   "/api/posts/id/:id",
   async (
     req: types.IdPostsRequest,
-    res: types.TypedResponse<types.SinglePostResBody>
+    res: types.TypedResponse<types.AggregateSinglePostResBody>
   ): Promise<void> => {
     const id: string = req.params.id;
     if (!checkIfCorrectId(id)) {
       res.status(400).json({ message: "Invalid ID" });
     } else {
       const post: InferSchemaType<typeof schemas.Posts> =
-        await schemas.Posts.findById(id);
+        await schemas.Posts.aggregate([
+          {
+            $match: {
+              _id: id,
+            },
+          },
+          {
+            $lookup: {
+              from: "users",
+              localField: "author",
+              foreignField: "login",
+              as: "user",
+            },
+          },
+          {
+            $project: {
+              _id: 1,
+              category: 1,
+              title: 1,
+              content: 1,
+              author: 1,
+              date: 1,
+              userId: { $arrayElemAt: ["$user._id", 0] },
+              userProfilePicture: { $arrayElemAt: ["$user.profilePicture", 0] },
+            },
+          },
+        ]);
       if (post) {
         res.json({ message: "Post found", post: post });
       } else {

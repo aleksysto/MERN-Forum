@@ -175,14 +175,32 @@ export type RegisterResBody =
   | { message: string; user: InferSchemaType<typeof schemas.Users> }
   | { message: string };
 
+export interface AggregatePostObject extends PostObject {
+  userId: string;
+  userProfilePicture: string;
+}
+export type AggregatePostsResBody =
+  | { message: string; posts: Array<AggregatePostObject> }
+  | { message: string };
 export type PostsResBody =
   | { message: string; posts: Array<PostObject> }
+  | { message: string };
+
+export type AggregateSinglePostResBody =
+  | { message: string; post: AggregatePostObject }
   | { message: string };
 
 export type SinglePostResBody =
   | { message: string; post: PostObject }
   | { message: string };
 
+export interface AggregateCommentObject extends CommentObject {
+  userId: string;
+  userProfilePicture: string;
+}
+export type AggregateCommentsResBody =
+  | { message: string; comments: Array<AggregateCommentObject> }
+  | { message: string };
 export type CommentsResBody =
   | { message: string; comments: Array<CommentObject> }
   | { message: string };

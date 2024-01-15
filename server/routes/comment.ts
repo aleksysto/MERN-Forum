@@ -78,14 +78,45 @@ router.get(
   "/api/posts/:id/comments",
   async (
     req: types.IdPostsRequest,
-    res: types.TypedResponse<types.CommentsResBody>
+    res: types.TypedResponse<types.AggregateCommentsResBody>
   ): Promise<void> => {
     const id: string = req.params.id;
     if (!checkIfCorrectId(id)) {
       res.status(400).json({ message: "Invalid ID" });
     } else {
       const comments: InferSchemaType<typeof schemas.Comments> =
-        await schemas.Comments.find({ postId: id }).sort({ date: 1 });
+        await schemas.Comments.aggregate([
+          {
+            $match: {
+              postId: id,
+            },
+          },
+          {
+            $sort: {
+              date: 1,
+            },
+          },
+          {
+            $lookup: {
+              from: "users",
+              localField: "author",
+              foreignField: "login",
+              as: "user",
+            },
+          },
+          {
+            $project: {
+              _id: 1,
+              content: 1,
+              author: 1,
+              date: 1,
+              userId: { $arrayElemAt: ["$user._id", 0] },
+              userProfilePicture: {
+                $arrayElemAt: ["$user.profilePicture", 0],
+              },
+            },
+          },
+        ]);
       if (comments) {
         res.json({ message: `${comments.length} found`, comments: comments });
       } else {

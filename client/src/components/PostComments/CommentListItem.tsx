@@ -1,7 +1,6 @@
 import React from "react";
 import { CommentListItemProps } from "../interfaces/PostComments";
 import DateCreator from "../DateCreator/DateCreator";
-
 export default function CommentListItem({
     comment,
     index,
