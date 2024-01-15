@@ -4,6 +4,7 @@ import axios, { AxiosError, AxiosResponse } from 'axios'
 import validationSchema from './validationSchema';
 import { RegisterUserObject, RegisterFormValues } from '../interfaces/RegisterUserTypes';
 import { RegisterHookValues } from '../interfaces/useRegisterSuccessTypes';
+import * as uuid from 'uuid';
 export default function RegisterForm({ setRegisterSuccess }: RegisterHookValues): JSX.Element {
     const formik: FormikProps<RegisterFormValues> = useFormik<RegisterFormValues>({
         initialValues: {
@@ -12,22 +13,27 @@ export default function RegisterForm({ setRegisterSuccess }: RegisterHookValues)
             email: '',
             password: '',
             confirmPassword: '',
-            tos: false
+            tos: false,
+            profilePicture: ''
         },
         validationSchema: validationSchema,
         validateOnChange: false,
         onSubmit: async (values: RegisterFormValues): Promise<void> => {
-            const { login, email, password }: RegisterUserObject = values
+            const { login, email, password, profilePicture }: RegisterUserObject = values
             const { image }: { image: File | null } = values
             const reqBody: RegisterUserObject = {
                 login: login,
                 email: email,
-                password: password
+                password: password,
+                profilePicture
             }
             if (image) {
+                const imageId: string = uuid.v4()
+                const fileType: string = image.type.split("/")[1]
+                const fileName: string = `${imageId}.${fileType}`
                 const formData = new FormData()
                 formData.append('image', image)
-                axios.post('http://localhost:4000/api/uploadImage/2137paporRapist', formData, {
+                axios.post(`http://localhost:4000/api/uploadImage/${imageId}`, formData, {
                     headers: {
                         'Content-Type': 'image/png'
                     }
@@ -37,14 +43,22 @@ export default function RegisterForm({ setRegisterSuccess }: RegisterHookValues)
                     .catch((err) => {
                         console.log(err)
                     })
+                axios.post('http://localhost:4000/api/register', { ...reqBody, profilePicture: fileName })
+                    .then((res: AxiosResponse): void => {
+                        setRegisterSuccess(true)
+                    })
+                    .catch((err: AxiosError): void => {
+                        setRegisterSuccess(false)
+                    })
+            } else {
+                axios.post('http://localhost:4000/api/register', reqBody)
+                    .then((res: AxiosResponse): void => {
+                        setRegisterSuccess(true)
+                    })
+                    .catch((err: AxiosError): void => {
+                        setRegisterSuccess(false)
+                    })
             }
-            axios.post('http://localhost:4000/api/register', reqBody)
-                .then((res: AxiosResponse): void => {
-                    setRegisterSuccess(true)
-                })
-                .catch((err: AxiosError): void => {
-                    setRegisterSuccess(false)
-                })
             formik.resetForm()
         }
     })
@@ -100,7 +114,7 @@ export default function RegisterForm({ setRegisterSuccess }: RegisterHookValues)
                         <div>{formik.errors.tos}</div>
                     ) : null}
 
-                    <button type="submit">Submit</button>
+                    <button type="submit" onClick={() => console.log(formik.errors)}>Submit</button>
                 </form>
             </div>
         </>

@@ -6,6 +6,7 @@ export interface UserObject {
   type: "user" | "moderator" | "admin";
   lastActive: Date;
   entryDate: Date;
+  profilePicture: "";
 }
 export interface UserContextType {
   loggedIn: boolean;

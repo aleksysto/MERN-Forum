@@ -30,7 +30,6 @@
     "redux-thunk": "^3.1.0",
     "stream": "npm:stream-browserify",
     "typescript": "^4.9.5",
-    "uuidv4": "^6.2.13",
     "web-vitals": "^2.1.4",
     "yup": "^1.3.3"
   },
@@ -63,7 +62,9 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@types/dompurify": "^3.0.5",
     "@types/lodash": "^4.14.202",
-    "react-scripts": "5.0.1"
+    "@types/uuid": "^9.0.7",
+    "react-scripts": "5.0.1",
+    "uuid": "^9.0.1"
   },
   "browser": {
     "crypto": false

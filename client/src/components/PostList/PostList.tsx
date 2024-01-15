@@ -27,7 +27,7 @@ export default function PostList() {
                 <ul>
                     {
                         posts.map((post: PostObject, idx: number): JSX.Element => {
-                            return <PostListItem post={post} index={idx} />
+                            return <PostListItem post={post} index={idx} key={idx} />
                         })
                     }
                 </ul>

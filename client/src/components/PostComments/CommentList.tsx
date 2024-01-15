@@ -6,6 +6,7 @@ import { StateObject } from '../interfaces/ReducerTypes'
 import { getComments } from '../reducers/actions/CommentActions'
 import { Params, useParams } from 'react-router-dom'
 import CommentListItem from './CommentListItem'
+import * as uuid from 'uuid';
 export default function CommentList(): JSX.Element {
     const { id }: Readonly<Params<string>> = useParams()
     const url: string = `http://localhost:4000/api/posts/${id}/comments`
@@ -24,7 +25,7 @@ export default function CommentList(): JSX.Element {
                 <ul style={{ listStyle: "none" }}>
                     {comments.map((comment: Comment, index) => {
                         return (
-                            <CommentListItem comment={comment} index={index} />
+                            <CommentListItem comment={comment} index={index} key={uuid.v4()} />
                         )
                     })}
                 </ul>

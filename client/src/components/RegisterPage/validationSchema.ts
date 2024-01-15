@@ -22,32 +22,31 @@ function checkImageSize(value: any): boolean {
     }
     return true;
   } else {
-    return false;
+    return true;
   }
 }
 function checkImageFormat(value: any): boolean {
   console.log(value);
   if (value) {
     const file: File = value as File;
-    if (["image/jpeg", "image/png"].includes(file.type)) {
+    if (
+      file.type !== "image/png" &&
+      file.type !== "image/jpeg" &&
+      file.type !== "image/jpg"
+    ) {
       return false;
     }
     return true;
   } else {
-    return false;
+    return true;
   }
 }
 
 const validationSchema: UserRegisterValidation = Yup.object({
   image: Yup.mixed()
-    .test("fileSize", "File size is too large", (value) => {
-      return value && (value as File).size <= 2097152; // 2MB
-    })
-    .test("fileType", "Unsupported file format", (value) => {
-      return (
-        value && ["image/jpeg", "image/png"].includes((value as File).type)
-      );
-    }),
+    .nullable()
+    .test("fileSize", "File size is too large", checkImageSize)
+    .test("fileType", "Unsupported file format", checkImageFormat),
   login: Yup.string()
     .required("* Required")
     .min(3, "Must be 3 characters or more")

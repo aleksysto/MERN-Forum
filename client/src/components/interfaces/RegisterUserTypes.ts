@@ -14,10 +14,12 @@ export interface RegisterFormValues {
   password: string;
   confirmPassword: string;
   tos: boolean;
+  profilePicture: "";
 }
 
 export interface RegisterUserObject {
   login: string;
   email: string;
   password: string;
+  profilePicture: string;
 }
