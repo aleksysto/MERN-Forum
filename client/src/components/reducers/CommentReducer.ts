@@ -33,12 +33,11 @@ const commentsReducer: Reducer<StateObject> = createReducer<StateObject>(
       ): StateObject => {
         const message: string = action.payload.message;
         const comments: Comment[] = action.payload.comments;
-        console.log("in reducer", message, comments);
         return {
           ...state,
           comments: comments,
           message: message,
-          printedComments: comments,
+          printedComments: comments.slice(0, 10),
         };
       }
     );
@@ -60,7 +59,6 @@ const commentsReducer: Reducer<StateObject> = createReducer<StateObject>(
         action: PayloadAction<SetMessagePayload>
       ): StateObject => {
         const message: string = action.payload.message;
-        console.log("in reducer", message);
         return {
           ...state,
           message: message,

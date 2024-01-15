@@ -34,6 +34,11 @@ export function getCommentsAction(
 ): PayloadAction<GetCommentsPayload> {
   return setComments({ comments, message });
 }
+
+export function setPageAction(page: number): PayloadAction<number> {
+  return commentsSetPage(page);
+}
+
 export function getComments(
   url: string
 ): ThunkAction<void, StateObject, unknown, PayloadAction<GetCommentsPayload>> {
