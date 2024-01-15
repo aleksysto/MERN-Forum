@@ -17,6 +17,7 @@ import PostPage from './components/PostPage/PostPage';
 import commentsStore from './components/reducers/stores/store';
 import { Provider } from 'react-redux';
 import CommentEditor from './components/CreateComment/CommentEditor';
+import PostCreator from './components/CreatePost/PostCreator';
 
 const root: Root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -43,7 +44,12 @@ const router = createBrowserRouter([
     children: [{
       path: ":category",
       element: <PostList />
-    }, {
+    },
+    {
+      path: ":category/create",
+      element: <PostCreator />
+    },
+    {
       path: "post/:id",
       element: <PostPage />
     }]

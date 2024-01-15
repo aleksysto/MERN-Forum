@@ -5,11 +5,13 @@ import DOMPurify from 'dompurify'
 import axios, { AxiosError, AxiosResponse } from 'axios'
 import { useUserContext } from '../contexts/UserContext'
 import { EditorComponentProps, UploadPost } from '../interfaces/EditorComponent'
+import { Params, useParams } from 'react-router-dom'
 export default function PostEditor({ setCreated, setMessage }: EditorComponentProps): JSX.Element {
     const [content, setContent] = useState<string>('')
     const [title, setTitle] = useState<string>('')
     const [errors, setErrors] = useState<null | string>(null)
     const { userInfo } = useUserContext()
+    const { category }: Readonly<Params<string>> = useParams()
     function handleQuillChange(value: string, delta: DeltaStatic, source: Sources, editor: UnprivilegedEditor): void {
         const images: DeltaOperation[] | undefined = editor.getContents().ops?.filter((op: DeltaOperation): boolean => op.insert?.image).slice(-1)
         console.log(images)
@@ -63,7 +65,7 @@ export default function PostEditor({ setCreated, setMessage }: EditorComponentPr
                 author: author,
                 content: sanitizedContent
             }
-            axios.post('http://localhost:4000/api/posts/category', submitPost, { headers: { 'Authorization': `${localStorage.getItem('token')}` } })
+            axios.post(`http://localhost:4000/api/posts/${category}`, submitPost, { headers: { 'Authorization': `${localStorage.getItem('token')}` } })
                 .then((res: AxiosResponse<{ message: string }>): void => {
                     setCreated(true)
                     setMessage(res.data.message)

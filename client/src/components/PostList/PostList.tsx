@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { PostObject } from '../interfaces/ForumPosts'
 import axios, { AxiosResponse } from 'axios'
-import { Params, useParams } from 'react-router-dom'
+import { Link, Params, useParams } from 'react-router-dom'
 import PostListItem from './PostListItem'
 
 
@@ -23,7 +23,7 @@ export default function PostList() {
     return (
         <>
             <div>
-                {count}
+                {count} <Link to={{ pathname: `/posts/${category}/create` }}><button>create post</button></Link>
                 <ul>
                     {
                         posts.map((post: PostObject, idx: number): JSX.Element => {
