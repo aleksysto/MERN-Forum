@@ -5,8 +5,12 @@ export interface PostObject {
   author: string;
   date: Date;
 }
+export interface AggregatePostObject extends PostObject {
+  userId: string;
+  userProfilePicture: string;
+}
 
 export interface PostItemProps {
-  post: PostObject;
+  post: AggregatePostObject;
   index: number;
 }

@@ -72,7 +72,7 @@ router.post(
     }
   }
 );
-
+const ObjectId = require("mongoose").Types.ObjectId;
 // HTTP GET for all posts comments
 router.get(
   "/api/posts/:id/comments",
@@ -117,7 +117,7 @@ router.get(
             },
           },
         ]);
-      if (comments) {
+      if (comments.length > 0) {
         res.json({ message: `${comments.length} found`, comments: comments });
       } else {
         res.status(404).json({ message: "No comments found" });

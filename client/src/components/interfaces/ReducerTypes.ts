@@ -1,7 +1,7 @@
-import { Comment } from "./PostComments";
+import { AggregateComment } from "./PostComments";
 
 export interface GetCommentsPayload extends SetMessagePayload {
-  comments: Comment[];
+  comments: AggregateComment[];
 }
 
 export interface SetMessagePayload {
@@ -10,6 +10,6 @@ export interface SetMessagePayload {
 
 export interface StateObject {
   message: string;
-  comments: Comment[];
-  printedComments: Comment[];
+  comments: AggregateComment[];
+  printedComments: AggregateComment[];
 }

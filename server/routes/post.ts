@@ -2,6 +2,7 @@ import { InferSchemaType } from "mongoose";
 import { Router, Request, Response } from "express";
 import * as types from "../interfaces/RouterTypes";
 const schemas = require("../models/schemas");
+const ObjectId = require("mongoose").Types.ObjectId;
 const express = require("express");
 import {
   secretKey,
@@ -95,7 +96,7 @@ router.get(
           },
         },
       ]);
-    if (posts) {
+    if (posts.length > 0) {
       res.json({ message: `${posts.length} found`, posts: posts });
     } else {
       res.status(404).json({ message: "No posts found" });
@@ -135,13 +136,10 @@ router.get(
     if (!checkIfCorrectId(id)) {
       res.status(400).json({ message: "Invalid ID" });
     } else {
+      console.log(id);
       const post: InferSchemaType<typeof schemas.Posts> =
         await schemas.Posts.aggregate([
-          {
-            $match: {
-              _id: id,
-            },
-          },
+          { $match: { _id: new ObjectId(id) } },
           {
             $lookup: {
               from: "users",
@@ -163,7 +161,7 @@ router.get(
             },
           },
         ]);
-      if (post) {
+      if (post.length > 0) {
         res.json({ message: "Post found", post: post });
       } else {
         res.status(404).json({ message: "No posts found" });

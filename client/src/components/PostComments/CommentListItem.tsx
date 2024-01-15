@@ -10,7 +10,7 @@ export default function CommentListItem({
             <li key={index}>
                 <div>
                     <div style={{ display: "flex", justifyContent: "space-between", width: "100%", margin: "auto" }}>
-                        <div>{comment.author}</div> <div><DateCreator date={comment.date} /></div>
+                        <div>{comment.author}</div><img style={{ width: "30px", height: "30px" }} src={`http://localhost:4000/api/getImage/${comment.userProfilePicture}`} alt="" /> <div><DateCreator date={comment.date} /></div>
                     </div>
                     <div dangerouslySetInnerHTML={{ __html: comment.content }}></div>
                 </div>

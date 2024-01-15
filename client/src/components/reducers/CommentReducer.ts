@@ -9,7 +9,7 @@ import {
   setComments,
   setMessage,
 } from "./actions/CommentActions";
-import { Comment } from "../interfaces/PostComments";
+import { AggregateComment } from "../interfaces/PostComments";
 import {
   GetCommentsPayload,
   SetMessagePayload,
@@ -18,8 +18,8 @@ import {
 
 const initialState: StateObject = {
   message: "",
-  comments: [] as Comment[],
-  printedComments: [] as Comment[],
+  comments: [] as AggregateComment[],
+  printedComments: [] as AggregateComment[],
 };
 
 const commentsReducer: Reducer<StateObject> = createReducer<StateObject>(
@@ -32,7 +32,7 @@ const commentsReducer: Reducer<StateObject> = createReducer<StateObject>(
         action: PayloadAction<GetCommentsPayload>
       ): StateObject => {
         const message: string = action.payload.message;
-        const comments: Comment[] = action.payload.comments;
+        const comments: AggregateComment[] = action.payload.comments;
         return {
           ...state,
           comments: comments,
@@ -45,7 +45,7 @@ const commentsReducer: Reducer<StateObject> = createReducer<StateObject>(
       commentsSetPage,
       (state: StateObject, action: PayloadAction<number>): StateObject => {
         const skipValue: number = action.payload * 10;
-        const newComments: Array<Comment> = state.comments.slice(
+        const newComments: AggregateComment[] = state.comments.slice(
           skipValue,
           skipValue + 10
         );

@@ -10,6 +10,7 @@ export default function PostListItem({ post, index }: PostItemProps): JSX.Elemen
                 <div>
                     <div>{post.title}</div>
                     <div>{post.author}</div>
+                    <img style={{ width: "50px", height: "50px" }} src={`http://localhost:4000/api/getImage/${post.userProfilePicture}`} alt="" />
                     <div><DateCreator date={post.date} /></div>
                 </div>
             </Link>

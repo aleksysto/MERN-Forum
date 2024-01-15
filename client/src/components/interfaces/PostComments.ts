@@ -4,8 +4,12 @@ export interface Comment {
   author: string;
   date: Date;
 }
+export interface AggregateComment extends Comment {
+  userId: string;
+  userProfilePicture: string;
+}
 
 export interface CommentListItemProps {
-  comment: Comment;
+  comment: AggregateComment;
   index: number;
 }

@@ -12,6 +12,11 @@ async function getCategoryPosts(
       const posts: InferSchemaType<typeof schemas.Posts> =
         await schemas.Posts.aggregate([
           {
+            $match: {
+              category: category,
+            },
+          },
+          {
             $lookup: {
               from: "users",
               localField: "author",
