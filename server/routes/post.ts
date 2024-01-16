@@ -46,7 +46,12 @@ router.post(
           ) {
             const savedPost: InferSchemaType<typeof schemas.Posts> =
               await new schemas.Posts(newPost).save();
-            if (savedPost) {
+            const updateUser: InferSchemaType<typeof schemas.Users> =
+              await schemas.Users.findOneAndUpdate(
+                { _id: postingUser._id },
+                { posts: postingUser.posts + 1 }
+              );
+            if (savedPost && updateUser) {
               res.json({ message: "Post created", comment: savedPost });
             } else {
               res.status(500).json({ message: "Error creating comment" });
