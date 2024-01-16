@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM, { Root } from 'react-dom/client';
 import {
   createBrowserRouter,
-  RouterProvider
+  RouterProvider,
 } from 'react-router-dom';
 import './index.css';
 import App from './App';
@@ -18,6 +18,7 @@ import commentsStore from './components/reducers/stores/store';
 import { Provider } from 'react-redux';
 import CommentEditor from './components/CreateComment/CommentEditor';
 import PostCreator from './components/CreatePost/PostCreator';
+import SearchResultsPage from './components/SearchResults/SearchResultsPage';
 
 const root: Root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
   {
     path: "/account",
     element: <PrivateRoute><AccountPage /></PrivateRoute>,
+  },
+  {
+    path: "/search",
+    element: <SearchResultsPage />
   },
   {
     path: "/posts/",

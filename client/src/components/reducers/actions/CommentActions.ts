@@ -52,8 +52,10 @@ export function getComments(
         const { comments, message }: GetCommentsPayload = res.data;
         dispatch(getCommentsAction(comments, message));
       })
-      .catch((error: AxiosError): void => {
-        dispatch(setMessageAction("Server error..."));
+      .catch((error: AxiosError<{ message: string }>): void => {
+        error.response
+          ? dispatch(setMessageAction(error.response.data.message))
+          : dispatch(setMessageAction("Server error"));
       });
   };
 }

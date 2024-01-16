@@ -136,7 +136,6 @@ router.get(
     if (!checkIfCorrectId(id)) {
       res.status(400).json({ message: "Invalid ID" });
     } else {
-      console.log(id);
       const post: InferSchemaType<typeof schemas.Posts> =
         await schemas.Posts.aggregate([
           { $match: { _id: new ObjectId(id) } },

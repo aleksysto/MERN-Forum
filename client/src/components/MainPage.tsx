@@ -4,6 +4,7 @@ import { useUserContext } from './contexts/UserContext';
 import LogoutButton from './utils/LogoutButton';
 import CategoryList from './CategoryList/CategoryList';
 import PostCreator from './CreatePost/PostCreator';
+import SearchBar from './SearchBar/SearchBar';
 export default function MainPage(): JSX.Element {
     const { loggedIn } = useUserContext()
     useEffect(() => {
@@ -22,6 +23,8 @@ export default function MainPage(): JSX.Element {
                     <Link to={{ pathname: '/account' }}>Account</Link>
                     <br />
                     <LogoutButton />
+                    <br />
+                    <SearchBar />
                 </nav>
                 <div>
                     <CategoryList />

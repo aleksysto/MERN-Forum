@@ -42,7 +42,7 @@ const userSchema = new Schema<UserObject>({
   },
   profilePicture: {
     type: String,
-    default: null,
+    default: "default.jpg",
   },
 });
 const Users: InferSchemaType<typeof userSchema> = mongoose.model(
