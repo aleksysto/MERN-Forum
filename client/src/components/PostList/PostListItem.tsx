@@ -8,9 +8,11 @@ export default function PostListItem({ post, index }: PostItemProps): JSX.Elemen
         <li key={index}>
             <Link to={{ pathname: `/posts/post/${post._id}` }}>
                 <div>
-                    <div>{post.title}</div>
+                    <img style={{ width: "50px", height: "50px" }} src={`http://localhost:4000/api/getImage/${post.userProfilePicture}`} alt="None" />
                     <div>{post.author}</div>
-                    <img style={{ width: "50px", height: "50px" }} src={`http://localhost:4000/api/getImage/${post.userProfilePicture}`} alt="" />
+                    <div>{post.title}</div>
+                    <div>{post.category}</div>
+
                     <div><DateCreator date={post.date} /></div>
                 </div>
             </Link>
