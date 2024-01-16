@@ -6,7 +6,7 @@ import PostListItem from './PostListItem'
 
 
 export default function PostList() {
-    const [posts, setPosts] = useState<AggregatePostObject[]>([])
+    const [posts, setPosts] = useState<AggregatePostObject[] | null>(null)
     const [count, setCount] = useState<string>('')
     const { category }: Readonly<Params<string>> = useParams()
     useEffect((): void => {
@@ -20,7 +20,7 @@ export default function PostList() {
             })
     }, [])
 
-    return (
+    return posts ? (
         <>
             <div>
                 {count} <Link to={{ pathname: `/posts/${category}/create` }}><button>create post</button></Link>
@@ -33,5 +33,7 @@ export default function PostList() {
                 </ul>
             </div>
         </>
+    ) : (
+        <div>Loading...</div>
     )
 }

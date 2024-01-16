@@ -54,8 +54,8 @@ export function getComments(
       })
       .catch((error: AxiosError<{ message: string }>): void => {
         error.response
-          ? dispatch(setMessageAction(error.response.data.message))
-          : dispatch(setMessageAction("Server error"));
+          ? dispatch(getCommentsAction([], error.response.data.message))
+          : dispatch(getCommentsAction([], "Server error"));
       });
   };
 }

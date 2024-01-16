@@ -26,7 +26,7 @@ const root: Root = ReactDOM.createRoot(
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Provider store={commentsStore}><App /></Provider>,
+    element: <App />,
   },
   {
     path: "/register",
@@ -56,7 +56,7 @@ const router = createBrowserRouter([
     },
     {
       path: "post/:id",
-      element: <PostPage />
+      element: <Provider store={commentsStore}><PostPage /> </Provider>
     }]
   }
 ]);

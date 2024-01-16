@@ -3,19 +3,15 @@ import ReactQuill, { UnprivilegedEditor } from 'react-quill'
 import { DeltaStatic, Sources, DeltaOperation } from 'quill'
 import DOMPurify from 'dompurify'
 import axios, { AxiosError, AxiosResponse } from 'axios'
-import { useUserContext } from '../contexts/UserContext'
-import { Params, useParams } from 'react-router-dom'
 import { Comment } from '../interfaces/PostComments'
-import { UploadComment, CommentEditorProps } from '../interfaces/EditorComponent'
+import { EditedComment, EditCommentProps } from '../interfaces/EditorComponent'
 import { CommentsDispatch, useCommentsDispatch } from '../reducers/stores/store'
 import { getComments } from '../reducers/actions/CommentActions'
-export default function CommentEditor({ setMessage }: CommentEditorProps): JSX.Element {
-    const [content, setContent] = useState<string>('')
+export default function EditComment({ setMessage, comment, setEditing }: EditCommentProps): JSX.Element {
+    const [content, setContent] = useState<string>(comment.content)
     const [errors, setErrors] = useState<null | string>(null)
-    const { userInfo } = useUserContext()
-    const { id }: Readonly<Params<string>> = useParams()
-    const token: string | null = localStorage.getItem('token')
     const dispatch: CommentsDispatch = useCommentsDispatch()
+    const token: string | null = localStorage.getItem('token')
     function handleQuillChange(value: string, delta: DeltaStatic, source: Sources, editor: UnprivilegedEditor): void {
         const images: DeltaOperation[] | undefined = editor.getContents().ops?.filter((op: DeltaOperation) => op.insert?.image)
         if (images && images.length > 0) {
@@ -54,19 +50,14 @@ export default function CommentEditor({ setMessage }: CommentEditorProps): JSX.E
         event.preventDefault()
         if (!errors) {
             const sanitizedContent: string = DOMPurify.sanitize(content)
-            const author: string = userInfo.login
-            const submitComment: UploadComment = {
-                postId: `${id}`,
-                author: author,
+            const submitComment: EditedComment = {
                 content: sanitizedContent
             }
-            axios.post(`http://localhost:4000/api/posts/id/${id}/comment`, submitComment, { headers: { 'Authorization': `${token as string}` } })
+            axios.patch(`http://localhost:4000/api/comments/id/${comment._id}`, submitComment, { headers: { 'Authorization': `${token as string}` } })
                 .then((res: AxiosResponse<{ message: string, comment: Comment }>): void => {
                     setMessage(res.data.message)
-                    setContent('')
-                    setErrors('')
-                    dispatch(getComments(`http://localhost:4000/api/posts/${id}/comments`))
-                    console.log(id)
+                    setEditing(false)
+                    dispatch(getComments(`http://localhost:4000/api/posts/${comment.postId}/comments`))
                 })
                 .catch((err: AxiosError): void => {
                     console.log(err)
@@ -105,6 +96,7 @@ export default function CommentEditor({ setMessage }: CommentEditorProps): JSX.E
                         />
                     </div>
                     <input type="submit" />
+                    <button onClick={(): void => setEditing(false)}>Cancel</button>
                 </form>
             </div>
         </>

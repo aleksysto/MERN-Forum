@@ -21,7 +21,7 @@ export default function PostEditor({ setCreated, setMessage }: EditorComponentPr
                 } else {
                     setErrors(null)
                 }
-                const imageString: string = images[0].insert.image
+                const imageString: string = image.insert.image
                 const imageStringLength: number = imageString.length - 22;
                 const sizeInBytes: number = 4 * Math.ceil(imageStringLength / 3) * 0.5624896334383812
                 const maxSize: number = 1048576

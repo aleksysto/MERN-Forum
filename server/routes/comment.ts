@@ -113,6 +113,7 @@ router.get(
           {
             $project: {
               _id: 1,
+              postId: 1,
               content: 1,
               author: 1,
               date: 1,
