@@ -14,27 +14,28 @@ export default function CommentEditor({ setMessage }: CommentEditorProps): JSX.E
     const { id }: Readonly<Params<string>> = useParams()
     const token: string | null = localStorage.getItem('token')
     function handleQuillChange(value: string, delta: DeltaStatic, source: Sources, editor: UnprivilegedEditor): void {
-        const images: DeltaOperation[] | undefined = editor.getContents().ops?.filter((op: DeltaOperation) => op.insert?.image).slice(-1)
-        console.log(images)
+        const images: DeltaOperation[] | undefined = editor.getContents().ops?.filter((op: DeltaOperation) => op.insert?.image)
         if (images && images.length > 0) {
-            if (value.length < 50) {
-                setErrors('Content must be at least 50 characters long')
-            } else {
-                setErrors(null)
-            }
-            const imageString: string = images[0].insert.image
-            const imageStringLength: number = imageString.length - 22;
-            const sizeInBytes: number = 4 * Math.ceil(imageStringLength / 3) * 0.5624896334383812
-            const maxSize: number = 1048576
-            const i = new Image()
-            i.src = imageString
-            i.onload = () => {
-                if (sizeInBytes > maxSize) {
-                    setErrors('File size too big, please remove the image and try again')
-                } else if (i.width > 2048 && i.height > 2048) {
-                    setErrors('We only accept images that are 2048x2048 or less, please remove the image and try again')
+            images.forEach((image: DeltaOperation) => {
+                if (value.length < 50) {
+                    setErrors('Content must be at least 50 characters long')
+                } else {
+                    setErrors(null)
                 }
-            }
+                const imageString: string = images[0].insert.image
+                const imageStringLength: number = imageString.length - 22;
+                const sizeInBytes: number = 4 * Math.ceil(imageStringLength / 3) * 0.5624896334383812
+                const maxSize: number = 1048576
+                const i = new Image()
+                i.src = imageString
+                i.onload = () => {
+                    if (sizeInBytes > maxSize) {
+                        setErrors('File size too big, please remove the image and try again')
+                    } else if (i.width > 2048 && i.height > 2048) {
+                        setErrors('We only accept images that are 2048x2048 or less, please remove the image and try again')
+                    }
+                }
+            })
         } else {
             if (value.length < 50) {
                 setErrors('Content must be at least 50 characters long')
