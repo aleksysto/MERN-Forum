@@ -3,11 +3,13 @@ import { AggregatePostObject } from '../interfaces/ForumPosts'
 import axios, { AxiosResponse } from 'axios'
 import { Link, Params, useParams } from 'react-router-dom'
 import PostListItem from './PostListItem'
+import SortSelection from '../SortResults/SortSelection'
+import useOrderBy from '../hooks/useOrderBy'
 
 
 export default function PostList() {
-    const [posts, setPosts] = useState<AggregatePostObject[] | null>(null)
     const [count, setCount] = useState<string>('')
+    const { posts, setPosts, order, setOrder } = useOrderBy()
     const { category }: Readonly<Params<string>> = useParams()
     useEffect((): void => {
         axios.get(`http://localhost:3000/api/posts/category/${category}`)
@@ -24,6 +26,7 @@ export default function PostList() {
         <>
             <div>
                 {count} <Link to={{ pathname: `/posts/${category}/create` }}><button>create post</button></Link>
+                <SortSelection setOrder={setOrder} />
                 <ul>
                     {
                         posts.map((post: AggregatePostObject, idx: number): JSX.Element => {

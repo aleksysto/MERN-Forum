@@ -9,6 +9,7 @@ export interface UploadPost {
 export interface EditedPost {
   title: string;
   content: string;
+  category?: string;
 }
 export interface EditedComment {
   content: string;

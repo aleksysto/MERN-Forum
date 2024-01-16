@@ -9,7 +9,9 @@ export default function PostEditor({ setMessage, post, setEditing }: EditPostPro
     const [content, setContent] = useState<string>(post.content)
     const [title, setTitle] = useState<string>(post.title)
     const [errors, setErrors] = useState<null | string>(null)
+    const [select, setSelect] = useState<string>('')
     const navigate: NavigateFunction = useNavigate()
+    console.log(select)
     function handleQuillChange(value: string, delta: DeltaStatic, source: Sources, editor: UnprivilegedEditor): void {
         const images: DeltaOperation[] | undefined = editor.getContents().ops?.filter((op: DeltaOperation): boolean => op.insert?.image)
         if (images && images.length > 0) {
@@ -44,7 +46,10 @@ export default function PostEditor({ setMessage, post, setEditing }: EditPostPro
         setContent(value)
     }
 
-
+    function handleSelectChange(event: React.ChangeEvent<HTMLSelectElement>): void {
+        event.preventDefault()
+        setSelect(event.target.value)
+    }
     function handleTitleChange(event: React.ChangeEvent<HTMLInputElement>): void {
         event.preventDefault()
         setTitle(event.target.value)
@@ -58,19 +63,36 @@ export default function PostEditor({ setMessage, post, setEditing }: EditPostPro
         event.preventDefault()
         if (!errors) {
             const sanitizedContent: string = DOMPurify.sanitize(content)
-            const submitPost: EditedPost = {
-                title: title,
-                content: sanitizedContent
+            if (select.length > 1) {
+                const submitPost: EditedPost = {
+                    title: title,
+                    content: sanitizedContent,
+                    category: select
+                }
+                axios.patch(`http://localhost:4000/api/posts/id/${post._id}`, submitPost, { headers: { 'Authorization': `${localStorage.getItem('token')}` } })
+                    .then((res: AxiosResponse<{ message: string }>): void => {
+                        setMessage(res.data.message)
+                        setEditing(false)
+                        navigate(0)
+                    })
+                    .catch((err: AxiosError): void => {
+                        console.log(err)
+                    })
+            } else {
+                const submitPost: EditedPost = {
+                    title: title,
+                    content: sanitizedContent
+                }
+                axios.patch(`http://localhost:4000/api/posts/id/${post._id}`, submitPost, { headers: { 'Authorization': `${localStorage.getItem('token')}` } })
+                    .then((res: AxiosResponse<{ message: string }>): void => {
+                        setMessage(res.data.message)
+                        setEditing(false)
+                        navigate(0)
+                    })
+                    .catch((err: AxiosError): void => {
+                        console.log(err)
+                    })
             }
-            axios.patch(`http://localhost:4000/api/posts/id/${post._id}`, submitPost, { headers: { 'Authorization': `${localStorage.getItem('token')}` } })
-                .then((res: AxiosResponse<{ message: string }>): void => {
-                    setMessage(res.data.message)
-                    setEditing(false)
-                    navigate(0)
-                })
-                .catch((err: AxiosError): void => {
-                    console.log(err)
-                })
         } else {
             setErrors('You can only submit the post after meeting the requirements')
         }
@@ -82,6 +104,13 @@ export default function PostEditor({ setMessage, post, setEditing }: EditPostPro
                 <form onSubmit={handleSubmit}>
                     <label htmlFor="title">Post title: </label>
                     <input type="text" id='title' value={title} onChange={handleTitleChange} />
+                    <select value={select} onChange={handleSelectChange}>
+                        <option value="">-</option>
+                        <option value="category">Category </option>
+                        <option value="test" >Test</option>
+                        <option value="category" >Category</option>
+                        <option value="category" >Category</option>
+                    </select>
                     <div id='editor-container'>
                         <ReactQuill
                             value={content}

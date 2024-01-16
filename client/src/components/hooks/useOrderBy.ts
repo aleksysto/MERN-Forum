@@ -77,7 +77,7 @@ export default function useOrderBy(): useOrderByHook {
         break;
     }
     setPosts(posts);
-  }, [order, posts, setPosts, setOrder]);
+  }, [order, posts, setPosts]);
 
   return { order, setOrder, posts, setPosts };
 }
