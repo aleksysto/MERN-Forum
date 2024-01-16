@@ -10,7 +10,6 @@ import CommentCreator from '../CreateComment/CommentCreator'
 
 export default function PostPage(): JSX.Element {
     const [error, setError] = useState<string | null>(null)
-
     return error ? (
         <>
             <div>{error}</div>

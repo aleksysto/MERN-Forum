@@ -3,6 +3,9 @@ import React, { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { AggregatePostObject } from '../interfaces/ForumPosts'
 import PostListItem from '../PostList/PostListItem'
+import useOrderBy from '../hooks/useOrderBy'
+import { useOrderByHook } from '../interfaces/useOrderByTypes'
+import SortSelection from '../SortResults/SortSelection'
 
 export default function SearchResultsPage() {
     const [searchParams] = useSearchParams()
@@ -11,7 +14,8 @@ export default function SearchResultsPage() {
     const category: null | string = searchParams.get('category')
     const keywords: null | string = searchParams.get('keywords')
     const [message, setMessage] = useState<string>('loading...')
-    const [posts, setPosts] = useState<null | AggregatePostObject[]>(null)
+    const { setOrder, posts, setPosts }: useOrderByHook = useOrderBy()
+
     useEffect(() => {
         if (keywords) {
             axios.get(`http://localhost:4000/api/search?keywords=${keywords}&category=${category}`)
@@ -34,9 +38,13 @@ export default function SearchResultsPage() {
         }
     }, [])
     return posts === null ? (<>
-        <div>{message}</div></>
+        <div>{message}</div>
+    </>
     ) : (
         <>
+            <div>
+                <SortSelection setOrder={setOrder} />
+            </div>
             <div>{message}, results: </div>
             <div>
                 <ul>
