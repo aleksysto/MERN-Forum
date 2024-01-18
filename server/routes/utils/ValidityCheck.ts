@@ -61,3 +61,52 @@ export function checkIfAdmin(user: types.DbUserObject): boolean {
     return false;
   }
 }
+
+export function checkEmail(email: string): boolean {
+  const mailRegex: RegExp = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+  if (mailRegex.test(email)) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+export function checkLogin(login: string): boolean {
+  if (login.length >= 3 && login.length <= 20) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+export function checkPassword(password: string): boolean {
+  const pwdRegex: RegExp =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  if (pwdRegex.test(password)) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+export function checkCategory(category: string): boolean {
+  if (category == "category" || category == "test") {
+    return true;
+  } else {
+    return false;
+  }
+}
+export function checkContent(content: string): boolean {
+  if (content.length > 50) {
+    return true;
+  } else {
+    return false;
+  }
+}
+export function checkTitle(title: string): boolean {
+  if (title.length > 10) {
+    return true;
+  } else {
+    return false;
+  }
+}

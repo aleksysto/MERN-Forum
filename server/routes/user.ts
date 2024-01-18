@@ -8,6 +8,9 @@ import {
   checkTokenValidity,
   checkIfCorrectId,
   checkIfAdmin,
+  checkPassword,
+  checkEmail,
+  checkLogin,
 } from "./utils/ValidityCheck";
 import generateToken from "./utils/TokenGeneration";
 import jwt, { JwtPayload } from "jsonwebtoken";
@@ -31,14 +34,21 @@ router.post(
       login: login,
       email: email,
       password: encryptedPassword,
-      profilePicture: profilePicture,
+      profilePicture: profilePicture || "default.jpg",
     };
 
     const newUser: InferSchemaType<typeof schemas.Users> = new schemas.Users(
       userData
     );
 
-    if (login && email && password) {
+    if (
+      login &&
+      email &&
+      password &&
+      checkLogin(login) &&
+      checkEmail(email) &&
+      checkPassword(password)
+    ) {
       const saveUser: InferSchemaType<typeof schemas.Users> =
         await newUser.save();
       const user: InferSchemaType<typeof schemas.Users> =
@@ -215,20 +225,20 @@ router.patch(
               await schemas.Users.findOne({ _id: id });
             if (editingUser && editedUser) {
               if (checkIfUserIsAccOwnerOrAdmin(id, editingUser)) {
-                if (login) {
+                if (login && checkLogin(login)) {
                   await schemas.Users.findOneAndUpdate(
                     { _id: id },
                     { login: login }
                   );
                 }
-                if (password) {
+                if (password && checkPassword(password)) {
                   const encryptedPassword = await encryptPassword(password);
                   await schemas.Users.findOneAndUpdate(
                     { _id: id },
                     { password: encryptedPassword }
                   );
                 }
-                if (email) {
+                if (email && checkEmail(email)) {
                   await schemas.Users.findOneAndUpdate(
                     { _id: id },
                     { email: email }

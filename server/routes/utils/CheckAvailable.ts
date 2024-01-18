@@ -28,5 +28,4 @@ async function checkAvailable(
       res.json({ available: notAvailable });
     });
 }
-// res.json({ available: false })
 export default checkAvailable;

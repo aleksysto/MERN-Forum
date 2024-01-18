@@ -1,4 +1,4 @@
-import { Multer } from "multer";
+import { FileFilterCallback, Multer } from "multer";
 import { DestinationCallback } from "../../interfaces/MulterTypes";
 import { Express, Request } from "express";
 const multer = require("multer");
@@ -22,4 +22,21 @@ export const storage: Multer = multer.diskStorage({
     );
   },
 });
-export const upload: Multer = multer({ storage });
+
+function fileFilter(
+  req: Request,
+  file: Express.Multer.File,
+  cb: FileFilterCallback
+): void {
+  if (
+    file.mimetype === "image/png" ||
+    file.mimetype === "image/jpg" ||
+    file.mimetype === "image/jpeg"
+  ) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+}
+
+export const upload: Multer = multer({ storage, fileFilter });

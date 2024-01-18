@@ -9,6 +9,9 @@ import {
   checkIfCorrectId,
   checkIfUserIsAuthorOrAdmin,
   checkTokenValidity,
+  checkContent,
+  checkCategory,
+  checkTitle,
 } from "./utils/ValidityCheck";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import getCategoryPosts from "./utils/GetCategoryPosts";
@@ -41,6 +44,9 @@ router.post(
             content &&
             author &&
             title &&
+            checkContent(content) &&
+            checkTitle(title) &&
+            checkCategory(category) &&
             postingUser &&
             postingUser.login === author
           ) {
@@ -344,19 +350,19 @@ router.patch(
               await schemas.Posts.findOne({ _id: id });
             if (user && post) {
               if (checkIfUserIsAuthorOrAdmin(user, post)) {
-                if (title) {
+                if (title && checkTitle(title)) {
                   await schemas.Posts.findOneAndUpdate(
                     { _id: id },
                     { title: title }
                   );
                 }
-                if (content) {
+                if (content && checkContent(content)) {
                   await schemas.Posts.findOneAndUpdate(
                     { _id: id },
                     { content: content }
                   );
                 }
-                if (category) {
+                if (category && checkCategory(category)) {
                   await schemas.Posts.findOneAndUpdate(
                     { _id: id },
                     { category: category }

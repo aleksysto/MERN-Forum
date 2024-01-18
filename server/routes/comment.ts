@@ -7,6 +7,7 @@ import {
   checkIfCorrectId,
   checkIfUserIsAuthorOrAdmin,
   checkTokenValidity,
+  checkContent,
 } from "./utils/ValidityCheck";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
@@ -48,6 +49,7 @@ router.post(
               author &&
               postId &&
               postingUser &&
+              checkContent(content) &&
               postingUser.login === author
             ) {
               const savedComment: InferSchemaType<typeof schemas.Comments> =
