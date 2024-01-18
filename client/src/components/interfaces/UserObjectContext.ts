@@ -1,4 +1,5 @@
 export interface UserObject {
+  _id: string;
   login: string;
   email: string;
   posts: number;

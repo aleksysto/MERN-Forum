@@ -3,7 +3,7 @@ import * as types from "../../interfaces/RouterTypes";
 import { secretKey } from "./ValidityCheck";
 export default function generateToken(user: types.DbUserObject) {
   const payload: types.GenerateTokenPayload = {
-    id: user._id,
+    _id: user._id,
     login: user.login,
     email: user.email,
     posts: user.posts,

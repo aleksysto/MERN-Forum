@@ -35,7 +35,7 @@ router.post(
         const decodedToken: string | JwtPayload = jwt.verify(token, secretKey);
         if (typeof decodedToken !== "string") {
           const postingUser: types.DbUserObject = await schemas.Users.findOne({
-            _id: decodedToken.id,
+            _id: decodedToken._id,
           });
           if (
             content &&
@@ -284,7 +284,7 @@ router.delete(
             secretKey
           );
           if (typeof decodedToken !== "string") {
-            const userId: string = decodedToken.id;
+            const userId: string = decodedToken._id;
 
             const post: InferSchemaType<typeof schemas.Posts> =
               await schemas.Posts.findOne({ _id: id });
@@ -337,7 +337,7 @@ router.patch(
             secretKey
           );
           if (typeof decodedToken !== "string") {
-            const userId: string = decodedToken.id;
+            const userId: string = decodedToken._id;
             const user: InferSchemaType<typeof schemas.Users> =
               await schemas.Users.findOne({ _id: userId });
             const post: InferSchemaType<typeof schemas.Posts> =

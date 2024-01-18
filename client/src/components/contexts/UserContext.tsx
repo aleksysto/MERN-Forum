@@ -5,6 +5,7 @@ export const userContext: React.Context<UserContextType> = createContext<UserCon
     loggedIn: false,
     setLoggedIn: () => { },
     userInfo: {
+        _id: '',
         login: "",
         email: "",
         posts: 0,
@@ -28,8 +29,9 @@ export default function UserProvider({ children }: { children: JSX.Element }): J
         const token: string = localStorage.getItem("token") as string
         const decodedToken: customPayload | string = await jwtDecode(token)
         if (typeof decodedToken !== "string") {
-            const { login, email, posts, comments, type, lastActive, entryDate, profilePicture }: UserObject = decodedToken
-            setUserInfo({ login, email, posts, comments, type, lastActive, entryDate, profilePicture })
+            const { _id, login, email, posts, comments, type, lastActive, entryDate, profilePicture }: UserObject = decodedToken
+            console.log(_id, login, email)
+            setUserInfo({ _id, login, email, posts, comments, type, lastActive, entryDate, profilePicture })
         }
     }
     useEffect(() => {

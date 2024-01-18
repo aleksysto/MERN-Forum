@@ -161,7 +161,7 @@ router.delete(
             secretKey
           );
           if (typeof decodedToken !== "string") {
-            const userId: string = decodedToken.id;
+            const userId: string = decodedToken._id;
             const deletingUser: InferSchemaType<typeof schemas.Users> =
               await schemas.Users.findOne({ _id: userId });
             const deletedUser: InferSchemaType<typeof schemas.Users> =
@@ -197,7 +197,7 @@ router.patch(
     req: types.EditUserRequest,
     res: types.TypedResponse<types.PatchResBody>
   ): Promise<void> => {
-    const { login, password, email, type } = req.body;
+    const { login, password, email, type, profilePicture } = req.body;
     const id: string = req.params.id;
     const token: string | undefined = req.headers.authorization;
     if (token) {
@@ -208,7 +208,7 @@ router.patch(
             secretKey
           );
           if (typeof decodedToken !== "string") {
-            const userId: string = decodedToken.id;
+            const userId: string = decodedToken._id;
             const editingUser: InferSchemaType<typeof schemas.Users> =
               await schemas.Users.findOne({ _id: userId });
             const editedUser: InferSchemaType<typeof schemas.Users> =
@@ -222,15 +222,22 @@ router.patch(
                   );
                 }
                 if (password) {
+                  const encryptedPassword = await encryptPassword(password);
                   await schemas.Users.findOneAndUpdate(
                     { _id: id },
-                    { password: password }
+                    { password: encryptedPassword }
                   );
                 }
                 if (email) {
                   await schemas.Users.findOneAndUpdate(
                     { _id: id },
                     { email: email }
+                  );
+                }
+                if (profilePicture) {
+                  await schemas.Users.findOneAndUpdate(
+                    { _id: id },
+                    { profilePicture: profilePicture }
                   );
                 }
                 if (checkIfAdmin(editingUser)) {
@@ -258,6 +265,38 @@ router.patch(
         res.status(400).json({ message: "Invalid ID" });
       }
     }
+  }
+);
+
+router.post(
+  "/api/generateToken",
+  async (
+    req: types.TokenRequest,
+    res: types.TypedResponse<
+      { token: string; message: string } | { message: string }
+    >
+  ): Promise<string | void> => {
+    return new Promise<string>(async (resolve, reject) => {
+      const id: string = req.body.id;
+      if (!checkIfCorrectId(id)) {
+        reject("Bad request");
+      } else {
+        const user: InferSchemaType<typeof schemas.Users> =
+          await schemas.Users.findOne({ _id: id }, { password: 0 });
+        if (user) {
+          const token: string = generateToken(user);
+          resolve(token);
+        } else {
+          reject("User not found");
+        }
+      }
+    })
+      .then((token: string) => {
+        res.json({ token: token, message: "Token generated" });
+      })
+      .catch((err: string) => {
+        res.status(500).json({ message: err });
+      });
   }
 );
 

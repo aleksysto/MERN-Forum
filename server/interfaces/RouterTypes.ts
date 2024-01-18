@@ -8,7 +8,7 @@ export interface DbUserObject extends UserObject {
 }
 
 export interface GenerateTokenPayload {
-  id: string;
+  _id: string;
   login: string;
   email: string;
   posts: number;
@@ -144,6 +144,7 @@ export interface EditUserRequest extends Request {
     password?: string;
     email?: string;
     type?: string;
+    profilePicture?: string;
   };
 }
 export interface SearchRequest extends Request {
@@ -152,6 +153,11 @@ export interface SearchRequest extends Request {
     q: string;
     category?: string;
     keywords?: string;
+  };
+}
+export interface TokenRequest extends Request {
+  body: {
+    id: string;
   };
 }
 

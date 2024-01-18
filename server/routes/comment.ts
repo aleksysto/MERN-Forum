@@ -40,7 +40,7 @@ router.post(
           if (typeof decodedToken !== "string") {
             const postingUser: types.DbUserObject = await schemas.Users.findOne(
               {
-                _id: decodedToken.id,
+                _id: decodedToken._id,
               }
             );
             if (
@@ -192,7 +192,7 @@ router.delete(
             secretKey
           );
           if (typeof decodedToken !== "string") {
-            const userId: string = decodedToken.id;
+            const userId: string = decodedToken._id;
 
             const comment: InferSchemaType<typeof schemas.Comments> =
               await schemas.Comments.findOne({ _id: id });
@@ -241,7 +241,7 @@ router.patch(
             secretKey
           );
           if (typeof decodedToken !== "string") {
-            const userId: string = decodedToken.id;
+            const userId: string = decodedToken._id;
             const user: InferSchemaType<typeof schemas.Users> =
               await schemas.Users.findOne({ _id: userId });
             const comment: InferSchemaType<typeof schemas.Comments> =

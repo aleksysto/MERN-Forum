@@ -1,19 +1,19 @@
 import * as Yup from "yup";
 import { UserRegisterValidation } from "../interfaces/RegisterUserTypes";
 import axios, { AxiosResponse } from "axios";
-async function testLoginAvailability(value: string): Promise<boolean> {
+export async function testLoginAvailability(value: string): Promise<boolean> {
   const response: AxiosResponse<{ available: boolean }> = await axios.get(
     `/api/register/checkAvailability?value=${value}&type=login`
   );
   return response.data.available;
 }
-async function testEmailAvailability(value: string): Promise<boolean> {
+export async function testEmailAvailability(value: string): Promise<boolean> {
   const response: AxiosResponse<{ available: boolean }> = await axios.get(
     `/api/register/checkAvailability?value=${value}&type=email`
   );
   return response.data.available;
 }
-function checkImageSize(value: any): boolean {
+export function checkImageSize(value: any): boolean {
   if (value) {
     const file: File = value as File;
     if (file.size > 2097152) {
@@ -25,7 +25,7 @@ function checkImageSize(value: any): boolean {
     return true;
   }
 }
-function checkImageFormat(value: any): boolean {
+export function checkImageFormat(value: any): boolean {
   console.log(value);
   if (value) {
     const file: File = value as File;
