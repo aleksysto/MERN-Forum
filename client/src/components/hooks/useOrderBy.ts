@@ -4,8 +4,8 @@ import { AggregatePostObject } from "../interfaces/ForumPosts";
 
 export default function useOrderBy(): useOrderByHook {
   const [order, setOrderValue] = useState<OrderObject>({
-    field: null,
-    order: null,
+    field: "date",
+    order: "desc",
   });
   const [posts, setPosts] = useState<null | AggregatePostObject[]>(null);
   function setOrder(value: string): void {
@@ -36,18 +36,16 @@ export default function useOrderBy(): useOrderByHook {
         break;
       default:
         setOrderValue({
-          field: null,
-          order: null,
+          field: "date",
+          order: "desc",
         });
         break;
     }
   }
   useEffect((): void => {
-    console.log(order.field);
     switch (order.field) {
       case "author":
         if (posts) {
-          console.log("if posts author, order:", order);
           const newPosts: AggregatePostObject[] = posts.sort((a, b) => {
             if (order.order === "asc") {
               return a.author.localeCompare(b.author);
@@ -55,13 +53,11 @@ export default function useOrderBy(): useOrderByHook {
               return b.author.localeCompare(a.author);
             }
           });
-          console.log(newPosts);
           setPosts(newPosts);
         }
         break;
       case "date":
         if (posts) {
-          console.log("if posts date, order:", order);
           const newPosts: AggregatePostObject[] = posts.sort((a, b) => {
             if (order.order === "asc") {
               return new Date(a.date).getTime() - new Date(b.date).getTime();
@@ -69,11 +65,16 @@ export default function useOrderBy(): useOrderByHook {
               return new Date(b.date).getTime() - new Date(a.date).getTime();
             }
           });
-          console.log(newPosts);
           setPosts(newPosts);
         }
         break;
       default:
+        if (posts) {
+          const newPosts: AggregatePostObject[] = posts.sort((a, b) => {
+            return new Date(a.date).getTime() - new Date(b.date).getTime();
+          });
+          setPosts(newPosts);
+        }
         break;
     }
     setPosts(posts);

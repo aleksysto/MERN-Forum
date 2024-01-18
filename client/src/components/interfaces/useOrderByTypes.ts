@@ -1,8 +1,8 @@
 import { AggregatePostObject } from "./ForumPosts";
 
 export interface OrderObject {
-  field: null | "author" | "date";
-  order: null | "asc" | "desc";
+  field: "author" | "date";
+  order: "asc" | "desc";
 }
 
 export interface useOrderByHook {

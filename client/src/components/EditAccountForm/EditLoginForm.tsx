@@ -47,7 +47,7 @@ export default function EditLoginForm({ setForm }: EditFormProps): JSX.Element {
     })
     return (
         <>
-            <div>Change your password</div>
+            <div>Change your login</div>
             <div>
                 <form onSubmit={formik.handleSubmit}>
                     <label htmlFor="login">Your login: </label>

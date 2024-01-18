@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { AggregatePostObject } from '../interfaces/ForumPosts'
 import axios, { AxiosResponse } from 'axios'
 import { Link, Params, useParams } from 'react-router-dom'
@@ -21,7 +21,10 @@ export default function PostList() {
                 console.log(err)
             })
     }, [])
-
+    useEffect((): void => {
+        if (posts)
+            setPosts([...posts])
+    }, [order])
     return posts ? (
         <>
             <div>

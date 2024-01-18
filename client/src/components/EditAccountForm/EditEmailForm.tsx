@@ -50,7 +50,7 @@ export default function EditEmailForm({ setForm }: EditFormProps): JSX.Element {
     })
     return (
         <>
-            <div>Change your password</div>
+            <div>Change your Email</div>
             <div>
                 <form onSubmit={formik.handleSubmit}>
                     <label htmlFor="email">Your email: </label>

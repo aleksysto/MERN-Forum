@@ -14,7 +14,7 @@ export default function SearchResultsPage() {
     const category: null | string = searchParams.get('category')
     const keywords: null | string = searchParams.get('keywords')
     const [message, setMessage] = useState<string>('loading...')
-    const { setOrder, posts, setPosts }: useOrderByHook = useOrderBy()
+    const { order, setOrder, posts, setPosts }: useOrderByHook = useOrderBy()
 
     useEffect(() => {
         if (keywords) {
@@ -37,6 +37,9 @@ export default function SearchResultsPage() {
                 })
         }
     }, [])
+    useEffect((): void => {
+
+    }, [order])
     return posts === null ? (<>
         <div>{message}</div>
     </>
