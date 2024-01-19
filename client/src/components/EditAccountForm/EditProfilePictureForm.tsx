@@ -27,7 +27,8 @@ export default function EditProfilePictureForm({ setForm }: EditFormProps): JSX.
             if (image) {
                 const imageId: string = uuid.v4()
                 const fileType: string = image.type.split("/")[1]
-                const fileName: string = `${imageId}.${fileType}`
+                const fileExt: string = image.name.split('.').slice(-1).join('')
+                const fileName: string = `${imageId}.${fileExt}`
                 const formData = new FormData()
                 formData.append('image', image)
                 axios.post(`http://localhost:4000/api/uploadImage/${imageId}`, formData, {

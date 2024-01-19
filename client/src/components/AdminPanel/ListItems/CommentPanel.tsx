@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import { CommentListItemProps } from "../../interfaces/PostComments";
 import DateCreator from "../../DateCreator/DateCreator";
-import { checkAdmin, checkAuthor } from "../../utils/CheckPermissions";
-import { useUserContext } from "../../contexts/UserContext";
-import EditComment from "../../CreateComment/EditComment";
 import { AppAction, AppState } from "../../interfaces/AdminReducerTypes";
 import { useAdminContext } from "../../contexts/AdminContext";
 import useConfirm from "../../hooks/useConfirm";

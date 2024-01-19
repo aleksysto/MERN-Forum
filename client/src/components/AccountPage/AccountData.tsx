@@ -7,7 +7,6 @@ export default function AccountData(): JSX.Element {
     const { login, email, posts, comments, lastActive, entryDate } = userInfo
     const mapData = { login, email, posts, comments, lastActive, entryDate }
     const avatarUrl: string = `http://localhost:4000/api/getImage/${userInfo.profilePicture}`
-    console.log(userInfo._id)
     return userInfo._id ? (
         <>
             <div>

@@ -25,3 +25,11 @@ export interface PostObject {
   author: string;
   date: Date;
 }
+
+export interface ReportObject {
+  type: string
+  reportedId: string;
+  reportedBy: string
+  reportedOn: Date;
+  reportedObject: PostObject | UserObject | CommentObject
+}

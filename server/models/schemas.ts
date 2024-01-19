@@ -3,6 +3,7 @@ import { Schema, InferSchemaType } from "mongoose";
 import {
   CommentObject,
   PostObject,
+  ReportObject,
   UserObject,
 } from "../interfaces/ModelTypes";
 import { CommonConnectionOptions } from "tls";
@@ -106,15 +107,40 @@ const Comments: InferSchemaType<typeof commentSchema> = mongoose.model(
   commentSchema,
   "comments"
 );
+const reportSchema = new Schema<ReportObject>({
+  type: {
+    type: String,
+    required: true
+  },
+  reportedId: {
+    type: String,
+    required: true
+  },
+  reportedBy: {
+    type: String,
+    required: true
+  },
+  reportedOn: {
+    type: Date,
+    default: Date.now()
+  },
+  reportedObject: {
+    type: commentSchema || userSchema || postSchema
+  }
+})
+const Reports: InferSchemaType<typeof reportSchema> = mongoose.model("Reports", reportSchema, "reports")
+
 interface schemasObject {
   Users: InferSchemaType<typeof userSchema>;
   Posts: InferSchemaType<typeof postSchema>;
   Comments: InferSchemaType<typeof commentSchema>;
+  Reports: InferSchemaType<typeof reportSchema>;
 }
 
 const mySchemas: schemasObject = {
   Users: Users,
   Posts: Posts,
   Comments: Comments,
+  Reports: Reports
 };
 module.exports = mySchemas;
