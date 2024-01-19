@@ -27,9 +27,9 @@ export interface PostObject {
 }
 
 export interface ReportObject {
-  type: string
+  type: string;
   reportedId: string;
-  reportedBy: string
+  reportedBy: string;
   reportedOn: Date;
-  reportedObject: PostObject | UserObject | CommentObject
+  reportedObject: PostObject | UserObject | CommentObject;
 }

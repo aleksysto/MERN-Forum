@@ -25,7 +25,12 @@ export interface RegisterUserObject {
   password: string;
   profilePicture: string;
 }
-
+export interface ReportReqObject {
+  type: "post" | "comment" | "user";
+  reportedId: string;
+  reportedBy: string;
+  reportedObject: UserObject | PostObject | CommentObject;
+}
 export interface CreatePostObject {
   category?: string;
   title: string;
@@ -160,7 +165,17 @@ export interface TokenRequest extends Request {
     id: string;
   };
 }
-
+export interface ReportRequest extends Request {
+  body: {
+    type: string;
+    reportedId: string;
+  };
+}
+export interface DeleteReportRequest extends Request {
+  params: {
+    id: string;
+  };
+}
 export interface TypedResponse<ResBody> extends Response {
   json: Send<ResBody, this>;
 }

@@ -110,25 +110,29 @@ const Comments: InferSchemaType<typeof commentSchema> = mongoose.model(
 const reportSchema = new Schema<ReportObject>({
   type: {
     type: String,
-    required: true
+    required: true,
   },
   reportedId: {
     type: String,
-    required: true
+    required: true,
   },
   reportedBy: {
     type: String,
-    required: true
+    required: true,
   },
   reportedOn: {
     type: Date,
-    default: Date.now()
+    default: Date.now(),
   },
   reportedObject: {
-    type: commentSchema || userSchema || postSchema
-  }
-})
-const Reports: InferSchemaType<typeof reportSchema> = mongoose.model("Reports", reportSchema, "reports")
+    type: Schema.Types.Mixed,
+  },
+});
+const Reports: InferSchemaType<typeof reportSchema> = mongoose.model(
+  "Reports",
+  reportSchema,
+  "reports"
+);
 
 interface schemasObject {
   Users: InferSchemaType<typeof userSchema>;
@@ -141,6 +145,6 @@ const mySchemas: schemasObject = {
   Users: Users,
   Posts: Posts,
   Comments: Comments,
-  Reports: Reports
+  Reports: Reports,
 };
 module.exports = mySchemas;
