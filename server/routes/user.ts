@@ -107,12 +107,27 @@ router.post(
 // HTTP GET to check for available username/email
 router.get("/api/register/checkAvailability", checkAvailable);
 
+// HTTP GET for all users
+router.get(
+  "/api/users",
+  async (req: Request, res: types.TypedResponse<types.UsersArrayResBody>) => {
+    const users = await schemas.Users.find({}, { password: 0 }).sort({
+      lastActive: -1,
+    });
+    if (users) {
+      res.json({ message: `${users.length} found`, users: users });
+    } else {
+      res.status(404).json({ message: "No users found" });
+    }
+  }
+);
+
 // HTTP GET for top 15 most active users
 router.get(
   "/api/users/mostActive",
   async (
     req: Request,
-    res: types.TypedResponse<types.ActiveUsersResBody>
+    res: types.TypedResponse<types.UsersArrayResBody>
   ): Promise<void> => {
     const users: InferSchemaType<typeof schemas.Users> =
       await schemas.Users.find({}, { password: 0 })
@@ -130,7 +145,7 @@ router.get(
   "/api/users/combinedActivity",
   async (
     req: Request,
-    res: types.TypedResponse<types.ActiveUsersResBody>
+    res: types.TypedResponse<types.UsersArrayResBody>
   ): Promise<void> => {
     const users: InferSchemaType<typeof schemas.Users> =
       await schemas.Users.aggregate([

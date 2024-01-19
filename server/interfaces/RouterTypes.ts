@@ -165,6 +165,9 @@ export interface TypedResponse<ResBody> extends Response {
   json: Send<ResBody, this>;
 }
 
+export type AllCommentsResBody =
+  | { message: string; comments: Array<AggregateCommentObject> }
+  | { message: string };
 export type LoginResBody =
   | {
       message: string;
@@ -216,7 +219,7 @@ export type CountResBody = { count: number } | { message: string };
 export type PostCommentResBody =
   | { message: string; comment: CommentObject }
   | { message: string };
-export type ActiveUsersResBody =
+export type UsersArrayResBody =
   | {
       message: string;
       users: Array<DbUserObject>;

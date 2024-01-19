@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { CommentsDispatch, useCommentsDispatch } from '../reducers/stores/store'
-import { AggregateComment } from '../interfaces/PostComments'
+import { AggregateCommentObject } from '../interfaces/PostComments'
 import { useSelector } from 'react-redux'
 import { StateObject } from '../interfaces/ReducerTypes'
 import { getComments } from '../reducers/actions/CommentActions'
@@ -12,7 +12,7 @@ export default function CommentList(): JSX.Element {
     const { id }: Readonly<Params<string>> = useParams()
     const url: string = `http://localhost:4000/api/posts/${id}/comments`
     const dispatch: CommentsDispatch = useCommentsDispatch()
-    const comments = useSelector((state: StateObject): AggregateComment[] => { return state.printedComments })
+    const comments = useSelector((state: StateObject): AggregateCommentObject[] => { return state.printedComments })
     const commentsLength = useSelector((state: StateObject): number => { return state.comments.length })
     const message = useSelector((state: StateObject): string => { return state.message })
     const pageRef = useRef<number>(0)
@@ -25,7 +25,7 @@ export default function CommentList(): JSX.Element {
             <div style={{ margin: "auto", width: "35%" }}>
                 <div>{message}</div>
                 <ul style={{ listStyle: "none" }}>
-                    {comments.map((comment: AggregateComment, index: number): JSX.Element => {
+                    {comments.map((comment: AggregateCommentObject, index: number): JSX.Element => {
                         return (
                             <CommentListItem comment={comment} index={index} key={uuid.v4()} />
                         )

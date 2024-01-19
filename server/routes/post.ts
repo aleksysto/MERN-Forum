@@ -55,7 +55,7 @@ router.post(
             const updateUser: InferSchemaType<typeof schemas.Users> =
               await schemas.Users.findOneAndUpdate(
                 { _id: postingUser._id },
-                { posts: postingUser.posts + 1 }
+                { posts: postingUser.posts + 1, lastActive: Date.now() }
               );
             if (savedPost && updateUser) {
               res.json({ message: "Post created", comment: savedPost });
@@ -92,6 +92,11 @@ router.get(
             localField: "author",
             foreignField: "login",
             as: "user",
+          },
+        },
+        {
+          $sort: {
+            date: -1,
           },
         },
         {
@@ -300,6 +305,11 @@ router.delete(
 
             if (post && user) {
               if (checkIfUserIsAuthorOrAdmin(user, post)) {
+                const updateUser: InferSchemaType<typeof schemas.Users> =
+                  await schemas.Users.findOneAndUpdate(
+                    { _id: user._id },
+                    { posts: user.posts - 1 }
+                  );
                 await schemas.Posts.findOneAndDelete({ _id: id });
                 res.json({ message: `Post ${id} deleted` });
               } else {

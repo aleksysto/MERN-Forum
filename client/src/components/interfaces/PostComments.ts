@@ -5,12 +5,12 @@ export interface Comment {
   author: string;
   date: Date;
 }
-export interface AggregateComment extends Comment {
+export interface AggregateCommentObject extends Comment {
   userId: string;
   userProfilePicture: string;
 }
 
 export interface CommentListItemProps {
-  comment: AggregateComment;
+  comment: AggregateCommentObject;
   index: number;
 }

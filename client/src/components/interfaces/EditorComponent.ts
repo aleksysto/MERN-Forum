@@ -1,5 +1,5 @@
 import { AggregatePostObject } from "./ForumPosts";
-import { AggregateComment } from "./PostComments";
+import { AggregateCommentObject } from "./PostComments";
 
 export interface UploadPost {
   title: string;
@@ -25,7 +25,7 @@ export interface CommentEditorProps {
 }
 export interface EditCommentProps {
   setMessage: React.Dispatch<React.SetStateAction<string>>;
-  comment: AggregateComment;
+  comment: AggregateCommentObject;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 export interface EditPostProps {

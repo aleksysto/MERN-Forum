@@ -68,8 +68,8 @@ export default function CommentEditor({ setMessage }: CommentEditorProps): JSX.E
                     dispatch(getComments(`http://localhost:4000/api/posts/${id}/comments`))
                     console.log(id)
                 })
-                .catch((err: AxiosError): void => {
-                    console.log(err)
+                .catch((err: AxiosError<{ message: string }>): void => {
+                    err.response?.data.message ? setMessage(err.response.data.message) : setMessage('Error')
                 })
         } else {
             setErrors('You can only submit the post after meeting the requirements')

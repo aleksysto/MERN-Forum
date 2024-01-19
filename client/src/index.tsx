@@ -19,6 +19,8 @@ import { Provider } from 'react-redux';
 import CommentEditor from './components/CreateComment/CommentEditor';
 import PostCreator from './components/CreatePost/PostCreator';
 import SearchResultsPage from './components/SearchResults/SearchResultsPage';
+import AdminPanel from './components/AdminPanel/AdminPanel';
+import AdminProvider from './components/contexts/AdminContext';
 
 const root: Root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -43,6 +45,16 @@ const router = createBrowserRouter([
   {
     path: "/search",
     element: <SearchResultsPage />
+  },
+  {
+    path: '/admin',
+    element: (
+      <>
+        <AdminProvider>
+          <AdminPanel />
+        </AdminProvider>
+      </>
+    )
   },
   {
     path: "/posts/",

@@ -5,7 +5,7 @@ import {
   ThunkAction,
   createAction,
 } from "@reduxjs/toolkit";
-import { AggregateComment } from "../../interfaces/PostComments";
+import { AggregateCommentObject } from "../../interfaces/PostComments";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import {
   GetCommentsPayload,
@@ -29,7 +29,7 @@ export function setMessageAction(
 }
 
 export function getCommentsAction(
-  comments: AggregateComment[],
+  comments: AggregateCommentObject[],
   message: string
 ): PayloadAction<GetCommentsPayload> {
   return setComments({ comments, message });

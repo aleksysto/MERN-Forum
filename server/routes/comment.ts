@@ -1,6 +1,6 @@
 import { InferSchemaType } from "mongoose";
 import * as types from "../interfaces/RouterTypes";
-import express, { Router } from "express";
+import express, { Router, Request } from "express";
 const schemas = require("../models/schemas");
 import {
   secretKey,
@@ -10,7 +10,7 @@ import {
   checkContent,
 } from "./utils/ValidityCheck";
 import jwt, { JwtPayload } from "jsonwebtoken";
-
+const ObjectId = require("mongoose").Types.ObjectId;
 const router: Router = express.Router();
 // HTTP POST to post comments
 router.post(
@@ -57,7 +57,7 @@ router.post(
               const updateUser: InferSchemaType<typeof schemas.Users> =
                 await schemas.Users.findOneAndUpdate(
                   { _id: postingUser._id },
-                  { comments: postingUser.comments + 1 }
+                  { comments: postingUser.comments + 1, lastActive: Date.now() }
                 );
               console.log(updateUser);
               if (savedComment && updateUser) {
@@ -80,7 +80,54 @@ router.post(
     }
   }
 );
-const ObjectId = require("mongoose").Types.ObjectId;
+
+// HTTP GET for all comments
+router.get(
+  "/api/comments",
+  async (
+    req: Request,
+    res: types.TypedResponse<types.AllCommentsResBody>
+  ): Promise<void> => {
+    const comments: InferSchemaType<typeof schemas.Comments>[] =
+      await schemas.Comments.aggregate([
+        {
+          $sort: {
+            date: -1,
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "author",
+            foreignField: "login",
+            as: "user",
+          },
+        },
+        {
+          $project: {
+            _id: 1,
+            postId: 1,
+            content: 1,
+            author: 1,
+            date: 1,
+            userId: { $arrayElemAt: ["$user._id", 0] },
+            userProfilePicture: {
+              $arrayElemAt: ["$user.profilePicture", 0],
+            },
+          },
+        },
+      ]);
+    if (comments && comments.length > 0) {
+      res.json({
+        message: `${comments.length} found`,
+        comments: comments,
+      });
+    } else {
+      res.status(404).json({ message: "No comments found" });
+    }
+  }
+);
+
 // HTTP GET for all posts comments
 router.get(
   "/api/posts/:id/comments",
@@ -204,6 +251,11 @@ router.delete(
 
             if (comment && user) {
               if (checkIfUserIsAuthorOrAdmin(user, comment)) {
+                const updateUser: InferSchemaType<typeof schemas.Users> =
+                  await schemas.Users.findOneAndUpdate(
+                    { _id: user._id },
+                    { comments: user.comments - 1 }
+                  );
                 await schemas.Comments.findOneAndDelete({ _id: id });
                 res.json({ message: `Comment ${id} deleted` });
               } else {
