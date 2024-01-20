@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
-import useAdminReducer from '../reducers/AdminReducer'
+import React, { useEffect, useRef } from 'react'
 import { AppAction, AppState, OrderDirection } from '../interfaces/AdminReducerTypes'
 import { loadComments } from '../reducers/actions/AdminActions/AdminActions'
 import { AggregateCommentObject } from '../interfaces/PostComments'
@@ -48,7 +47,7 @@ export default function Comments(): JSX.Element {
                 <ul>
                     {state.displayComments.map((comment: AggregateCommentObject, idx: number): JSX.Element => {
                         return (
-                            <CommentPanel comment={comment} index={idx} dispatch={dispatch} key={comment._id} />
+                            <CommentPanel comment={comment} index={idx} key={comment._id} />
                         )
                     })}
                 </ul>

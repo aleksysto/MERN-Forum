@@ -16,7 +16,3 @@ export interface CommentListItemProps {
   comment: AggregateCommentObject;
   index: number;
 }
-
-export interface AdminCommentListItemProps extends CommentListItemProps {
-  dispatch: React.Dispatch<AppAction>;
-}

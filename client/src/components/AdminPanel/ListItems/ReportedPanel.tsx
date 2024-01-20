@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react'
-import { ReportedPanelProps } from '../../interfaces/AdminReducerTypes'
+import React, { useState } from 'react'
+import { AppAction, AppState, ReportedPanelProps } from '../../interfaces/AdminReducerTypes'
 import DateCreator from '../../DateCreator/DateCreator'
 import { CommentObject } from '../../interfaces/PostComments'
 import { UserObject } from '../../interfaces/UserObjectContext'
 import { PostObject } from '../../interfaces/ForumPosts'
 import useConfirm from '../../hooks/useConfirm'
 import DeleteButton from '../../utils/DeleteButton'
-import useAdminReducer from '../../reducers/AdminReducer'
 import axios, { AxiosError, AxiosResponse } from 'axios'
-export default function ReportedPanel({ report, index, dispatch }: ReportedPanelProps): JSX.Element {
+import { useAdminContext } from '../../contexts/AdminContext'
+export default function ReportedPanel({ report, index }: ReportedPanelProps): JSX.Element {
+    const [state, dispatch]: [AppState, React.Dispatch<AppAction>] = useAdminContext()
     const { action, setAction, confirm, setConfirm } = useConfirm()
     const [handled, setHandled] = useState<string | null>(null)
     const type: string = report.type

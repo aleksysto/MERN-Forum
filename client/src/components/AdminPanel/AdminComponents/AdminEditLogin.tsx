@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 import { FormikProps, useFormik } from 'formik';
 import axios, { AxiosError, AxiosResponse } from 'axios'
-import { EditUserObject, EditFormValues, AdminEditFormProps } from '../../interfaces/RegisterUserTypes';
+import { AdminEditFormProps } from '../../interfaces/RegisterUserTypes';
 import * as Yup from 'yup'
 import { testLoginAvailability } from '../../RegisterPage/validationSchema';
-import { useUserContext } from '../../contexts/UserContext';
+import { AppAction, AppState } from '../../interfaces/AdminReducerTypes';
+import { useAdminContext } from '../../contexts/AdminContext';
 
-export default function EditLoginForm({ user, setForm, setEdited, dispatch }: AdminEditFormProps): JSX.Element {
+export default function EditLoginForm({ user, setForm, setEdited }: AdminEditFormProps): JSX.Element {
+    const [state, dispatch]: [AppState, React.Dispatch<AppAction>] = useAdminContext()
     const [message, setMessage] = useState<string>('')
     const formik: FormikProps<{ login: string }> = useFormik<{ login: string }>({
         initialValues: {
@@ -27,12 +29,12 @@ export default function EditLoginForm({ user, setForm, setEdited, dispatch }: Ad
             }, { headers: { 'Authorization': localStorage.getItem('token') } })
                 .then((res: AxiosResponse): void => {
                     setMessage('Login changed')
-                    dispatch({ type: 'setMessgae', payload: { message: 'Login updated' } })
+                    dispatch({ type: 'setMessage', payload: { message: 'Login updated' } })
                     setEdited(true)
                 })
                 .catch((err: AxiosError<{ message: string }>): void => {
                     setMessage(err.response?.data.message || 'Server error')
-                    dispatch({ type: 'setMessgae', payload: { message: err.response?.data.message || 'Server error' } })
+                    dispatch({ type: 'setMessage', payload: { message: err.response?.data.message || 'Server error' } })
                 })
             formik.resetForm()
         }

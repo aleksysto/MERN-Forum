@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { AdminCommentListItemProps } from "../../interfaces/PostComments";
+import { CommentListItemProps } from "../../interfaces/PostComments";
 import DateCreator from "../../DateCreator/DateCreator";
 import { AppAction, AppState } from "../../interfaces/AdminReducerTypes";
 import { useAdminContext } from "../../contexts/AdminContext";
@@ -10,8 +10,8 @@ import AdminCommentEditor from "../AdminComponents/AdminCommentEditor";
 export default function CommentPanel({
     comment,
     index,
-    dispatch
-}: AdminCommentListItemProps): JSX.Element {
+}: CommentListItemProps): JSX.Element {
+    const [state, dispatch]: [AppState, React.Dispatch<AppAction>] = useAdminContext()
     const { action, setAction, confirm, setConfirm } = useConfirm()
     const [editing, setEditing] = useState<boolean>(false);
     const [message, setMessage] = useState<string>('');
@@ -50,7 +50,7 @@ export default function CommentPanel({
                 ) : (
                     <>
                         <div>{message}</div>
-                        <AdminCommentEditor setMessage={setMessage} comment={comment} setEditing={setEditing} dispatch={dispatch} />
+                        <AdminCommentEditor setMessage={setMessage} comment={comment} setEditing={setEditing} />
                         <DeleteButton {...{ action, setAction, confirm, setConfirm, handleAction: handleDelete }} />
                     </>
                 )}

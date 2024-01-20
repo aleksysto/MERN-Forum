@@ -5,7 +5,10 @@ import * as Yup from 'yup'
 import * as uuid from 'uuid';
 import { checkImageSize, checkImageFormat } from '../../RegisterPage/validationSchema';
 import { AdminEditFormProps } from '../../interfaces/RegisterUserTypes';
-export default function AdminEditProfilePicture({ user, setForm, setEdited, dispatch }: AdminEditFormProps): JSX.Element {
+import { useAdminContext } from '../../contexts/AdminContext';
+import { AppAction, AppState } from '../../interfaces/AdminReducerTypes';
+export default function AdminEditProfilePicture({ user, setForm, setEdited }: AdminEditFormProps): JSX.Element {
+    const [state, dispatch]: [AppState, React.Dispatch<AppAction>] = useAdminContext()
     const [message, setMessage] = useState<string>('')
     const formik: FormikProps<{ image: any }> = useFormik<{ image: any }>({
         initialValues: {
@@ -22,7 +25,6 @@ export default function AdminEditProfilePicture({ user, setForm, setEdited, disp
             const { image }: { image: File | null } = values
             if (image) {
                 const imageId: string = uuid.v4()
-                const fileType: string = image.type.split("/")[1]
                 const fileExt: string = image.name.split('.').slice(-1).join('')
                 const fileName: string = `${imageId}.${fileExt}`
                 const formData = new FormData()

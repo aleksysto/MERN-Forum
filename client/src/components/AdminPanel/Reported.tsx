@@ -1,20 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react'
-import useAdminReducer from '../reducers/AdminReducer'
+import React, { useEffect } from 'react'
 import { AppAction, AppState } from '../interfaces/AdminReducerTypes'
-import { loadComments, loadReports } from '../reducers/actions/AdminActions/AdminActions'
-import { AggregateCommentObject } from '../interfaces/PostComments'
-import CommentPanel from './ListItems/CommentPanel'
+import { loadReports } from '../reducers/actions/AdminActions/AdminActions'
+
 import { useAdminContext } from '../contexts/AdminContext'
 import { ReportObject } from '../interfaces/Reports'
-import UserPanel from './ListItems/UserPanel'
-import PostPanel from './ListItems/PostPanel'
-import { AggregatePostObject, PostObject } from '../interfaces/ForumPosts'
-import { UserObject } from '../interfaces/UserObjectContext'
 import ReportedPanel from './ListItems/ReportedPanel'
-import { ref } from 'yup'
 export default function Comments(): JSX.Element {
     const [state, dispatch]: [AppState, React.Dispatch<AppAction>] = useAdminContext()
-    const [refresh, setRefresh] = useState(false)
     function handleFilter(e: React.ChangeEvent<HTMLSelectElement>): void {
         e.preventDefault()
         if (e.target.value) {
@@ -59,7 +51,7 @@ export default function Comments(): JSX.Element {
                 <ul>
                     {state.displayReports.map((report: ReportObject, idx: number): JSX.Element => {
                         return (
-                            <ReportedPanel report={report} index={idx} dispatch={dispatch} />
+                            <ReportedPanel report={report} index={idx} key={idx} />
                         )
                     })}
                 </ul>

@@ -17,7 +17,3 @@ export interface PostItemProps {
   post: AggregatePostObject;
   index: number;
 }
-
-export interface AdminPostItemProps extends PostItemProps {
-  dispatch: React.Dispatch<AppAction>;
-}

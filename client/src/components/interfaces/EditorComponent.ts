@@ -29,9 +29,6 @@ export interface EditCommentProps {
   comment: AggregateCommentObject;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
-export interface AdminEditCommentProps extends EditCommentProps {
-  dispatch: React.Dispatch<AppAction>;
-}
 export interface EditPostProps {
   setMessage: React.Dispatch<React.SetStateAction<string>>;
   post: AggregatePostObject;
@@ -39,8 +36,4 @@ export interface EditPostProps {
 }
 export interface EditorComponentProps extends CommentEditorProps {
   setCreated: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export interface AdminEditorComponentProps extends EditPostProps {
-  dispatch: React.Dispatch<AppAction>;
 }

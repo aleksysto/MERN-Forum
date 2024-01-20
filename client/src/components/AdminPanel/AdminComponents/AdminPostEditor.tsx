@@ -3,8 +3,11 @@ import ReactQuill, { UnprivilegedEditor } from 'react-quill'
 import { DeltaStatic, Sources, DeltaOperation } from 'quill'
 import DOMPurify from 'dompurify'
 import axios, { AxiosError, AxiosResponse } from 'axios'
-import { AdminEditorComponentProps, EditedPost } from '../../interfaces/EditorComponent'
-export default function AdminPostEditor({ setMessage, post, setEditing, dispatch }: AdminEditorComponentProps): JSX.Element {
+import { EditPostProps, EditedPost } from '../../interfaces/EditorComponent'
+import { AppAction, AppState } from '../../interfaces/AdminReducerTypes'
+import { useAdminContext } from '../../contexts/AdminContext'
+export default function AdminPostEditor({ setMessage, post, setEditing }: EditPostProps): JSX.Element {
+    const [state, dispatch]: [AppState, React.Dispatch<AppAction>] = useAdminContext()
     const [content, setContent] = useState<string>(post.content)
     const [title, setTitle] = useState<string>(post.title)
     const [errors, setErrors] = useState<null | string>(null)

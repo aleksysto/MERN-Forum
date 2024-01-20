@@ -53,5 +53,4 @@ export interface EditFormProps {
 }
 export interface AdminEditFormProps extends EditFormProps {
   user: UserObject;
-  dispatch: React.Dispatch<AppAction>;
 }

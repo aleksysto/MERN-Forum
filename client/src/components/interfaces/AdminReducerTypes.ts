@@ -80,12 +80,10 @@ export interface UserPanelProps {
 export interface ReportedPanelProps {
   report: ReportObject;
   index: number;
-  dispatch: React.Dispatch<AppAction>;
 }
 export interface AdminAccountEditNavProps {
   user: UserObject;
   setEdited: React.Dispatch<React.SetStateAction<boolean>>;
-  dispatch: React.Dispatch<AppAction>;
 }
 export type OrderDirection = "asc" | "desc";
 export type AdminContextType = [AppState, React.Dispatch<AppAction>];

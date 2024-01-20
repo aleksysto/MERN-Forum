@@ -3,9 +3,7 @@ import { AppAction, AppState, UserPanelProps } from '../../interfaces/AdminReduc
 import DateCreator from '../../DateCreator/DateCreator'
 import useConfirm from '../../hooks/useConfirm'
 import { useConfirmHook } from '../../interfaces/useConfirmTypes'
-import { isButtonElement } from 'react-router-dom/dist/dom'
 import axios, { AxiosError, AxiosResponse } from 'axios'
-import useAdminReducer from '../../reducers/AdminReducer'
 import { useAdminContext } from '../../contexts/AdminContext'
 import DeleteButton from '../../utils/DeleteButton'
 import AdminAccountEditNav from '../AdminComponents/AdminAccountEditNav'
@@ -43,7 +41,7 @@ export default function Posts({ user, index }: UserPanelProps): JSX.Element {
                     <div><button onClick={handleRemove}>Remove from list</button></div>
                     <div>{edited ? 'Changes saved' : null}</div>
                     <div>
-                        <AdminAccountEditNav user={user} setEdited={setEdited} dispatch={dispatch} />
+                        <AdminAccountEditNav user={user} setEdited={setEdited} />
                         <DeleteButton {...{ action, setAction, confirm, setConfirm, handleAction: handleDelete }} />
                     </div>
                     <div>

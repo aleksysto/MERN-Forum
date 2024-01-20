@@ -21,6 +21,7 @@ import PostCreator from './components/CreatePost/PostCreator';
 import SearchResultsPage from './components/SearchResults/SearchResultsPage';
 import AdminPanel from './components/AdminPanel/AdminPanel';
 import AdminProvider from './components/contexts/AdminContext';
+import AdminRoute from './components/utils/AdminRoute';
 
 const root: Root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -50,9 +51,11 @@ const router = createBrowserRouter([
     path: '/admin',
     element: (
       <>
-        <AdminProvider>
-          <AdminPanel />
-        </AdminProvider>
+        <AdminRoute>
+          <AdminProvider>
+            <AdminPanel />
+          </AdminProvider>
+        </AdminRoute>
       </>
     )
   },

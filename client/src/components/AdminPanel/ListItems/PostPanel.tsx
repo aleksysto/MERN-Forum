@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from 'react'
-import { Params, useParams } from 'react-router-dom'
-import { AggregatePostObject, AdminPostItemProps } from '../../interfaces/ForumPosts'
+import React, { useState } from 'react'
 import axios, { AxiosError, AxiosResponse } from 'axios'
 import DateCreator from '../../DateCreator/DateCreator'
-import { useUserContext } from '../../contexts/UserContext'
-import EditPost from '../../CreatePost/EditPost'
 import { AppAction, AppState } from '../../interfaces/AdminReducerTypes'
 import { useAdminContext } from '../../contexts/AdminContext'
 import DeleteButton from '../../utils/DeleteButton'
 import useConfirm from '../../hooks/useConfirm'
 import AdminPostEditor from '../AdminComponents/AdminPostEditor'
-export default function PostPanel({ post, index, dispatch }: AdminPostItemProps): JSX.Element {
+import { PostItemProps } from '../../interfaces/ForumPosts'
+export default function PostPanel({ post, index }: PostItemProps): JSX.Element {
     const { action, setAction, confirm, setConfirm } = useConfirm()
+    const [state, dispatch]: [AppState, React.Dispatch<AppAction>] = useAdminContext()
     const [editing, setEditing] = useState<boolean>(false)
     const [message, setMessage] = useState('')
     function handleDelete() {
@@ -41,7 +39,7 @@ export default function PostPanel({ post, index, dispatch }: AdminPostItemProps)
                     <>
                         <div>
                             <div>{message}</div>
-                            <AdminPostEditor setMessage={setMessage} post={post} setEditing={setEditing} dispatch={dispatch} />
+                            <AdminPostEditor setMessage={setMessage} post={post} setEditing={setEditing} />
                         </div>
                     </>
                 ) : (

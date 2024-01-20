@@ -1,9 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react'
-import useAdminReducer from '../reducers/AdminReducer'
+import React, { useEffect, useRef } from 'react'
 import { AppAction, AppState, OrderDirection } from '../interfaces/AdminReducerTypes'
 import { loadPosts } from '../reducers/actions/AdminActions/AdminActions'
-import { AggregateCommentObject } from '../interfaces/PostComments'
-import CommentPanel from './ListItems/CommentPanel'
 import { AggregatePostObject } from '../interfaces/ForumPosts'
 import PostPanel from './ListItems/PostPanel'
 import { useAdminContext } from '../contexts/AdminContext'
@@ -49,7 +46,7 @@ export default function Posts(): JSX.Element {
                 <ul>
                     {state.displayPosts.map((post: AggregatePostObject, idx: number): JSX.Element => {
                         return (
-                            <PostPanel post={post} index={idx} dispatch={dispatch} key={post._id} />
+                            <PostPanel post={post} index={idx} key={post._id} />
                         )
                     })}
                 </ul>

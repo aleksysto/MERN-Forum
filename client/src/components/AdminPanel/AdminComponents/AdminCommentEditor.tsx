@@ -4,8 +4,10 @@ import { DeltaStatic, Sources, DeltaOperation } from 'quill'
 import DOMPurify from 'dompurify'
 import axios, { AxiosError, AxiosResponse } from 'axios'
 import { CommentObject } from '../../interfaces/PostComments'
-import { EditedComment, AdminEditCommentProps } from '../../interfaces/EditorComponent'
-export default function AdminCommentEditor({ setMessage, comment, setEditing, dispatch }: AdminEditCommentProps): JSX.Element {
+import { EditedComment, EditCommentProps } from '../../interfaces/EditorComponent'
+import { useAdminContext } from '../../contexts/AdminContext'
+export default function AdminCommentEditor({ setMessage, comment, setEditing }: EditCommentProps): JSX.Element {
+    const [state, dispatch] = useAdminContext()
     const [content, setContent] = useState<string>(comment.content)
     const [errors, setErrors] = useState<null | string>(null)
     const token: string | null = localStorage.getItem('token')
