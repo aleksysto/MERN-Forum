@@ -10,7 +10,6 @@ import { useUserContext } from '../contexts/UserContext';
 import { UserObject } from '../interfaces/UserObjectContext';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 export default function EditEmailForm({ setForm }: EditFormProps): JSX.Element {
-    const navigate: NavigateFunction = useNavigate()
     const { userInfo }: { userInfo: UserObject } = useUserContext()
     const formik: FormikProps<{ email: string }> = useFormik<{ email: string }>({
         initialValues: {
@@ -36,7 +35,6 @@ export default function EditEmailForm({ setForm }: EditFormProps): JSX.Element {
                         const token: string = tokenRes.data.token
                         localStorage.setItem("token", token)
                         setForm(null)
-                        navigate(0)
                     }
                     ).catch((err: AxiosError<{ message: string }>): void => {
                         console.log(err.response?.data.message)

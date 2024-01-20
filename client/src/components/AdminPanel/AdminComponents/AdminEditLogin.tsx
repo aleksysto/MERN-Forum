@@ -1,14 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { FormikProps, useFormik } from 'formik';
 import axios, { AxiosError, AxiosResponse } from 'axios'
-import { EditUserObject, EditFormValues, EditFormProps } from '../interfaces/RegisterUserTypes';
+import { EditUserObject, EditFormValues, AdminEditFormProps } from '../../interfaces/RegisterUserTypes';
 import * as Yup from 'yup'
-import { testLoginAvailability } from '../RegisterPage/validationSchema';
-import { useUserContext } from '../contexts/UserContext';
-import { UserObject } from '../interfaces/UserObjectContext';
-import { NavigateFunction, useNavigate } from 'react-router-dom';
-export default function EditLoginForm({ setForm, setEdited }: EditFormProps): JSX.Element {
-    const { userInfo }: { userInfo: UserObject } = useUserContext()
+import { testLoginAvailability } from '../../RegisterPage/validationSchema';
+import { useUserContext } from '../../contexts/UserContext';
+
+export default function EditLoginForm({ user, setForm, setEdited, dispatch }: AdminEditFormProps): JSX.Element {
+    const [message, setMessage] = useState<string>('')
     const formik: FormikProps<{ login: string }> = useFormik<{ login: string }>({
         initialValues: {
             login: '',
@@ -23,24 +22,17 @@ export default function EditLoginForm({ setForm, setEdited }: EditFormProps): JS
         validateOnChange: false,
         onSubmit: async (values: { login: string }): Promise<void> => {
             const login: string = values.login
-            axios.patch(`http://localhost:4000/api/users/id/${userInfo._id}`, {
+            axios.patch(`http://localhost:4000/api/users/id/${user._id}`, {
                 login: login
             }, { headers: { 'Authorization': localStorage.getItem('token') } })
                 .then((res: AxiosResponse): void => {
-                    axios.post('http://localhost:4000/api/generateToken', { id: userInfo._id }).then((tokenRes: AxiosResponse<{ token: string }>): void => {
-                        const token: string = tokenRes.data.token
-                        localStorage.removeItem("token")
-                        localStorage.setItem("token", token)
-                        setForm(null)
-                    }
-                    ).catch((err: AxiosError<{ message: string }>): void => {
-                        console.log(err)
-                        console.log(err.response?.data.message)
-                    })
+                    setMessage('Login changed')
+                    dispatch({ type: 'setMessgae', payload: { message: 'Login updated' } })
+                    setEdited(true)
                 })
                 .catch((err: AxiosError<{ message: string }>): void => {
-                    console.log(err)
-                    console.log(err.response?.data.message)
+                    setMessage(err.response?.data.message || 'Server error')
+                    dispatch({ type: 'setMessgae', payload: { message: err.response?.data.message || 'Server error' } })
                 })
             formik.resetForm()
         }
@@ -48,6 +40,7 @@ export default function EditLoginForm({ setForm, setEdited }: EditFormProps): JS
     return (
         <>
             <div>Change your login</div>
+            <div>{message}</div>
             <div>
                 <form onSubmit={formik.handleSubmit}>
                     <label htmlFor="login">Your login: </label>

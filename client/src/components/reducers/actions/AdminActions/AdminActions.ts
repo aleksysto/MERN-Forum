@@ -7,6 +7,8 @@ import {
   Payload,
   PostData,
   PostsResponse,
+  ReportData,
+  ReportsResponse,
   UserData,
   UsersResponse,
 } from "../../../interfaces/AdminReducerTypes";
@@ -45,6 +47,21 @@ export async function loadComments(): Promise<CommentData> {
       .get("http://localhost:4000/api/comments")
       .then((res: AxiosResponse<CommentsResponse>) => {
         resolve({ data: res.data.comments, message: res.data.message });
+      })
+      .catch((err: AxiosError<ErrorMessage>) => {
+        reject(err.response?.data.message);
+      });
+  });
+}
+
+export async function loadReports(): Promise<ReportData> {
+  return new Promise<ReportData>((resolve, reject) => {
+    axios
+      .get("http://localhost:4000/api/reports", {
+        headers: { Authorization: localStorage.getItem("token") },
+      })
+      .then((res: AxiosResponse<ReportsResponse>) => {
+        resolve({ data: res.data.reports, message: res.data.message });
       })
       .catch((err: AxiosError<ErrorMessage>) => {
         reject(err.response?.data.message);

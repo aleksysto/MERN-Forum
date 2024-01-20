@@ -3,9 +3,9 @@ import ReactQuill, { UnprivilegedEditor } from 'react-quill'
 import { DeltaStatic, Sources, DeltaOperation } from 'quill'
 import DOMPurify from 'dompurify'
 import axios, { AxiosError, AxiosResponse } from 'axios'
-import { Comment } from '../interfaces/PostComments'
-import { EditedComment, EditCommentProps } from '../interfaces/EditorComponent'
-export default function AdminCommentEditor({ setMessage, comment, setEditing }: EditCommentProps): JSX.Element {
+import { CommentObject } from '../../interfaces/PostComments'
+import { EditedComment, AdminEditCommentProps } from '../../interfaces/EditorComponent'
+export default function AdminCommentEditor({ setMessage, comment, setEditing, dispatch }: AdminEditCommentProps): JSX.Element {
     const [content, setContent] = useState<string>(comment.content)
     const [errors, setErrors] = useState<null | string>(null)
     const token: string | null = localStorage.getItem('token')
@@ -51,8 +51,10 @@ export default function AdminCommentEditor({ setMessage, comment, setEditing }: 
                 content: sanitizedContent
             }
             axios.patch(`http://localhost:4000/api/comments/id/${comment._id}`, submitComment, { headers: { 'Authorization': `${token as string}` } })
-                .then((res: AxiosResponse<{ message: string, comment: Comment }>): void => {
+                .then((res: AxiosResponse<{ message: string, comment: CommentObject }>): void => {
                     setMessage(res.data.message)
+                    dispatch({ type: 'removeComment', payload: { id: comment._id } })
+                    dispatch({ type: 'setMessage', payload: { message: res.data.message } })
                     setEditing(false)
                 })
                 .catch((err: AxiosError<{ message: string }>): void => {

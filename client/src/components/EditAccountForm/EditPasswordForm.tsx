@@ -7,7 +7,6 @@ import { useUserContext } from '../contexts/UserContext';
 import { UserObject } from '../interfaces/UserObjectContext';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 export default function EditPasswordForm({ setForm }: EditFormProps): JSX.Element {
-    const navigate: NavigateFunction = useNavigate()
     const { userInfo }: { userInfo: UserObject } = useUserContext()
     const formik: FormikProps<{ password: string, confirmPassword: string }> = useFormik<{ password: string, confirmPassword: string }>({
         initialValues: {
@@ -36,7 +35,6 @@ export default function EditPasswordForm({ setForm }: EditFormProps): JSX.Elemen
                         const token: string = tokenRes.data.token
                         localStorage.setItem("token", token)
                         setForm(null)
-                        navigate(0)
                     }
                     ).catch((err: AxiosError<{ message: string }>): void => {
                         console.log(err.response?.data.message)

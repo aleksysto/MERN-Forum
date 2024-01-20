@@ -1,4 +1,6 @@
 import * as Yup from "yup";
+import { UserObject } from "./UserObjectContext";
+import { AppAction } from "./AdminReducerTypes";
 export type UserRegisterValidation = Yup.ObjectSchema<{
   image: any;
   login: string;
@@ -47,4 +49,9 @@ export interface EditUserObject {
 
 export interface EditFormProps {
   setForm: React.Dispatch<React.SetStateAction<JSX.Element | null>>;
+  setEdited: React.Dispatch<React.SetStateAction<boolean>>;
+}
+export interface AdminEditFormProps extends EditFormProps {
+  user: UserObject;
+  dispatch: React.Dispatch<AppAction>;
 }

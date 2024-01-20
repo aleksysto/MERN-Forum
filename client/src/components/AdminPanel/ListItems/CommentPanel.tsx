@@ -1,18 +1,18 @@
 import React, { useState } from "react";
-import { CommentListItemProps } from "../../interfaces/PostComments";
+import { AdminCommentListItemProps } from "../../interfaces/PostComments";
 import DateCreator from "../../DateCreator/DateCreator";
 import { AppAction, AppState } from "../../interfaces/AdminReducerTypes";
 import { useAdminContext } from "../../contexts/AdminContext";
 import useConfirm from "../../hooks/useConfirm";
 import DeleteButton from "../../utils/DeleteButton";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import AdminCommentEditor from "../../utils/AdminCommentEditor";
+import AdminCommentEditor from "../AdminComponents/AdminCommentEditor";
 export default function CommentPanel({
     comment,
     index,
-}: CommentListItemProps): JSX.Element {
-    const { deleting, setDeleting, confirm, setConfirm } = useConfirm()
-    const [state, dispatch]: [AppState, React.Dispatch<AppAction>] = useAdminContext()
+    dispatch
+}: AdminCommentListItemProps): JSX.Element {
+    const { action, setAction, confirm, setConfirm } = useConfirm()
     const [editing, setEditing] = useState<boolean>(false);
     const [message, setMessage] = useState<string>('');
     function handleDelete() {
@@ -20,6 +20,7 @@ export default function CommentPanel({
             .then((res: AxiosResponse<{ message: string }>): void => {
                 dispatch({ type: 'setMessage', payload: { message: "Comment deleted" } })
                 dispatch({ type: 'removeComment', payload: { id: comment._id } })
+                setMessage('Deleted')
             })
             .catch((err: AxiosError<{ message: string }>): void => {
                 err.response
@@ -27,10 +28,10 @@ export default function CommentPanel({
                     : dispatch({ type: 'setMessage', payload: { message: 'Server Error' } })
             })
     }
-    return deleting && confirm ? (
+    return (action && confirm) || message.length > 0 ? (
         <>
-            <div
-            >Deleted!
+            <div>
+                {message}
             </div>
         </>
     ) : (
@@ -49,8 +50,8 @@ export default function CommentPanel({
                 ) : (
                     <>
                         <div>{message}</div>
-                        <AdminCommentEditor setMessage={setMessage} comment={comment} setEditing={setEditing} />
-                        <DeleteButton {...{ deleting, setDeleting, confirm, setConfirm, handleDelete }} />
+                        <AdminCommentEditor setMessage={setMessage} comment={comment} setEditing={setEditing} dispatch={dispatch} />
+                        <DeleteButton {...{ action, setAction, confirm, setConfirm, handleAction: handleDelete }} />
                     </>
                 )}
             </li>

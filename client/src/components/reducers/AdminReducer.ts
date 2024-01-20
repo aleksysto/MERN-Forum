@@ -1,17 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import React, { Dispatch, useReducer } from "react";
 import { UserObject } from "../interfaces/UserObjectContext";
-import {
-  AppAction,
-  AppState,
-  Data,
-  ErrorMessage,
-  Payload,
-  PostData,
-  PostsResponse,
-  UserData,
-  UsersResponse,
-} from "../interfaces/AdminReducerTypes";
+import { AppAction, AppState } from "../interfaces/AdminReducerTypes";
 import { AggregatePostObject } from "../interfaces/ForumPosts";
 import { AggregateCommentObject } from "../interfaces/PostComments";
 import {
@@ -29,14 +19,22 @@ import {
   removeUser,
   sortedUsers,
 } from "./actions/AdminActions/User";
+import { ReportObject } from "../interfaces/Reports";
+import {
+  filterReportsType,
+  removeReport,
+  sortedReports,
+} from "./actions/AdminActions/Report";
 
 export const initialState: AppState = {
   users: [],
   comments: [],
   posts: [],
+  reports: [],
   displayUsers: [],
   displayComments: [],
   displayPosts: [],
+  displayReports: [],
   message: "",
 };
 
@@ -84,6 +82,20 @@ function adminReducer(state: AppState, action: AppAction): AppState {
           message: "error",
         };
       }
+    case "setReports":
+      if (action.payload.reports && action.payload.message) {
+        return {
+          ...state,
+          reports: action.payload.reports,
+          displayReports: action.payload.reports,
+          message: action.payload.message,
+        };
+      } else {
+        return {
+          ...state,
+          message: "error",
+        };
+      }
     case "sortUsers":
       const users: string | UserObject[] = sortedUsers(state, action.payload);
       return typeof users === "string"
@@ -103,7 +115,7 @@ function adminReducer(state: AppState, action: AppAction): AppState {
         : {
             ...state,
             displayComments: comments,
-            message: `${comments.length} users`,
+            message: `${comments.length} comments`,
           };
     case "sortPosts":
       const posts: string | AggregatePostObject[] = sortedPosts(
@@ -115,7 +127,19 @@ function adminReducer(state: AppState, action: AppAction): AppState {
         : {
             ...state,
             displayPosts: posts,
-            message: `${posts.length} users`,
+            message: `${posts.length} posts`,
+          };
+    case "sortReports":
+      const reports: string | ReportObject[] = sortedReports(
+        state,
+        action.payload
+      );
+      return typeof reports === "string"
+        ? { ...state, message: reports }
+        : {
+            ...state,
+            displayReports: reports,
+            message: `${reports.length} reports`,
           };
     case "filterPostsTitle":
       const filteredPosts: AggregatePostObject[] = filterPostsTitle(
@@ -147,6 +171,16 @@ function adminReducer(state: AppState, action: AppAction): AppState {
         displayComments: filteredComments,
         message: `${filteredComments.length} comments`,
       };
+    case "filterReportsType":
+      const filteredReports: ReportObject[] = filterReportsType(
+        state,
+        action.payload
+      );
+      return {
+        ...state,
+        displayReports: filteredReports,
+        message: `${filteredReports.length} reports`,
+      };
     case "removeUser":
       const newUsers: string | UserObject[] = removeUser(state, action.payload);
       return typeof newUsers === "string"
@@ -168,6 +202,15 @@ function adminReducer(state: AppState, action: AppAction): AppState {
       return typeof newComments === "string"
         ? { ...state, message: newComments }
         : { ...state, comments: newComments };
+    case "removeReport":
+      const newReports: string | ReportObject[] = removeReport(
+        state,
+        action.payload
+      );
+      console.log(newReports);
+      return typeof newReports === "string"
+        ? { ...state, message: newReports }
+        : { ...state, reports: newReports };
     case "setMessage":
       return action.payload.message
         ? {

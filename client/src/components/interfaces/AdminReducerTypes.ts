@@ -1,5 +1,6 @@
 import { AggregatePostObject } from "./ForumPosts";
 import { AggregateCommentObject } from "./PostComments";
+import { ReportObject } from "./Reports";
 import { UserObject } from "./UserObjectContext";
 
 export interface UserData {
@@ -19,7 +20,10 @@ export interface PostsResponse {
   message: string;
   posts: AggregatePostObject[];
 }
-
+export interface ReportData {
+  data: ReportObject[];
+  message: string;
+}
 export interface CommentData {
   data: AggregateCommentObject[];
   message: string;
@@ -27,6 +31,10 @@ export interface CommentData {
 export interface CommentsResponse {
   message: string;
   comments: AggregateCommentObject[];
+}
+export interface ReportsResponse {
+  message: string;
+  reports: ReportObject[];
 }
 export interface ErrorMessage {
   message: string;
@@ -40,9 +48,11 @@ export interface AppState {
   posts: AggregatePostObject[];
   comments: AggregateCommentObject[];
   users: UserObject[];
+  reports: ReportObject[];
   displayUsers: UserObject[];
   displayComments: AggregateCommentObject[];
   displayPosts: AggregatePostObject[];
+  displayReports: ReportObject[];
   message: string;
 }
 
@@ -51,6 +61,7 @@ export interface Payload {
   users?: UserObject[];
   posts?: AggregatePostObject[];
   comments?: AggregateCommentObject[];
+  reports?: ReportObject[];
   message?: string;
   filter?: string;
   orderBy?: string;
@@ -66,5 +77,15 @@ export interface UserPanelProps {
   user: UserObject;
   index: number;
 }
-
+export interface ReportedPanelProps {
+  report: ReportObject;
+  index: number;
+  dispatch: React.Dispatch<AppAction>;
+}
+export interface AdminAccountEditNavProps {
+  user: UserObject;
+  setEdited: React.Dispatch<React.SetStateAction<boolean>>;
+  dispatch: React.Dispatch<AppAction>;
+}
+export type OrderDirection = "asc" | "desc";
 export type AdminContextType = [AppState, React.Dispatch<AppAction>];

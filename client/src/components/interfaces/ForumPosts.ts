@@ -1,3 +1,5 @@
+import { AppAction, AppState } from "./AdminReducerTypes";
+
 export interface PostObject {
   _id: string;
   title: string;
@@ -14,4 +16,8 @@ export interface AggregatePostObject extends PostObject {
 export interface PostItemProps {
   post: AggregatePostObject;
   index: number;
+}
+
+export interface AdminPostItemProps extends PostItemProps {
+  dispatch: React.Dispatch<AppAction>;
 }

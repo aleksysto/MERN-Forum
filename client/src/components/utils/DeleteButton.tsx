@@ -1,18 +1,18 @@
 import React from 'react'
 interface DeleteButtonProps {
-    deleting: boolean
-    setDeleting: React.Dispatch<React.SetStateAction<boolean>>
+    action: boolean
+    setAction: React.Dispatch<React.SetStateAction<boolean>>
     confirm: boolean
     setConfirm: React.Dispatch<React.SetStateAction<boolean>>
-    handleDelete: () => void
+    handleAction: () => void
 }
-export default function DeleteButton({ deleting, setDeleting, confirm, setConfirm, handleDelete }: DeleteButtonProps): JSX.Element {
+export default function DeleteButton({ action, setAction, confirm, setConfirm, handleAction }: DeleteButtonProps): JSX.Element {
     return (
         <>
             {
-                !deleting ?
+                !action ?
                     (
-                        <button onClick={() => setDeleting(true)}>
+                        <button onClick={() => setAction(true)}>
                             Delete
                         </button>
                     ) : (
@@ -27,11 +27,11 @@ export default function DeleteButton({ deleting, setDeleting, confirm, setConfir
                                                 </div>
                                                 <button onClick={() => {
                                                     setConfirm(true)
-                                                    handleDelete()
+                                                    handleAction()
                                                 }}>
                                                     Confirm
                                                 </button>
-                                                <button onClick={() => setDeleting(false)}>
+                                                <button onClick={() => setAction(false)}>
                                                     Cancel
                                                 </button>
                                             </>

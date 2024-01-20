@@ -30,7 +30,6 @@ export default function UserProvider({ children }: { children: JSX.Element }): J
         const decodedToken: customPayload | string = await jwtDecode(token)
         if (typeof decodedToken !== "string") {
             const { _id, login, email, posts, comments, type, lastActive, entryDate, profilePicture }: UserObject = decodedToken
-            console.log(_id, login, email)
             setUserInfo({ _id, login, email, posts, comments, type, lastActive, entryDate, profilePicture })
         }
     }

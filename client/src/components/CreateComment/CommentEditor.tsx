@@ -5,7 +5,7 @@ import DOMPurify from 'dompurify'
 import axios, { AxiosError, AxiosResponse } from 'axios'
 import { useUserContext } from '../contexts/UserContext'
 import { Params, useParams } from 'react-router-dom'
-import { Comment } from '../interfaces/PostComments'
+import { CommentObject } from '../interfaces/PostComments'
 import { UploadComment, CommentEditorProps } from '../interfaces/EditorComponent'
 import { CommentsDispatch, useCommentsDispatch } from '../reducers/stores/store'
 import { getComments } from '../reducers/actions/CommentActions'
@@ -61,7 +61,7 @@ export default function CommentEditor({ setMessage }: CommentEditorProps): JSX.E
                 content: sanitizedContent
             }
             axios.post(`http://localhost:4000/api/posts/id/${id}/comment`, submitComment, { headers: { 'Authorization': `${token as string}` } })
-                .then((res: AxiosResponse<{ message: string, comment: Comment }>): void => {
+                .then((res: AxiosResponse<{ message: string, comment: CommentObject }>): void => {
                     setMessage(res.data.message)
                     setContent('')
                     setErrors('')

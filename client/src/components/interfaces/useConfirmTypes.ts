@@ -1,6 +1,6 @@
 export interface useConfirmHook {
-  deleting: boolean;
+  action: boolean;
   confirm: boolean;
-  setDeleting: React.Dispatch<React.SetStateAction<boolean>>;
+  setAction: React.Dispatch<React.SetStateAction<boolean>>;
   setConfirm: React.Dispatch<React.SetStateAction<boolean>>;
 }

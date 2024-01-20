@@ -3,7 +3,7 @@ import ReactQuill, { UnprivilegedEditor } from 'react-quill'
 import { DeltaStatic, Sources, DeltaOperation } from 'quill'
 import DOMPurify from 'dompurify'
 import axios, { AxiosError, AxiosResponse } from 'axios'
-import { Comment } from '../interfaces/PostComments'
+import { CommentObject } from '../interfaces/PostComments'
 import { EditedComment, EditCommentProps } from '../interfaces/EditorComponent'
 import { CommentsDispatch, useCommentsDispatch } from '../reducers/stores/store'
 import { getComments } from '../reducers/actions/CommentActions'
@@ -54,7 +54,7 @@ export default function EditComment({ setMessage, comment, setEditing }: EditCom
                 content: sanitizedContent
             }
             axios.patch(`http://localhost:4000/api/comments/id/${comment._id}`, submitComment, { headers: { 'Authorization': `${token as string}` } })
-                .then((res: AxiosResponse<{ message: string, comment: Comment }>): void => {
+                .then((res: AxiosResponse<{ message: string, comment: CommentObject }>): void => {
                     setMessage(res.data.message)
                     setEditing(false)
                     dispatch(getComments(`http://localhost:4000/api/posts/${comment.postId}/comments`))

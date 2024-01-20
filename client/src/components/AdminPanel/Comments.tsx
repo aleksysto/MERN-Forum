@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import useAdminReducer from '../reducers/AdminReducer'
-import { AppAction, AppState } from '../interfaces/AdminReducerTypes'
+import { AppAction, AppState, OrderDirection } from '../interfaces/AdminReducerTypes'
 import { loadComments } from '../reducers/actions/AdminActions/AdminActions'
 import { AggregateCommentObject } from '../interfaces/PostComments'
 import CommentPanel from './ListItems/CommentPanel'
@@ -15,6 +15,13 @@ export default function Comments(): JSX.Element {
             dispatch({ type: 'filterCommentsContent', payload: { filter: undefined } })
         }
     }
+    // autor date
+    function handleSort(e: React.ChangeEvent<HTMLSelectElement>): void {
+        e.preventDefault()
+        const order: OrderDirection = e.target.value.split(' ')[0] as OrderDirection
+        const orderBy: string = e.target.value.split(' ')[1]
+        dispatch({ type: 'sortComments', payload: { order: order, orderBy: orderBy } })
+    }
     useEffect(() => {
         dispatch({ type: 'setMessage', payload: { message: 'Loading...' } })
         loadComments().then((res: { message: string, data: AggregateCommentObject[] }): void => {
@@ -26,12 +33,22 @@ export default function Comments(): JSX.Element {
     return (
         <>
             <div>{state.message}</div>
-            <div><input ref={filterRef} type="text" id="filter" onChange={handleFilter} /></div>
+            <div>
+                <label htmlFor="filter">Search by content: </label>
+                <input ref={filterRef} type="text" id="filter" onChange={handleFilter} />
+                <select onChange={handleSort}>
+                    <option value="">-Sort-</option>
+                    <option value="asc date" >Date &uarr;</option>
+                    <option value="desc date">Date &darr;</option>
+                    <option value="desc author" >Author &uarr;</option>
+                    <option value="asc author">Author &darr;</option>
+                </select>
+            </div>
             <div>
                 <ul>
                     {state.displayComments.map((comment: AggregateCommentObject, idx: number): JSX.Element => {
                         return (
-                            <CommentPanel comment={comment} index={idx} key={comment._id} />
+                            <CommentPanel comment={comment} index={idx} dispatch={dispatch} key={comment._id} />
                         )
                     })}
                 </ul>

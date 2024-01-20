@@ -122,7 +122,7 @@ const reportSchema = new Schema<ReportObject>({
   },
   reportedOn: {
     type: Date,
-    default: Date.now(),
+    default: Date.now,
   },
   reportedObject: {
     type: Schema.Types.Mixed,

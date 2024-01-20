@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Params, useParams } from 'react-router-dom'
-import { AggregatePostObject, PostItemProps } from '../../interfaces/ForumPosts'
+import { AggregatePostObject, AdminPostItemProps } from '../../interfaces/ForumPosts'
 import axios, { AxiosError, AxiosResponse } from 'axios'
 import DateCreator from '../../DateCreator/DateCreator'
 import { useUserContext } from '../../contexts/UserContext'
@@ -9,9 +9,9 @@ import { AppAction, AppState } from '../../interfaces/AdminReducerTypes'
 import { useAdminContext } from '../../contexts/AdminContext'
 import DeleteButton from '../../utils/DeleteButton'
 import useConfirm from '../../hooks/useConfirm'
-export default function PostPanel({ post, index }: PostItemProps): JSX.Element {
-    const { deleting, setDeleting, confirm, setConfirm } = useConfirm()
-    const [state, dispatch]: [AppState, React.Dispatch<AppAction>] = useAdminContext()
+import AdminPostEditor from '../AdminComponents/AdminPostEditor'
+export default function PostPanel({ post, index, dispatch }: AdminPostItemProps): JSX.Element {
+    const { action, setAction, confirm, setConfirm } = useConfirm()
     const [editing, setEditing] = useState<boolean>(false)
     const [message, setMessage] = useState('')
     function handleDelete() {
@@ -19,6 +19,7 @@ export default function PostPanel({ post, index }: PostItemProps): JSX.Element {
             .then((res: AxiosResponse<{ message: string }>): void => {
                 dispatch({ type: 'setMessage', payload: { message: "Post deleted" } })
                 dispatch({ type: 'removePost', payload: { id: post._id } })
+                setMessage('Deleted')
             })
             .catch((err: AxiosError<{ message: string }>): void => {
                 err.response
@@ -27,10 +28,10 @@ export default function PostPanel({ post, index }: PostItemProps): JSX.Element {
             })
     }
 
-    return deleting && confirm ? (
+    return (action && confirm) || message.length > 0 ? (
         <>
-            <div
-            >Deleted!
+            <div>
+                {message}
             </div>
         </>
     ) : (
@@ -39,11 +40,8 @@ export default function PostPanel({ post, index }: PostItemProps): JSX.Element {
                 {editing ? (
                     <>
                         <div>
-                            {message}
-                        </div>
-                        <div>
                             <div>{message}</div>
-                            <EditPost setMessage={setMessage} post={post} setEditing={setEditing} />
+                            <AdminPostEditor setMessage={setMessage} post={post} setEditing={setEditing} dispatch={dispatch} />
                         </div>
                     </>
                 ) : (
@@ -54,7 +52,7 @@ export default function PostPanel({ post, index }: PostItemProps): JSX.Element {
                     </>
                 )}
                 <button onClick={() => setEditing(!editing)}>Edit</button>
-                <DeleteButton {...{ deleting, setDeleting, confirm, setConfirm, handleDelete }} />
+                <DeleteButton {...{ action, setAction, confirm, setConfirm, handleAction: handleDelete }} />
             </li >
         </>
 

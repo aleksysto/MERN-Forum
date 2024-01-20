@@ -1,15 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { FormikProps, useFormik } from 'formik';
 import axios, { AxiosError, AxiosResponse } from 'axios'
 import * as Yup from 'yup'
 import * as uuid from 'uuid';
-import { checkImageSize, checkImageFormat } from '../RegisterPage/validationSchema';
-import { EditFormProps } from '../interfaces/RegisterUserTypes';
-import { useUserContext } from '../contexts/UserContext';
-import { UserObject } from '../interfaces/UserObjectContext';
-import { NavigateFunction, useNavigate } from 'react-router-dom';
-export default function EditProfilePictureForm({ setForm, setEdited }: EditFormProps): JSX.Element {
-    const { userInfo }: { userInfo: UserObject } = useUserContext()
+import { checkImageSize, checkImageFormat } from '../../RegisterPage/validationSchema';
+import { AdminEditFormProps } from '../../interfaces/RegisterUserTypes';
+export default function AdminEditProfilePicture({ user, setForm, setEdited, dispatch }: AdminEditFormProps): JSX.Element {
+    const [message, setMessage] = useState<string>('')
     const formik: FormikProps<{ image: any }> = useFormik<{ image: any }>({
         initialValues: {
             image: null,
@@ -34,28 +31,25 @@ export default function EditProfilePictureForm({ setForm, setEdited }: EditFormP
                     headers: {
                         'Content-Type': 'image/png'
                     }
-                }).then((res) => {
-                    console.log(res)
                 })
+                    .then((res) => {
+                        setMessage('Image uploaded')
+                    })
                     .catch((err) => {
-                        console.log(err)
+                        setMessage('Could not upload image to server')
                     })
 
-                axios.patch(`http://localhost:4000/api/users/id/${userInfo._id}`, {
+                axios.patch(`http://localhost:4000/api/users/id/${user._id}`, {
                     profilePicture: fileName
                 }, { headers: { 'Authorization': localStorage.getItem('token') } })
                     .then((res: AxiosResponse): void => {
-                        axios.post('http://localhost:4000/api/generateToken', { id: userInfo._id }).then((tokenRes: AxiosResponse<{ token: string }>): void => {
-                            const token: string = tokenRes.data.token
-                            localStorage.setItem("token", token)
-                            setForm(null)
-                        }
-                        ).catch((err: AxiosError<{ message: string }>): void => {
-                            console.log(err.response?.data.message)
-                        })
+                        setMessage('Profile picture changed')
+                        dispatch({ type: 'setMessage', payload: { message: 'Profile picture changed' } })
+                        setEdited(true)
                     })
                     .catch((err: AxiosError<{ message: string }>): void => {
-                        console.log(err.response?.data.message)
+                        setMessage(err.response?.data.message || 'Server error')
+                        dispatch({ type: 'setMessage', payload: { message: err.response?.data.message || 'Server error' } })
                     })
             }
             formik.resetForm()
@@ -64,6 +58,7 @@ export default function EditProfilePictureForm({ setForm, setEdited }: EditFormP
     return (
         <>
             <div>Change your profile picture</div>
+            <div>{message}</div>
             <div>
                 <form onSubmit={formik.handleSubmit}>
                     <label htmlFor="image">Your avatar: </label>
