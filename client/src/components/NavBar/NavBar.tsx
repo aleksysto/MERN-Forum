@@ -15,7 +15,7 @@ export default function NavBar() {
 
     return (
         <>
-            <div id="nav">
+            <div className="NavBar">
                 <div>
                     <Link to={{ pathname: '/' }}>
                         <button>

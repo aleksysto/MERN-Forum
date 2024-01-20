@@ -130,7 +130,7 @@ router.get(
     res: types.TypedResponse<types.UsersArrayResBody>
   ): Promise<void> => {
     const users: InferSchemaType<typeof schemas.Users> =
-      await schemas.Users.find({}, { password: 0 })
+      await schemas.Users.find({}, { password: 0, email: 0 })
         .sort({ posts: -1, comments: -1 })
         .limit(15);
     if (users) {
@@ -154,7 +154,9 @@ router.get(
             _id: 1,
             posts: 1,
             comments: 1,
-            login: "$login",
+            login: 1,
+            profilePicture: 1,
+            entryDate: 1,
             combinedActivity: { $add: ["$posts", "$comments"] },
           },
         },
