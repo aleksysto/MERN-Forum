@@ -6,6 +6,7 @@ import { UserObject } from '../interfaces/UserObjectContext'
 export default function LoginForm(): JSX.Element {
     const [login, setLogin] = useState<string>('')
     const [password, setPassword] = useState<string>('')
+    const [message, setMessage] = useState<string>('')
     const { setLoggedIn, setUserInfo } = useUserContext()
     function handleLoginChange(event: React.ChangeEvent<HTMLInputElement>): void {
         event.preventDefault()
@@ -20,7 +21,6 @@ export default function LoginForm(): JSX.Element {
         axios.post('http://localhost:4000/api/login', { login, password })
             .then((res: AxiosResponse<{ token: string, user: UserObject }>): void => {
                 const { _id, login, email, posts, comments, type, lastActive, entryDate, profilePicture }: UserObject = res.data.user
-                console.log(_id)
                 setLoggedIn(true)
                 setUserInfo({ _id, login, email, posts, comments, type, lastActive, entryDate, profilePicture })
                 localStorage.setItem("token", res.data.token)
@@ -28,7 +28,7 @@ export default function LoginForm(): JSX.Element {
             })
             .catch((err: AxiosError): void => {
                 setLoggedIn(false)
-                console.log("error", err)
+                setMessage("Wrong login or password")
             })
     }
     return (
@@ -42,6 +42,7 @@ export default function LoginForm(): JSX.Element {
                     <input type="password" id="password" onChange={handlePasswordChange} />
                     <button type="submit">Login</button>
                 </form>
+                <div>{message}</div>
             </div>
         </>
     )

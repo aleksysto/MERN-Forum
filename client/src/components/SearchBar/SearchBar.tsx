@@ -4,7 +4,14 @@ import SearchForm from './SearchForm'
 export default function SearchBar() {
     return (
         <>
-            <SearchForm />
+            <div>
+                <div>
+                    Search the forum:
+                </div>
+                <div>
+                    <SearchForm />
+                </div>
+            </div>
         </>
     )
 }

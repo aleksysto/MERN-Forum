@@ -22,6 +22,6 @@
     "types": ["dompurify"]
   },
   "include": [
-    "src"
+    "src",
   ]
 }

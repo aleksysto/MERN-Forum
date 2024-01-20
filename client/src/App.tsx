@@ -1,11 +1,14 @@
 import React from 'react';
-import './App.css';
-import MainPage from './components/MainPage';
+import './App.scss';
+import NavBar from './components/NavBar/NavBar';
 
-function App() {
+function App({ children }: { children: JSX.Element }): JSX.Element {
   return (
     <>
-      <MainPage />
+      <div>
+        <NavBar />
+        {children}
+      </div>
     </>
   );
 }

@@ -22,6 +22,8 @@ import SearchResultsPage from './components/SearchResults/SearchResultsPage';
 import AdminPanel from './components/AdminPanel/AdminPanel';
 import AdminProvider from './components/contexts/AdminContext';
 import AdminRoute from './components/utils/AdminRoute';
+import NavBar from './components/NavBar/NavBar';
+import MainPage from './components/MainPage';
 
 const root: Root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -29,49 +31,79 @@ const root: Root = ReactDOM.createRoot(
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element:
+      <App>
+        <MainPage />
+      </App>,
   },
   {
     path: "/register",
-    element: <RegisterPage />,
+    element:
+      <App>
+        <RegisterPage />
+      </App>,
   },
   {
     path: "/login",
-    element: <LoginPage />,
+    element:
+      <App>
+        <LoginPage />
+      </App>,
   },
   {
     path: "/account",
-    element: <PrivateRoute><AccountPage /></PrivateRoute>,
+    element:
+      <App>
+        <PrivateRoute>
+          <AccountPage />
+        </PrivateRoute>
+      </App>,
   },
   {
     path: "/search",
-    element: <SearchResultsPage />
+    element:
+      <App>
+        <SearchResultsPage />
+      </App>
   },
   {
     path: '/admin',
-    element: (
-      <>
+    element:
+      <App>
         <AdminRoute>
+
           <AdminProvider>
             <AdminPanel />
           </AdminProvider>
+
         </AdminRoute>
-      </>
-    )
+      </App>
+
   },
   {
     path: "/posts/",
     children: [{
       path: ":category",
-      element: <PostList />
+      element:
+        <App>
+          <PostList />
+        </App>
     },
     {
       path: ":category/create",
-      element: <PostCreator />
+      element:
+        <App >
+          <PostCreator />
+        </App >
     },
     {
       path: "post/:id",
-      element: <Provider store={commentsStore}><PostPage /> </Provider>
+      element:
+        <Provider store={commentsStore}>
+          <App>
+            <PostPage />
+          </App>
+        </Provider>
     }]
   }
 ]);
