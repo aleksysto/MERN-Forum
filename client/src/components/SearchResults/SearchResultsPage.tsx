@@ -25,8 +25,10 @@ export default function SearchResultsPage() {
                 })
                 .catch((err: AxiosError<{ message: string }>): void => {
                     err.response ? setMessage(err.response.data.message) : setMessage("Server error")
+                    setPosts(null)
                 })
         } else {
+            console.log(`http://localhost:4000/api/search?field=${field}&q=${q}&category=${category}`)
             axios.get(`http://localhost:4000/api/search?field=${field}&q=${q}&category=${category}`)
                 .then((res: AxiosResponse<{ message: string, posts: AggregatePostObject[] }>): void => {
                     setPosts(res.data.posts)
@@ -34,9 +36,10 @@ export default function SearchResultsPage() {
                 })
                 .catch((err: AxiosError<{ message: string }>): void => {
                     err.response ? setMessage(err.response.data.message) : setMessage("Server error")
+                    setPosts(null)
                 })
         }
-    }, [])
+    }, [searchParams])
     useEffect((): void => {
 
     }, [order])

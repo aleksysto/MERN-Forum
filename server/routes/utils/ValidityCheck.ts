@@ -88,9 +88,23 @@ export function checkPassword(password: string): boolean {
     return false;
   }
 }
-
+const categories: Array<string> = [
+  "Category 1",
+  "Category 2",
+  "Category 3",
+  "Category 4",
+  "Category 5",
+  "Category 5",
+  "Side category 1",
+  "Side category 2",
+  "Side category 3",
+  "Side category 4",
+  "Off topic category 1",
+  "Off topic category 2",
+  "Off topic category 3",
+];
 export function checkCategory(category: string): boolean {
-  if (category == "category" || category == "test") {
+  if (categories.includes(category)) {
     return true;
   } else {
     return false;

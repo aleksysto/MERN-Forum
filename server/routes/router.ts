@@ -11,6 +11,7 @@ import path from "path";
 import searchAggregation from "./utils/SearchAggregation";
 import {
   checkIfAdmin,
+  checkIfCorrectId,
   checkTokenValidity,
   secretKey,
 } from "./utils/ValidityCheck";
@@ -26,7 +27,7 @@ router.get(
   async (
     req: types.SearchRequest,
     res: types.TypedResponse<types.PostsResBody>
-  ): Promise<void> => {
+  ): Promise<void | types.TypedResponse<types.PostsResBody>> => {
     const {
       field,
       q,
@@ -34,6 +35,9 @@ router.get(
       keywords,
     }: { field: string; q: string; category?: string; keywords?: string } =
       req.query;
+    if (!field && !q && !category && !keywords) {
+      return res.status(400).json({ message: "Bad request" });
+    }
     searchAggregation(res, field, q, category, keywords);
   }
 );
@@ -49,31 +53,37 @@ router.get(
   async (
     req: Request,
     res: types.TypedResponse<{ message: string; reports?: Array<ReportObject> }>
-  ) => {
-    const token: undefined | string = req.headers.authorization;
-    if (token) {
-      if (checkTokenValidity(token)) {
-        const decodedToken: string | JwtPayload = jwt.verify(token, secretKey);
-        if (typeof decodedToken !== "string") {
-          const user: InferSchemaType<typeof schemas.Users> =
-            await schemas.Users.findOne({ _id: decodedToken._id });
-          if (checkIfAdmin(user)) {
-            const reports: InferSchemaType<typeof schemas.Reports> =
-              await schemas.Reports.find();
-            res
-              .status(200)
-              .json({ message: `${reports.length} found`, reports: reports });
-          } else {
-            res.status(403).json({ message: "Forbidden" });
-          }
-        } else {
-          res.status(401).json({ message: "Server error" });
-        }
-      } else {
-        res.status(401).json({ message: "Invalid token" });
+  ): Promise<void | types.TypedResponse<{
+    message: string;
+    reports?: Array<ReportObject>;
+  }>> => {
+    try {
+      const token: undefined | string = req.headers.authorization;
+
+      if (!token || !checkTokenValidity(token)) {
+        return res.status(400).json({ message: "Invalid token" });
       }
-    } else {
-      res.status(401).json({ message: "Unauthorized" });
+
+      const decodedToken: string | JwtPayload = jwt.verify(token, secretKey);
+
+      if (typeof decodedToken === "string") {
+        return res.status(500).json({ message: "Server error" });
+      }
+
+      const user: InferSchemaType<typeof schemas.Users> =
+        await schemas.Users.findOne({ _id: decodedToken._id });
+
+      if (!user || !checkIfAdmin(user)) {
+        return res.status(403).json({ message: "Forbidden" });
+      }
+
+      const reports: InferSchemaType<typeof schemas.Reports> =
+        await schemas.Reports.find();
+      res
+        .status(200)
+        .json({ message: `${reports.length} found`, reports: reports });
+    } catch (error) {
+      res.status(500).json({ message: "Server error" });
     }
   }
 );
@@ -97,109 +107,125 @@ router.post(
   async (
     req: types.ReportRequest,
     res: Response<{ message: string }>
-  ): Promise<void> => {
-    const { type, reportedId }: { type: string; reportedId: string } = req.body;
-    const token: undefined | string = req.headers.authorization;
-    if (token && type && reportedId) {
-      if (checkTokenValidity(token)) {
-        const decodedToken: string | JwtPayload = jwt.verify(token, secretKey);
-        if (typeof decodedToken !== "string") {
-          const userId: string = decodedToken._id;
-          const reportingUser: InferSchemaType<typeof schemas.Users> =
-            await schemas.Users.findOne({ _id: userId });
-          if (reportingUser) {
-            switch (type) {
-              case "user":
-                const reportedUser: InferSchemaType<typeof schemas.Users> =
-                  await schemas.Users.findOne({
-                    _id: reportedId,
-                  });
-                if (reportedUser && reportingUser) {
-                  const reportedObject: types.ReportReqObject = {
-                    type,
-                    reportedId,
-                    reportedBy: reportingUser._id,
-                    reportedObject: reportedUser,
-                  };
-                  const newReport: InferSchemaType<typeof schemas.Users> =
-                    new schemas.Reports(reportedObject);
-                  const saved: InferSchemaType<typeof schemas.Users> =
-                    await newReport.save();
-                  if (saved) {
-                    res.status(200).json({ message: "Reported" });
-                  } else {
-                    res.status(400).json({ message: "Server error" });
-                  }
-                } else {
-                  res.status(400).json({ message: "User not found" });
-                }
-                break;
-              case "post":
-                const reportedPost: InferSchemaType<typeof schemas.Posts> =
-                  await schemas.Posts.findOne({
-                    _id: reportedId,
-                  });
-                if (reportedPost && reportingUser) {
-                  const reportedObject: types.ReportReqObject = {
-                    type,
-                    reportedId,
-                    reportedBy: reportingUser._id,
-                    reportedObject: reportedPost,
-                  };
-                  const newReport: InferSchemaType<typeof schemas.Users> =
-                    new schemas.Reports(reportedObject);
-                  const saved: InferSchemaType<typeof schemas.Users> =
-                    await newReport.save();
-                  if (saved) {
-                    res.status(200).json({ message: "Reported" });
-                  } else {
-                    res.status(400).json({ message: "Server error" });
-                  }
-                } else {
-                  res.status(400).json({ message: "Post not found" });
-                }
-                break;
-              case "comment":
-                const reportedComment: InferSchemaType<
-                  typeof schemas.Comments
-                > = await schemas.Comments.findOne({
-                  _id: reportedId,
-                });
-                if (reportedComment && reportingUser) {
-                  const reportedObject: types.ReportReqObject = {
-                    type,
-                    reportedId,
-                    reportedBy: reportingUser._id,
-                    reportedObject: reportedComment,
-                  };
-                  const newReport: InferSchemaType<typeof schemas.Users> =
-                    new schemas.Reports(reportedObject);
-                  const saved: InferSchemaType<typeof schemas.Users> =
-                    await newReport.save();
-                  if (saved) {
-                    res.status(200).json({ message: "Reported" });
-                  } else {
-                    res.status(400).json({ message: "Server error" });
-                  }
-                } else {
-                  res.status(400).json({ message: "Comment not found" });
-                }
-                break;
-              default:
-                res.status(400).json({ message: "Bad request" });
-                break;
-            }
-          } else {
-            res.status(404).json({ message: "User not found" });
-          }
-        } else {
-          res.status(401).json({ message: "Server error" });
-        }
-      } else {
-        res.status(400).json({ message: "Invalid token" });
+  ): Promise<void | Response<{ message: string }>> => {
+    try {
+      const { type, reportedId }: { type: string; reportedId: string } =
+        req.body;
+      const token: undefined | string = req.headers.authorization;
+
+      if (
+        !token ||
+        !type ||
+        !reportedId ||
+        !checkTokenValidity(token) ||
+        !checkIfCorrectId(reportedId)
+      ) {
+        return res.status(400).json({ message: "Bad request" });
       }
-    } else {
-      res.status(400).json({ message: "Bad request" });
+
+      const decodedToken: string | JwtPayload = jwt.verify(token, secretKey);
+
+      if (typeof decodedToken === "string") {
+        return res.status(500).json({ message: "Server error" });
+      }
+
+      const userId: string = decodedToken._id;
+      const reportingUser: InferSchemaType<typeof schemas.Users> =
+        await schemas.Users.findOne({ _id: userId });
+
+      if (!reportingUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      switch (type) {
+        case "user":
+          const reportedUser: InferSchemaType<typeof schemas.Users> =
+            await schemas.Users.findOne({
+              _id: reportedId,
+            });
+
+          if (!reportedUser) {
+            return res.status(404).json({ message: "User not found" });
+          }
+
+          const reportedUserObject: types.ReportReqObject = {
+            type,
+            reportedId,
+            reportedBy: reportingUser._id,
+            reportedObject: reportedUser,
+          };
+          const newUserReport: InferSchemaType<typeof schemas.Reports> =
+            new schemas.Reports(reportedUserObject);
+          const savedUser: InferSchemaType<typeof schemas.Reports> =
+            await newUserReport.save();
+
+          if (savedUser) {
+            return res.status(200).json({ message: "Reported" });
+          } else {
+            return res.status(400).json({ message: "Server error" });
+          }
+          break;
+
+        case "post":
+          const reportedPost: InferSchemaType<typeof schemas.Posts> =
+            await schemas.Posts.findOne({
+              _id: reportedId,
+            });
+
+          if (!reportedPost) {
+            return res.status(404).json({ message: "Post not found" });
+          }
+
+          const reportedPostObject: types.ReportReqObject = {
+            type,
+            reportedId,
+            reportedBy: reportingUser._id,
+            reportedObject: reportedPost,
+          };
+          const newPostReport: InferSchemaType<typeof schemas.Reports> =
+            new schemas.Reports(reportedPostObject);
+          const savedPost: InferSchemaType<typeof schemas.Reports> =
+            await newPostReport.save();
+
+          if (savedPost) {
+            return res.status(200).json({ message: "Reported" });
+          } else {
+            return res.status(400).json({ message: "Server error" });
+          }
+
+          break;
+        case "comment":
+          const reportedComment: InferSchemaType<typeof schemas.Comments> =
+            await schemas.Comments.findOne({
+              _id: reportedId,
+            });
+          if (!reportedComment) {
+            return res.status(404).json({ message: "Comment not found" });
+          }
+
+          const reportedCommentObject: types.ReportReqObject = {
+            type,
+            reportedId,
+            reportedBy: reportingUser._id,
+            reportedObject: reportedComment,
+          };
+          const newCommentReport: InferSchemaType<typeof schemas.Reports> =
+            new schemas.Reports(reportedCommentObject);
+          const saved: InferSchemaType<typeof schemas.Reports> =
+            await newCommentReport.save();
+
+          if (saved) {
+            return res.status(200).json({ message: "Reported" });
+          } else {
+            return res.status(400).json({ message: "Server error" });
+          }
+          break;
+        default:
+          return res.status(400).json({ message: "Bad request" });
+          break;
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Server error" });
     }
   }
 );
@@ -210,36 +236,40 @@ router.delete(
   async (
     req: types.DeleteReportRequest,
     res: types.TypedResponse<{ message: string }>
-  ): Promise<void> => {
-    const reportId: string = req.params.id;
-    const token: undefined | string = req.headers.authorization;
-    if (token && reportId) {
-      if (checkTokenValidity(token)) {
-        const decodedToken: string | JwtPayload = jwt.verify(token, secretKey);
-        if (typeof decodedToken !== "string") {
-          const userId: string = decodedToken._id;
-          const deletingUser: InferSchemaType<typeof schemas.Users> =
-            await schemas.Users.findOne({ _id: userId });
-          if (deletingUser && checkIfAdmin(deletingUser)) {
-            const deletedReport = await schemas.Reports.findOneAndDelete({
-              _id: reportId,
-            });
-            if (deletedReport) {
-              res.status(200).json({ message: "Report deleted" });
-            } else {
-              res.status(404).json({ message: "Report not found" });
-            }
-          } else {
-            res.status(404).json({ message: "User not found" });
-          }
-        } else {
-          res.status(401).json({ message: "Server error" });
-        }
-      } else {
-        res.status(400).json({ message: "Invalid token" });
+  ): Promise<void | types.TypedResponse<{ message: string }>> => {
+    try {
+      const reportId: string = req.params.id;
+      const token: undefined | string = req.headers.authorization;
+
+      if (!token || !reportId || !checkTokenValidity(token)) {
+        return res.status(400).json({ message: "Bad request" });
       }
-    } else {
-      res.status(400).json({ message: "Bad request" });
+
+      const decodedToken: string | JwtPayload = jwt.verify(token, secretKey);
+
+      if (typeof decodedToken === "string") {
+        return res.status(500).json({ message: "Server error" });
+      }
+
+      const userId: string = decodedToken._id;
+      const deletingUser: InferSchemaType<typeof schemas.Users> =
+        await schemas.Users.findOne({ _id: userId });
+
+      if (!deletingUser || !checkIfAdmin(deletingUser)) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const deletedReport = await schemas.Reports.findOneAndDelete({
+        _id: reportId,
+      });
+
+      if (!deletedReport) {
+        return res.status(404).json({ message: "Report not found" });
+      }
+
+      res.status(200).json({ message: "Report deleted" });
+    } catch (error) {
+      res.status(500).json({ message: "Server error" });
     }
   }
 );

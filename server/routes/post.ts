@@ -20,59 +20,66 @@ const router: Router = express.Router();
 // HTTP POST for creating new posts
 router.post(
   "/api/posts/:category",
-  async (req: types.CreatePostRequest, res: Response): Promise<void> => {
-    const { title, content, author }: types.CreatePostObject = req.body;
-    const token: string | undefined = req.headers.authorization;
-    const category: string = req.params.category;
-    const postData: types.CreatePostObject = {
-      category: category,
-      title: title,
-      content: content,
-      author: author,
-    };
-    const newPost: InferSchemaType<typeof schemas.Posts> = new schemas.Posts(
-      postData
-    );
-    if (token) {
-      if (checkTokenValidity(token)) {
-        const decodedToken: string | JwtPayload = jwt.verify(token, secretKey);
-        if (typeof decodedToken !== "string") {
-          const postingUser: types.DbUserObject = await schemas.Users.findOne({
-            _id: decodedToken._id,
-          });
-          if (
-            content &&
-            author &&
-            title &&
-            checkContent(content) &&
-            checkTitle(title) &&
-            checkCategory(category) &&
-            postingUser &&
-            postingUser.login === author
-          ) {
-            const savedPost: InferSchemaType<typeof schemas.Posts> =
-              await new schemas.Posts(newPost).save();
-            const updateUser: InferSchemaType<typeof schemas.Users> =
-              await schemas.Users.findOneAndUpdate(
-                { _id: postingUser._id },
-                { posts: postingUser.posts + 1, lastActive: Date.now() }
-              );
-            if (savedPost && updateUser) {
-              res.json({ message: "Post created", comment: savedPost });
-            } else {
-              res.status(500).json({ message: "Error creating comment" });
-            }
-          } else {
-            res.status(500).json({ message: "Bad request" });
-          }
-        } else {
-          res.status(401).json({ message: "Server error" });
-        }
-      } else {
-        res.status(401).json({ message: "Invalid token" });
+  async (
+    req: types.CreatePostRequest,
+    res: Response
+  ): Promise<void | Response> => {
+    try {
+      const { title, content, author }: types.CreatePostObject = req.body;
+      const token: string | undefined = req.headers.authorization;
+      const category: string = req.params.category;
+      const postData: types.CreatePostObject = {
+        category: category,
+        title: title,
+        content: content,
+        author: author,
+      };
+      const newPost: InferSchemaType<typeof schemas.Posts> = new schemas.Posts(
+        postData
+      );
+
+      if (
+        !title ||
+        !content ||
+        !author ||
+        !category ||
+        title.length < 10 ||
+        !checkContent(content) ||
+        !checkCategory(category)
+      ) {
+        return res.status(400).json({ message: "Bad request" });
       }
-    } else {
-      res.status(401).json({ message: "Unauthorized" });
+      if (!token || !checkTokenValidity(token)) {
+        return res.status(401).json({ message: "Invalid token" });
+      }
+
+      const decodedToken: string | JwtPayload = jwt.verify(token, secretKey);
+
+      if (typeof decodedToken === "string") {
+        return res.status(500).json({ message: "Server error" });
+      }
+
+      const postingUser: types.DbUserObject = await schemas.Users.findOne({
+        _id: decodedToken._id,
+      });
+
+      if (!postingUser || postingUser.login !== author) {
+        return res.status(401).json({ message: "Bad request" });
+      }
+
+      const savedPost: InferSchemaType<typeof schemas.Posts> =
+        await new schemas.Posts(newPost).save();
+      const updateUser: InferSchemaType<typeof schemas.Users> =
+        await schemas.Users.findOneAndUpdate(
+          { _id: postingUser._id },
+          { posts: postingUser.posts + 1, lastActive: Date.now() }
+        );
+
+      if (savedPost && updateUser) {
+        return res.json({ message: "Post created" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Server error" });
     }
   }
 );
@@ -284,49 +291,44 @@ router.delete(
   async (
     req: types.DeleteRequest,
     res: types.TypedResponse<types.PatchResBody>
-  ): Promise<void> => {
-    const id: string = req.params.id;
-    const token: string | undefined = req.headers.authorization;
-    if (token) {
-      if (checkIfCorrectId(id)) {
-        if (checkTokenValidity(token)) {
-          const decodedToken: string | JwtPayload = jwt.verify(
-            token,
-            secretKey
-          );
-          if (typeof decodedToken !== "string") {
-            const userId: string = decodedToken._id;
-
-            const post: InferSchemaType<typeof schemas.Posts> =
-              await schemas.Posts.findOne({ _id: id });
-
-            const user: InferSchemaType<typeof schemas.Users> =
-              await schemas.Users.findOne({ _id: userId });
-
-            if (post && user) {
-              if (checkIfUserIsAuthorOrAdmin(user, post)) {
-                const updateUser: InferSchemaType<typeof schemas.Users> =
-                  await schemas.Users.findOneAndUpdate(
-                    { _id: user._id },
-                    { posts: user.posts - 1 }
-                  );
-                await schemas.Posts.findOneAndDelete({ _id: id });
-                res.json({ message: `Post ${id} deleted` });
-              } else {
-                res.status(401).json({ message: "Unauthorized" });
-              }
-            } else {
-              res.status(500).json({ message: "User or Post not found" });
-            }
-          } else {
-            res.status(500).json({ message: "Server error" });
-          }
-        } else {
-          res.status(400).json({ message: "Invalid token" });
-        }
-      } else {
-        res.status(400).json({ message: "Invalid ID" });
+  ): Promise<void | types.TypedResponse<types.PatchResBody>> => {
+    try {
+      const id: string = req.params.id;
+      const token: string | undefined = req.headers.authorization;
+      if (!token || !checkIfCorrectId(id) || !checkTokenValidity(token)) {
+        return res.status(400).json({ message: "Invalid token or ID" });
       }
+
+      const decodedToken: string | JwtPayload = jwt.verify(token, secretKey);
+
+      if (typeof decodedToken === "string") {
+        return res.status(500).json({ message: "Server error" });
+      }
+
+      const userId: string = decodedToken._id;
+
+      const post: InferSchemaType<typeof schemas.Posts> =
+        await schemas.Posts.findOne({ _id: id });
+
+      const user: InferSchemaType<typeof schemas.Users> =
+        await schemas.Users.findOne({ _id: userId });
+
+      if (!post || !user) {
+        return res.status(500).json({ message: "User or Post not found" });
+      }
+      if (!checkIfUserIsAuthorOrAdmin(user, post)) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      const updateUser: InferSchemaType<typeof schemas.Users> =
+        await schemas.Users.findOneAndUpdate(
+          { _id: user._id },
+          { posts: user.posts - 1 }
+        );
+      await schemas.Posts.findOneAndDelete({ _id: id });
+      res.json({ message: `Post ${id} deleted` });
+    } catch (error) {
+      res.status(500).json({ message: "Server Error" });
     }
   }
 );
@@ -337,65 +339,61 @@ router.patch(
   async (
     req: types.EditPostRequest,
     res: types.TypedResponse<types.PatchResBody>
-  ): Promise<void> => {
-    const id: string = req.params.id;
-    const {
-      title,
-      content,
-      category,
-    }: { title?: string; content?: string; category?: string } = req.body;
-    const token: string | undefined = req.headers.authorization;
-    if (token) {
-      if (checkIfCorrectId(id)) {
-        if (checkTokenValidity(token)) {
-          const decodedToken: string | JwtPayload = jwt.verify(
-            token,
-            secretKey
-          );
-          if (typeof decodedToken !== "string") {
-            const userId: string = decodedToken._id;
-            const user: InferSchemaType<typeof schemas.Users> =
-              await schemas.Users.findOne({ _id: userId });
-            const post: InferSchemaType<typeof schemas.Posts> =
-              await schemas.Posts.findOne({ _id: id });
-            if (user && post) {
-              if (checkIfUserIsAuthorOrAdmin(user, post)) {
-                if (title && checkTitle(title)) {
-                  await schemas.Posts.findOneAndUpdate(
-                    { _id: id },
-                    { title: title }
-                  );
-                }
-                if (content && checkContent(content)) {
-                  await schemas.Posts.findOneAndUpdate(
-                    { _id: id },
-                    { content: content }
-                  );
-                }
-                if (category && checkCategory(category)) {
-                  await schemas.Posts.findOneAndUpdate(
-                    { _id: id },
-                    { category: category }
-                  );
-                }
-                res.json({ message: `Post ${id} updated` });
-              } else {
-                res.status(401).json({ message: "Unauthorized" });
-              }
-            } else {
-              res.status(404).json({ message: "User or Post not found" });
-            }
-          } else {
-            res.status(500).json({ message: "Server error" });
-          }
-        } else {
-          res.status(400).json({ message: "Invalid token" });
-        }
-      } else {
-        res.status(400).json({ message: "Invalid ID" });
+  ): Promise<void | types.TypedResponse<types.PatchResBody>> => {
+    try {
+      const id: string = req.params.id;
+      const {
+        title,
+        content,
+        category,
+      }: { title?: string; content?: string; category?: string } = req.body;
+      const token: string | undefined = req.headers.authorization;
+
+      if (!token || !checkIfCorrectId(id) || !checkTokenValidity(token)) {
+        return res.status(400).json({ message: "Invalid token or ID" });
       }
-    } else {
-      res.status(400).json({ message: "Invalid token" });
+      if (!title && !content && !category) {
+        return res.status(400).json({ message: "No fields to update" });
+      }
+
+      const decodedToken: string | JwtPayload = jwt.verify(token, secretKey);
+
+      if (typeof decodedToken === "string") {
+        return res.status(500).json({ message: "Server error" });
+      }
+
+      const userId: string = decodedToken._id;
+      const user: InferSchemaType<typeof schemas.Users> =
+        await schemas.Users.findOne({ _id: userId });
+      const post: InferSchemaType<typeof schemas.Posts> =
+        await schemas.Posts.findOne({ _id: id });
+
+      if (!user || !post) {
+        return res.status(404).json({ message: "User or Post not found" });
+      }
+
+      if (!checkIfUserIsAuthorOrAdmin(user, post)) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      if (title && checkTitle(title)) {
+        await schemas.Posts.findOneAndUpdate({ _id: id }, { title: title });
+      }
+
+      if (content && checkContent(content)) {
+        await schemas.Posts.findOneAndUpdate({ _id: id }, { content: content });
+      }
+
+      if (category && checkCategory(category)) {
+        await schemas.Posts.findOneAndUpdate(
+          { _id: id },
+          { category: category }
+        );
+      }
+
+      res.json({ message: `Post ${id} updated` });
+    } catch (error) {
+      res.status(500).json({ message: "Server error" });
     }
   }
 );

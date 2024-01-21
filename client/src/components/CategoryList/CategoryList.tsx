@@ -2,9 +2,9 @@ import React, { useEffect, useRef } from 'react'
 import CategoryListItem from './CategoryListItem'
 
 //, 'category3', 'category4', 'category5'
-const mainCategoryList: Array<string> = ['category1', 'test', 'category2', 'category3', 'category4', 'category5']
-const sideCategoryList: Array<string> = ['sideCategory1', 'sideCategory2', 'sideCategory3', 'sideCategory4']
-const offTopicCategoryList: Array<string> = ['offTopicCategory1', 'offTopicCategory2', 'offTopicCategory3']
+const mainCategoryList: Array<string> = ['Category 1', 'Category 2', 'Category 3', 'Category 4', 'Category 5', 'Category 5']
+const sideCategoryList: Array<string> = ['Side category 1', 'Side category 2', 'Side category 3', 'Side category 4']
+const offTopicCategoryList: Array<string> = ['Off topic category 1', 'Off topic category 2', 'Off topic category 3']
 export default function CategoryList(): JSX.Element {
 
     return (

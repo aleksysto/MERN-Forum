@@ -11,6 +11,7 @@ import {
   checkPassword,
   checkEmail,
   checkLogin,
+  checkIfUserIsAuthorOrAdmin,
 } from "./utils/ValidityCheck";
 import generateToken from "./utils/TokenGeneration";
 import jwt, { JwtPayload } from "jsonwebtoken";
@@ -26,43 +27,59 @@ router.post(
   async (
     req: types.RegisterUserRequest,
     res: types.TypedResponse<types.RegisterResBody>
-  ): Promise<void> => {
-    const { login, email, password, profilePicture }: types.RegisterUserObject =
-      req.body;
-    const encryptedPassword: string = await encryptPassword(password);
-    const userData: types.RegisterUserObject = {
-      login: login,
-      email: email,
-      password: encryptedPassword,
-      profilePicture: profilePicture || "default.jpg",
-    };
+  ): Promise<void | types.TypedResponse<types.RegisterResBody>> => {
+    try {
+      const {
+        login,
+        email,
+        password,
+        profilePicture,
+      }: types.RegisterUserObject = req.body;
 
-    const newUser: InferSchemaType<typeof schemas.Users> = new schemas.Users(
-      userData
-    );
+      if (
+        !login ||
+        !email ||
+        !password ||
+        !checkLogin(login) ||
+        !checkEmail(email) ||
+        !checkPassword(password)
+      ) {
+        return res.status(400).json({ message: "Bad request" });
+      }
 
-    if (
-      login &&
-      email &&
-      password &&
-      checkLogin(login) &&
-      checkEmail(email) &&
-      checkPassword(password)
-    ) {
+      const checkDuplicate = await schemas.Users.findOne({
+        $or: [{ login: login }, { email: email }],
+      });
+
+      if (checkDuplicate) {
+        return res.status(409).json({ message: "User already exists" });
+      }
+
+      const encryptedPassword: string = await encryptPassword(password);
+      const userData: types.RegisterUserObject = {
+        login: login,
+        email: email,
+        password: encryptedPassword,
+        profilePicture: profilePicture || "default.jpg",
+      };
+      const newUser: InferSchemaType<typeof schemas.Users> = new schemas.Users(
+        userData
+      );
       const saveUser: InferSchemaType<typeof schemas.Users> =
         await newUser.save();
       const user: InferSchemaType<typeof schemas.Users> =
         await schemas.Users.findOne({ login: login }, { password: 0 });
-      if (saveUser && user) {
-        res.json({
-          message: "User registered successfully",
-          user: user,
-        });
-      } else {
-        res.status(400).json({ message: "Failed to register user" });
+
+      if (!saveUser || !user) {
+        return res.status(400).json({ message: "Failed to register user" });
       }
-    } else {
-      res.status(400).json({ message: "Failed to register user" });
+
+      res.json({
+        message: "User registered successfully",
+        user: user,
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Server error" });
     }
   }
 );
@@ -73,33 +90,41 @@ router.post(
   async (
     req: types.LoginRequest,
     res: types.TypedResponse<types.LoginResBody>
-  ): Promise<void> => {
-    const { login, password }: { login: string; password: string } = req.body;
-    if (login && password) {
+  ): Promise<void | types.TypedResponse<types.LoginResBody>> => {
+    try {
+      const { login, password }: { login: string; password: string } = req.body;
+
+      if (!login || !password) {
+        return res.status(400).json({ message: "Bad request" });
+      }
+
       const foundUser: InferSchemaType<typeof schemas.Users> =
         await schemas.Users.findOne({ login: login }, { password: 1 });
-      if (foundUser) {
-        const comparedPasswords: boolean = await comparePassword(
-          password,
-          foundUser.password
-        );
-        if (comparedPasswords) {
-          const user: InferSchemaType<typeof schemas.Users> =
-            await schemas.Users.findOne({ login: login }, { password: 0 });
-          const token: string = generateToken(user);
-          res.json({
-            message: "User logged in successfully",
-            user: user,
-            token: token,
-          });
-        } else {
-          res.status(401).json({ message: "Wrong password" });
-        }
-      } else {
-        res.status(404).json({ message: "User not found" });
+
+      if (!foundUser) {
+        return res.status(404).json({ message: "User not found" });
       }
-    } else {
-      res.status(400).json({ message: "Bad request" });
+
+      const comparedPasswords: boolean = await comparePassword(
+        password,
+        foundUser.password
+      );
+
+      if (!comparedPasswords) {
+        return res.status(401).json({ message: "Wrong password" });
+      }
+
+      const user: InferSchemaType<typeof schemas.Users> =
+        await schemas.Users.findOne({ login: login }, { password: 0 });
+      const token: string = generateToken(user);
+
+      res.json({
+        message: "User logged in successfully",
+        user: user,
+        token: token,
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Server error" });
     }
   }
 );
@@ -177,42 +202,43 @@ router.delete(
   async (
     req: types.DeleteRequest,
     res: types.TypedResponse<types.PatchResBody>
-  ): Promise<void> => {
-    const id: string = req.params.id;
-    const token: string | undefined = req.headers.authorization;
-    if (token) {
-      if (checkIfCorrectId(id)) {
-        if (checkTokenValidity(token)) {
-          const decodedToken: string | JwtPayload = jwt.verify(
-            token,
-            secretKey
-          );
-          if (typeof decodedToken !== "string") {
-            const userId: string = decodedToken._id;
-            const deletingUser: InferSchemaType<typeof schemas.Users> =
-              await schemas.Users.findOne({ _id: userId });
-            const deletedUser: InferSchemaType<typeof schemas.Users> =
-              await schemas.Users.findOne({ _id: id });
+  ): Promise<void | types.TypedResponse<types.PatchResBody>> => {
+    try {
+      const id: string = req.params.id;
+      const token: string | undefined = req.headers.authorization;
 
-            if (deletedUser && deletingUser) {
-              if (checkIfUserIsAccOwnerOrAdmin(id, deletingUser)) {
-                await schemas.Users.findOneAndDelete({ _id: id });
-                res.json({ message: `User ${id} deleted` });
-              } else {
-                res.status(401).json({ message: "Unauthorized" });
-              }
-            } else {
-              res.status(500).json({ message: "User not found" });
-            }
-          } else {
-            res.status(500).json({ message: "Server error" });
-          }
-        } else {
-          res.status(400).json({ message: "Invalid token" });
-        }
-      } else {
-        res.status(400).json({ message: "Invalid ID" });
+      if (
+        !id ||
+        !token ||
+        !checkIfCorrectId(id) ||
+        !checkTokenValidity(token)
+      ) {
+        return res.status(400).json({ message: "Invalid token or ID" });
       }
+
+      const decodedToken: string | JwtPayload = jwt.verify(token, secretKey);
+
+      if (typeof decodedToken === "string") {
+        return res.status(500).json({ message: "Server error" });
+      }
+
+      const userId: string = decodedToken._id;
+      const deletingUser: InferSchemaType<typeof schemas.Users> =
+        await schemas.Users.findOne({ _id: userId });
+      const deletedUser: InferSchemaType<typeof schemas.Users> =
+        await schemas.Users.findOne({ _id: id });
+
+      if (!deletedUser || !deletingUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      if (!checkIfUserIsAccOwnerOrAdmin(id, deletingUser)) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      await schemas.Users.findOneAndDelete({ _id: id });
+      res.json({ message: `User ${id} deleted` });
+    } catch (error) {
+      res.status(500).json({ message: "Server error" });
     }
   }
 );
@@ -223,74 +249,66 @@ router.patch(
   async (
     req: types.EditUserRequest,
     res: types.TypedResponse<types.PatchResBody>
-  ): Promise<void> => {
-    const { login, password, email, type, profilePicture } = req.body;
-    const id: string = req.params.id;
-    const token: string | undefined = req.headers.authorization;
-    if (token) {
-      if (checkIfCorrectId(id)) {
-        if (checkTokenValidity(token)) {
-          const decodedToken: string | JwtPayload = jwt.verify(
-            token,
-            secretKey
-          );
-          if (typeof decodedToken !== "string") {
-            const userId: string = decodedToken._id;
-            const editingUser: InferSchemaType<typeof schemas.Users> =
-              await schemas.Users.findOne({ _id: userId });
-            const editedUser: InferSchemaType<typeof schemas.Users> =
-              await schemas.Users.findOne({ _id: id });
-            if (editingUser && editedUser) {
-              if (checkIfUserIsAccOwnerOrAdmin(id, editingUser)) {
-                if (login && checkLogin(login)) {
-                  await schemas.Users.findOneAndUpdate(
-                    { _id: id },
-                    { login: login }
-                  );
-                }
-                if (password && checkPassword(password)) {
-                  const encryptedPassword = await encryptPassword(password);
-                  await schemas.Users.findOneAndUpdate(
-                    { _id: id },
-                    { password: encryptedPassword }
-                  );
-                }
-                if (email && checkEmail(email)) {
-                  await schemas.Users.findOneAndUpdate(
-                    { _id: id },
-                    { email: email }
-                  );
-                }
-                if (profilePicture) {
-                  await schemas.Users.findOneAndUpdate(
-                    { _id: id },
-                    { profilePicture: profilePicture }
-                  );
-                }
-                if (checkIfAdmin(editingUser)) {
-                  if (type) {
-                    await schemas.Users.findOneAndUpdate(
-                      { _id: id },
-                      { type: type }
-                    );
-                  }
-                }
-                res.json({ message: `User ${id} updated` });
-              } else {
-                res.status(401).json({ message: "Unauthorized" });
-              }
-            } else {
-              res.status(500).json({ message: "User not found" });
-            }
-          } else {
-            res.status(500).json({ message: "Server error" });
-          }
-        } else {
-          res.status(400).json({ message: "Invalid token" });
-        }
-      } else {
-        res.status(400).json({ message: "Invalid ID" });
+  ): Promise<void | types.TypedResponse<types.PatchResBody>> => {
+    try {
+      const { login, password, email, type, profilePicture } = req.body;
+      const id: string = req.params.id;
+      const token: string | undefined = req.headers.authorization;
+
+      if (!login && !password && !email && !type && !profilePicture) {
+        return res.status(400).json({ message: "No data provided" });
       }
+
+      if (!token || !checkIfCorrectId(id) || !checkTokenValidity(token)) {
+        return res.status(401).json({ message: "Invalid token or ID" });
+      }
+
+      const decodedToken: string | JwtPayload = jwt.verify(token, secretKey);
+
+      if (typeof decodedToken === "string") {
+        return res.status(500).json({ message: "Server error" });
+      }
+
+      const userId: string = decodedToken._id;
+      const editingUser: InferSchemaType<typeof schemas.Users> =
+        await schemas.Users.findOne({ _id: userId });
+      const editedUser: InferSchemaType<typeof schemas.Users> =
+        await schemas.Users.findOne({ _id: id });
+
+      if (!editingUser || !editedUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      if (!checkIfUserIsAccOwnerOrAdmin(id, editingUser)) {
+        return res.status(400).json({ message: "Unauthorized" });
+      }
+
+      if (login && checkLogin(login)) {
+        await schemas.Users.findOneAndUpdate({ _id: id }, { login: login });
+      }
+      if (password && checkPassword(password)) {
+        const encryptedPassword = await encryptPassword(password);
+        await schemas.Users.findOneAndUpdate(
+          { _id: id },
+          { password: encryptedPassword }
+        );
+      }
+      if (email && checkEmail(email)) {
+        await schemas.Users.findOneAndUpdate({ _id: id }, { email: email });
+      }
+      if (profilePicture) {
+        await schemas.Users.findOneAndUpdate(
+          { _id: id },
+          { profilePicture: profilePicture }
+        );
+      }
+      if (checkIfAdmin(editingUser)) {
+        if (type) {
+          await schemas.Users.findOneAndUpdate({ _id: id }, { type: type });
+        }
+      }
+      res.json({ message: "User updated" });
+    } catch (error) {
+      res.status(500).json({ message: "Server error" });
     }
   }
 );
