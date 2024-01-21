@@ -29,6 +29,7 @@ export default function UserProvider({ children }: { children: JSX.Element }): J
         const token: string = localStorage.getItem("token") as string
         const decodedToken: customPayload | string = await jwtDecode(token)
         if (typeof decodedToken !== "string") {
+
             const { _id, login, email, posts, comments, type, lastActive, entryDate, profilePicture }: UserObject = decodedToken
             setUserInfo({ _id, login, email, posts, comments, type, lastActive, entryDate, profilePicture })
         }

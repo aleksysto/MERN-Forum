@@ -161,7 +161,7 @@ router.get(
           },
         },
         { $sort: { combinedActivity: -1 } },
-        { $limit: 15 },
+        { $limit: 10 },
       ]);
     if (users) {
       res.json({ message: `${users.length} found`, users: users });

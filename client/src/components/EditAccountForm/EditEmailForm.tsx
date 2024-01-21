@@ -9,7 +9,7 @@ import { testEmailAvailability } from '../RegisterPage/validationSchema';
 import { useUserContext } from '../contexts/UserContext';
 import { UserObject } from '../interfaces/UserObjectContext';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
-export default function EditEmailForm({ setForm }: EditFormProps): JSX.Element {
+export default function EditEmailForm({ setForm, setEdited }: EditFormProps): JSX.Element {
     const { userInfo }: { userInfo: UserObject } = useUserContext()
     const formik: FormikProps<{ email: string }> = useFormik<{ email: string }>({
         initialValues: {

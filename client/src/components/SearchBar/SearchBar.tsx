@@ -5,12 +5,7 @@ export default function SearchBar() {
     return (
         <>
             <div>
-                <div>
-                    Search the forum:
-                </div>
-                <div>
-                    <SearchForm />
-                </div>
+                <SearchForm />
             </div>
         </>
     )

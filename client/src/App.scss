@@ -1,18 +1,293 @@
 @import "~quill/dist/quill.snow.css";
+
 .App {
-  background-color: rgb(255, 255, 255);
+  background-color: rgb(207, 207, 207);
   color: rgb(0, 0, 0);
 
-  .NavBar{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  .NavBar {
+    background-color: rgb(20, 20, 20);
+    position: fixed;
+    width: 100%;
+    padding: 0.25em;
+    border-bottom: 1px solid rgb(100, 100, 100);
+    box-shadow: 0 0 5px rgb(100, 100, 100);
+    nav {
+      display: grid;
+      grid-template-areas: "Logo Search Buttons";
+      grid-template-columns: 1fr 1fr 1fr;
+      width: 100%;
+      margin: 0.25em;
+
+      .NavLogo {
+        grid-area: Logo;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: auto;
+        margin-bottom: auto;
+        width: 100%;
+        display: flex;
+        a {
+          text-decoration: none;
+          color: rgb(207, 207, 207);
+          font-size: 1.5em;
+        }
+        a:hover {
+          color: rgb(241, 241, 241);
+          transition: ease-in 0.3s;
+        }
+      }
+      .SearchBar {
+        grid-area: Search;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: auto;
+        margin-bottom: auto;
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        div {
+          form {
+            height: 50%;
+            select,
+            input {
+              background-color: rgb(92, 92, 92);
+              color: rgb(201, 201, 201);
+              border: 0;
+              border-right: 1px solid black;
+              transition: ease-in 0.1s;
+              width: 10em;
+            }
+            input::placeholder {
+              text-indent: 5px;
+              color: rgb(199, 199, 199);
+            }
+            select:focus,
+            input:focus {
+              outline: none;
+              background-color: rgb(241, 241, 241);
+              color: rgb(47, 47, 47);
+              transition: ease-in 0.1s;
+            }
+            input:hover,
+            select:hover {
+              cursor: pointer;
+              background-color: rgb(241, 241, 241);
+              color: rgb(47, 47, 47);
+              transition: ease-in 0.1s;
+            }
+            a {
+              input {
+                width: 6em;
+                border: none;
+              }
+              :hover {
+                cursor: pointer;
+              }
+            }
+          }
+          form input:not(:last-child) {
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+          }
+          form input:last-child {
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+          }
+        }
+      }
+      .NavButtons {
+        grid-area: Buttons;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: auto;
+        margin-bottom: auto;
+        width: 100%;
+        display: flex;
+        justify-content: end;
+        div {
+          margin-left: 0.5em;
+          margin-right: 2em;
+          button {
+            width: 8em;
+            height: 2em;
+            color: rgb(207, 207, 207);
+            background-color: rgb(30, 30, 30);
+            border: 1px solid rgb(75, 75, 75);
+            border-radius: 10px;
+            text-align: center;
+            font-size: 0.9em;
+            transition: ease-in 0.1s;
+          }
+          button:hover {
+            cursor: pointer;
+            border: 1px solid rgb(120, 120, 120);
+            color: rgb(241, 241, 241);
+            box-shadow: 0 0 5px rgb(120, 120, 120);
+            transition: ease-in 0.3s;
+          }
+          a {
+            :hover {
+              cursor: pointer;
+              border: 1px solid rgb(120, 120, 120);
+              color: rgb(241, 241, 241);
+              box-shadow: 0 0 5px rgb(120, 120, 120);
+              transition: ease-in 0.3s;
+            }
+            button {
+              width: 8em;
+              height: 2em;
+              color: rgb(207, 207, 207);
+              background-color: rgb(30, 30, 30);
+              border: 1px solid rgb(75, 75, 75);
+              border-radius: 10px;
+              text-align: center;
+              font-size: 0.9em;
+              transition: ease-in 0.1s;
+            }
+          }
+        }
+      }
+    }
+  }
+  .Body {
+    padding-top: 3em;
+    display: grid;
+    grid-template-areas: "LeftPanel Middle RightPanel";
+    grid-template-columns: 0.5fr 1.5fr 0.5fr;
+    background-color: rgb(20, 20, 20);
+    .LeftPanel {
+      grid-area: LeftPanel;
+      background-color: rgb(20, 20, 20);
+      color: rgb(207, 207, 207);
+      width: 20em;
+      padding-right: 2em;
+      display: flex;
+      flex-direction: column;
+      .OurTopUsers {
+        padding-top: 1em;
+        text-align: center;
+      }
+      ul {
+        padding-right: 0.5em;
+        li {
+          font-size: 0.9em;
+          list-style: none;
+          padding-bottom: 2.5em;
+          text-align: center;
+          .TopUser {
+            border-radius: 10px;
+            box-shadow: 0 0 7px rgb(120, 120, 120);
+            padding-bottom: 0.5em;
+            transition: all 0.3s ease-in;
+            .TopUserImgName {
+              a {
+                display: flex;
+                justify-content: space-around;
+                text-decoration: none;
+                color: rgb(207, 207, 207);
+                margin-bottom: 1em;
+                //border-radius: 10px;
+                width: 100%;
+                border-bottom: 1px solid rgb(81, 81, 81);
+                div {
+                  padding: 1em;
+                  margin: auto;
+                  height: 50%;
+                  //transition: color 0.3s ease-in;
+                }
+                img {
+                  height: 4em;
+                  width: 4em;
+                  border-radius: 10px;
+                }
+              }
+            }
+            div {
+              transition: color 0.3s ease-in;
+            }
+          }
+          .TopUser:hover {
+            box-shadow: 0 0 9px rgb(185, 185, 185);
+            div {
+              color: rgb(241, 241, 241);
+            }
+          }
+        }
+      }
+    }
+    .CategoryList {
+      grid-area: Middle;
+      width: 100%;
+      padding-left: 5em;
+      padding-right: 5em;
+      padding-top: 2em;
+      background-color: rgb(30, 30, 30);
+      ul {
+        margin-top: 3em;
+        padding-top: 1em;
+        padding-bottom: 1em;
+        padding-left: 0;
+        list-style: none;
+        box-shadow: 0 0 7px rgb(120, 120, 120);
+        border-radius: 10px;
+        transition: all 0.3s ease-in;
+        .CategoryHeader {
+          font-size: 3em;
+          text-align: center;
+          color: rgb(216, 216, 216);
+          margin-bottom: 1em;
+          transition: all 0.3s ease-in;
+        }
+        li:not(:first-child) {
+          box-shadow: 0 0 10px rgb(60, 60, 60);
+          border-radius: 10px;
+          margin-left: 2em;
+          margin-right: 2em;
+          margin-bottom: 2em;
+          height: 5em;
+          transition: all 0.2s ease-in;
+          a {
+            color: rgb(207, 207, 207);
+            text-decoration: none;
+            font-weight: 400;
+            font-size: 1.5em;
+            transition: all 0.2s ease-in;
+            div {
+              display: flex;
+              flex-direction: row;
+              justify-content: space-around;
+              height: 100%;
+              width: 100%;
+              div {
+                height: 50%;
+                margin: auto;
+              }
+            }
+          }
+        }
+        li:not(:first-child):hover {
+          box-shadow: 0 0 9px rgb(200, 200, 200);
+          background-color: rgb(50, 50, 50);
+          a {
+            color: rgb(226, 226, 226);
+          }
+        }
+      }
+      ul:hover {
+        box-shadow: 0 0 9px rgb(185, 185, 185);
+        .CategoryHeader {
+          color: rgb(241, 241, 241);
+        }
+      }
+    }
   }
 }
-
-
+// rgb(46, 46, 46); dark gray
+// rgb(207, 207, 207); light white
+// rgb(119, 119, 119); lighter border
+//color: rgb(211, 248, 255); h0over
+//border: 1px solid rgb(211, 248, 255); hover
 #editor-container {
   width: 50%;
   height: 50%;
 }
-

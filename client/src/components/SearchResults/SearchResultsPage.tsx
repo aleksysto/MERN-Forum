@@ -46,15 +46,17 @@ export default function SearchResultsPage() {
     ) : (
         <>
             <div>
-                <SortSelection setOrder={setOrder} />
-            </div>
-            <div>{message}, results: </div>
-            <div>
-                <ul>
-                    {posts.map((post: AggregatePostObject, index: number): JSX.Element => {
-                        return <PostListItem post={post} index={index} key={index} />
-                    })}
-                </ul>
+                <div>
+                    <SortSelection setOrder={setOrder} />
+                </div>
+                <div>{message}, results: </div>
+                <div>
+                    <ul>
+                        {posts.map((post: AggregatePostObject, index: number): JSX.Element => {
+                            return <PostListItem post={post} index={index} key={index} />
+                        })}
+                    </ul>
+                </div>
             </div>
         </>
     )

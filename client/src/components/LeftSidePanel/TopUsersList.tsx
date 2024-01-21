@@ -18,7 +18,7 @@ export default function TopUsersList() {
     //
     return (
         <div className="LeftPanel">
-            <div>Our top 15 users!</div>
+            <div className="OurTopUsers">Our top 10 users!</div>
             <ul>
                 {
                     users.map((user: UserActivityObject, index: number) => {

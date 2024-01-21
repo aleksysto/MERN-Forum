@@ -42,7 +42,7 @@ export default function SearchForm() {
     return (
         <>
             <form>
-                <input type={inputType} onChange={handleInput} />
+                <input type={inputType} onChange={handleInput} placeholder="Search..." />
                 <select value={type} onChange={handleTypeChange}>
                     <option value="keywords">-</option>
                     <option value="author">Author</option>
@@ -58,7 +58,7 @@ export default function SearchForm() {
                     <option value="category3" >Category3</option>
                     <option value="category4" >Category4</option>
                 </select>
-                <Link to={{ pathname: '/search', search: search }}><input type="submit" value="Search" /></Link>
+                <Link to={{ pathname: '/search', search: search }}><input type="submit" value="Search" id="SearchButton" /></Link>
             </form>
         </>
     )

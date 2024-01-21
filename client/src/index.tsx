@@ -69,15 +69,15 @@ const router = createBrowserRouter([
   {
     path: '/admin',
     element:
-      <App>
-        <AdminRoute>
+      //<App>
+      <AdminRoute>
 
-          <AdminProvider>
-            <AdminPanel />
-          </AdminProvider>
+        <AdminProvider>
+          <AdminPanel />
+        </AdminProvider>
 
-        </AdminRoute>
-      </App>
+      </AdminRoute>
+    //</App>
 
   },
   {

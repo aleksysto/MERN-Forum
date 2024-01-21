@@ -16,28 +16,30 @@ export default function NavBar() {
     return (
         <>
             <div className="NavBar">
-                <div>
-                    <Link to={{ pathname: '/' }}>
-                        <button>
-                            Forum Logo
-                        </button>
-                    </Link>
-                </div>
                 <nav>
-                    <div>
-                        <RegisterButton />
+                    <div className="NavLogo">
+                        <div >
+                            <Link to={{ pathname: '/' }} className="LogoButton">
+                                Forum Logo
+                            </Link>
+                        </div>
                     </div>
-                    <div>
-                        <LoginButton />
-                    </div>
-                    <div>
-                        <AccountButton />
-                    </div>
-                    <div>
-                        <LogoutButton />
-                    </div>
-                    <div>
+                    <div className="SearchBar">
                         <SearchBar />
+                    </div>
+                    <div className="NavButtons">
+                        <div>
+                            <RegisterButton />
+                        </div>
+                        <div>
+                            <LoginButton />
+                        </div>
+                        <div>
+                            <AccountButton />
+                        </div>
+                        <div>
+                            <LogoutButton />
+                        </div>
                     </div>
                 </nav>
             </div>

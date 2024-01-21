@@ -8,8 +8,10 @@ function App({ children }: { children: JSX.Element }): JSX.Element {
     <>
       <div className="App">
         <NavBar />
-        <TopUsersList />
-        {children}
+        <div className="Body">
+          <TopUsersList />
+          {children}
+        </div>
       </div>
     </>
   );
