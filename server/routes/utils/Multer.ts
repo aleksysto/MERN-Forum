@@ -39,4 +39,9 @@ function fileFilter(
   }
 }
 
-export const upload: Multer = multer({ storage, fileFilter });
+export const upload: Multer = multer({
+  storage,
+  fileFilter,
+  limits: { fileSize: 2097152 },
+});
+// 2097152 2 megabytes

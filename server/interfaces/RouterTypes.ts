@@ -140,6 +140,11 @@ export interface EditPostRequest extends Request {
     category?: string;
   };
 }
+export interface GetUserRequest extends Request {
+  params: {
+    id: string;
+  };
+}
 export interface EditUserRequest extends Request {
   params: {
     id: string;
@@ -230,7 +235,9 @@ export type CommentsResBody =
   | { message: string };
 
 export type CountResBody = { count: number } | { message: string };
-
+export type GetUserResBody =
+  | { message: string }
+  | { message: string; user: DbUserObject };
 export type PostCommentResBody =
   | { message: string; comment: CommentObject }
   | { message: string };

@@ -16,7 +16,6 @@ import {
 import generateToken from "./utils/TokenGeneration";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { comparePassword, encryptPassword } from "./utils/PasswordEncryption";
-import { Resolver } from "dns/promises";
 import checkAvailable from "./utils/CheckAvailable";
 
 const router: Router = express.Router();
@@ -143,6 +142,32 @@ router.get(
       res.json({ message: `${users.length} found`, users: users });
     } else {
       res.status(404).json({ message: "No users found" });
+    }
+  }
+);
+// HTTP GET for user
+router.get(
+  "/api/users/id/:id",
+  async (
+    req: types.GetUserRequest,
+    res: types.TypedResponse<types.GetUserResBody>
+  ): Promise<void | types.TypedResponse<types.GetUserResBody>> => {
+    try {
+      const id: string = req.params.id;
+
+      if (!checkIfCorrectId) {
+        return res.status(400).json({ message: "Invalid ID" });
+      }
+
+      const user: InferSchemaType<typeof schemas.Users> =
+        await schemas.Users.findOne({ _id: id }, { password: 0, email: 0 });
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      res.json({ message: "User found", user: user });
+    } catch (error) {
+      res.status(500).json({ message: "Server error" });
     }
   }
 );

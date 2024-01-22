@@ -93,10 +93,14 @@ router.post(
   "/api/uploadImage/:id",
   upload.single("image"),
   async (req: Request, res: Response): Promise<void> => {
-    if (req.file) {
-      res.status(200).json({ message: "File uploaded" });
-    } else {
-      res.status(400).json({ message: "Bad request" });
+    try {
+      if (req.file) {
+        res.status(200).json({ message: "File uploaded" });
+      } else {
+        res.status(400).json({ message: "Bad request" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Server error" });
     }
   }
 );

@@ -186,12 +186,33 @@ router.get(
       const page: number = parseInt(req.params.page);
       const skipValue: number = (page - 1) * 10;
       const comments: InferSchemaType<typeof schemas.Comments> =
-        await schemas.Comments.find({ postId: id }).skip(skipValue).limit(10);
+        await schemas.Comments.find({ postId: id })
+          .sort({ date: -1 })
+          .skip(skipValue)
+          .limit(10);
       if (comments) {
         res.json({ message: `${comments.length} found`, comments: comments });
       } else {
         res.status(404).json({ message: "No comments found" });
       }
+    }
+  }
+);
+
+// HTTP GET for users latest comment
+router.get(
+  "/api/comments/:username/latest",
+  async (
+    req: types.UsersLatestRequest,
+    res: types.TypedResponse<types.CommentsResBody>
+  ): Promise<void> => {
+    const username: string = req.params.username;
+    const comments: InferSchemaType<typeof schemas.Comments> =
+      await schemas.Comments.findOne({ author: username }).sort({ date: -1 });
+    if (comments) {
+      res.json({ message: `The latest comment`, comments: [comments] });
+    } else {
+      res.status(404).json({ message: "No comments found" });
     }
   }
 );
