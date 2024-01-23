@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FormikProps, useFormik } from 'formik';
 import axios, { AxiosError, AxiosResponse } from 'axios'
 import validationSchema from './validationSchema';
 import { RegisterUserObject, RegisterFormValues } from '../interfaces/RegisterUserTypes';
 import { RegisterHookValues } from '../interfaces/useRegisterSuccessTypes';
 import * as uuid from 'uuid';
+import { divide } from 'lodash';
 export default function RegisterForm({ setRegisterSuccess }: RegisterHookValues): JSX.Element {
     const formik: FormikProps<RegisterFormValues> = useFormik<RegisterFormValues>({
         initialValues: {
@@ -17,7 +18,6 @@ export default function RegisterForm({ setRegisterSuccess }: RegisterHookValues)
             profilePicture: ''
         },
         validationSchema: validationSchema,
-        validateOnChange: false,
         onSubmit: async (values: RegisterFormValues): Promise<void> => {
             const { login, email, password, profilePicture }: RegisterUserObject = values
             const { image }: { image: File | null } = values
@@ -62,13 +62,26 @@ export default function RegisterForm({ setRegisterSuccess }: RegisterHookValues)
             formik.resetForm()
         }
     })
+    const [imageUrl, setImageUrl] = React.useState<string | null | ArrayBuffer>('')
+    useEffect(() => {
+        if (formik.values.image) {
+            const reader = new FileReader()
+            reader.onload = (event: ProgressEvent<FileReader>) => {
+                if (event.target) {
+                    setImageUrl(event.target.result)
+                }
+            }
+            reader.readAsDataURL(formik.values.image)
+        }
+    }, [formik.values.image])
     return (
         <>
-            <div>Create your account</div>
-            <div>
-                <form onSubmit={formik.handleSubmit}>
-
-                    <label htmlFor="image">Your avatar: </label>
+            <div className="RegisterFormTitle">Create your account</div>
+            <div className="RegisterFormContainer">
+                <form onSubmit={formik.handleSubmit} className="RegisterFormElement">
+                    <div className="RegisterPageUserPfp"><img src={typeof imageUrl === 'string' ? imageUrl : undefined} alt="" /></div>
+                    <div className="UploadLabel">Upload your avatar: </div>
+                    <label htmlFor="image">&uarr; upload &uarr; </label>
                     <input type="file" id="image" onChange={(event) => {
                         event.preventDefault()
                         const files: FileList | null = event.currentTarget.files
@@ -77,44 +90,55 @@ export default function RegisterForm({ setRegisterSuccess }: RegisterHookValues)
                         }
                     }} />
                     {(
-                        <div>{
+                        <div className="RegisterError">{
                             String(formik.errors.image) === 'undefined' || String(formik.errors.image) === 'image cannot be null' ?
                                 '' :
                                 String(formik.errors.image)
                         }</div>
                     )}
 
+
                     <label htmlFor="login">Your login: </label>
-                    <input type="text" id="login" {...formik.getFieldProps('login')} />
-                    {formik.touched.login && formik.errors.login ? (
-                        <div>{formik.errors.login}</div>
-                    ) : null}
+                    <div className="RegisterInputAndErrors">
+                        <input type="text" id="login" {...formik.getFieldProps('login')} />
+                        {formik.touched.login && formik.errors.login ? (
+                            <div className="RegisterError">{formik.errors.login}</div>
+                        ) : <div> </div>}
+                    </div>
 
                     <label htmlFor="email">Your email: </label>
-                    <input type="text" id="email" {...formik.getFieldProps('email')} />
-                    {formik.touched.email && formik.errors.email ? (
-                        <div>{formik.errors.email}</div>
-                    ) : null}
+                    <div className="RegisterInputAndErrors">
+                        <input type="text" id="email" {...formik.getFieldProps('email')} />
+                        {formik.touched.email && formik.errors.email ? (
+                            <div className="RegisterError">{formik.errors.email}</div>
+                        ) : <div> </div>}
+                    </div>
+
 
                     <label htmlFor="password">Your password: </label>
-                    <input type="password" id="password" {...formik.getFieldProps('password')} />
-                    {formik.touched.password && formik.errors.password ? (
-                        <div>{formik.errors.password}</div>
-                    ) : null}
+                    <div className="RegisterInputAndErrors">
+                        <input type="password" id="password" {...formik.getFieldProps('password')} />
+                        {formik.touched.password && formik.errors.password ? (
+                            <div className="RegisterError">{formik.errors.password}</div>
+                        ) : <div> </div>}
+                    </div>
 
                     <label htmlFor="confirmPassword">Confirm your password: </label>
-                    <input type="password" id="confirmPassword" {...formik.getFieldProps('confirmPassword')} />
-                    {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
-                        <div>{formik.errors.confirmPassword}</div>
-                    ) : null}
+                    <div className="RegisterInputAndErrors">
+                        <input type="password" id="confirmPassword" {...formik.getFieldProps('confirmPassword')} />
+                        {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
+                            <div className="RegisterError">{formik.errors.confirmPassword}</div>
+                        ) : <div> </div>}
+                    </div>
+
 
                     <label htmlFor="tos">Agree to Terms and Conditions</label>
                     <input type="checkbox" id="tos" {...formik.getFieldProps('tos')} />
                     {formik.touched.tos && formik.errors.tos ? (
-                        <div>{formik.errors.tos}</div>
-                    ) : null}
+                        <div className="RegisterError">{formik.errors.tos}</div>
+                    ) : <div> </div>}
 
-                    <button type="submit" onClick={() => console.log(formik.errors)}>Submit</button>
+                    <button type="submit">Submit</button>
                 </form>
             </div>
         </>

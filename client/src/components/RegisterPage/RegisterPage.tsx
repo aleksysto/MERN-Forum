@@ -12,12 +12,14 @@ export default function RegisterPage(): JSX.Element {
     <>
       <div>
         <div>Your account has been created</div>
-        <Link to={{pathname: "/login"}}>You can log into your account here</Link>
+        <Link to={{ pathname: "/login" }}>You can log into your account here</Link>
       </div>
     </>
   ) : (
     <>
-      <RegisterForm setRegisterSuccess={setRegisterSuccess} />
+      <div className="RegisterForm">
+        <RegisterForm setRegisterSuccess={setRegisterSuccess} />
+      </div>
     </>
   );
 }

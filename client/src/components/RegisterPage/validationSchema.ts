@@ -26,7 +26,6 @@ export function checkImageSize(value: any): boolean {
   }
 }
 export function checkImageFormat(value: any): boolean {
-  console.log(value);
   if (value) {
     const file: File = value as File;
     if (

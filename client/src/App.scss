@@ -280,6 +280,184 @@
         }
       }
     }
+    .LoginForm {
+      grid-area: Middle;
+      width: 100%;
+      padding-left: 5em;
+      padding-right: 5em;
+      padding-top: 2em;
+      background-color: rgb(30, 30, 30);
+      color: rgb(238, 238, 238);
+      margin-top: 1em;
+      margin-bottom: 1em;
+      div {
+        text-align: center;
+        margin-bottom: 1em;
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        input {
+          width: 20%;
+          align-self: center;
+          background-color: rgb(75, 75, 75);
+          color: rgb(238, 238, 238);
+          transition: all 0.2s ease-in;
+          border: 0;
+          border-radius: 10px;
+          height: 1.5em;
+          padding-left: 1em;
+          padding-right: 1em;
+          margin-top: 0.5em;
+          margin-bottom: 1em;
+        }
+        button {
+          width: 15%;
+          align-self: center;
+          border: 0;
+          border-radius: 10px;
+          height: 1.5em;
+          background-color: rgb(75, 75, 75);
+          color: rgb(238, 238, 238);
+          transition: all 0.2s ease-in;
+        }
+        input:focus {
+          outline: none;
+          background-color: rgb(241, 241, 241);
+          color: rgb(29, 29, 29);
+        }
+        input:hover {
+          cursor: pointer;
+          background-color: rgb(241, 241, 241);
+          color: rgb(29, 29, 29);
+        }
+        button:hover {
+          cursor: pointer;
+          background-color: rgb(241, 241, 241);
+          color: rgb(29, 29, 29);
+        }
+        button[type="submit"] {
+          font-size: 1.25em;
+          width: 10%;
+        }
+      }
+    }
+    .RegisterForm {
+      //       RegisterFormTitle
+      // RegisterFormContainer
+      // RegisterFormElement
+      grid-area: Middle;
+      width: 100%;
+      padding-left: 5em;
+      padding-right: 5em;
+      padding-top: 2em;
+      background-color: rgb(30, 30, 30);
+      color: rgb(238, 238, 238);
+      .RegisterFormTitle {
+        text-align: center;
+        font-size: 3em;
+      }
+      .RegisterFormContainer {
+        .RegisterFormElement {
+          margin-top: 1em;
+          margin-bottom: 1em;
+          display: flex;
+          flex-direction: column;
+          text-align: center;
+          .RegisterPageUserPfp {
+            img {
+              max-width: 20em;
+            }
+          }
+          input {
+            width: 20%;
+            align-self: center;
+            background-color: rgb(75, 75, 75);
+            color: rgb(238, 238, 238);
+            transition: all 0.2s ease-in;
+            border: 0;
+            border-radius: 10px;
+            height: 1.5em;
+            padding-left: 1em;
+            padding-right: 1em;
+            margin-top: 0.5em;
+          }
+          .RegisterError {
+            margin-bottom: 1em;
+          }
+          input:focus {
+            outline: none;
+            background-color: rgb(241, 241, 241);
+            color: rgb(29, 29, 29);
+          }
+          input:hover {
+            cursor: pointer;
+            background-color: rgb(241, 241, 241);
+            color: rgb(29, 29, 29);
+          }
+          button {
+            width: 15%;
+            align-self: center;
+            border: 0;
+            border-radius: 10px;
+            height: 1.5em;
+            background-color: rgb(75, 75, 75);
+            color: rgb(238, 238, 238);
+            transition: all 0.2s ease-in;
+          }
+          button:hover {
+            background-color: rgb(241, 241, 241);
+            color: rgb(29, 29, 29);
+            cursor: pointer;
+          }
+          input[type="file"],
+          input[type="file"]:hover {
+            display: none;
+          }
+          label {
+            width: 15%;
+            align-self: center;
+            margin-top: 1.5em;
+            transition: all 0.2 ease-in;
+          }
+          label[for="image"] {
+            display: block;
+            background-color: rgb(75, 75, 75);
+            position: relative;
+            margin-bottom: 0.5em;
+            margin-top: 0.5em;
+            border-radius: 10px;
+            width: 20%;
+            height: 1.5em;
+            overflow: hidden;
+            transition: all 0.2s ease-in;
+          }
+          label[for="image"]:hover {
+            background-color: rgb(241, 241, 241);
+            color: rgb(29, 29, 29);
+            position: relative;
+            margin-bottom: 0.5em;
+            cursor: pointer;
+            // transition: all 0.2 ease-in;
+          }
+          label[for="tos"] {
+            margin-top: 5em;
+          }
+          input[type="checkbox"] {
+            width: 2%;
+            margin-bottom: 0.5em;
+          }
+          button[type="submit"] {
+            font-size: 1.25em;
+            width: 10%;
+          }
+          .RegisterInputAndErrors {
+            height: 3em;
+          }
+        }
+      }
+    }
   }
 }
 // rgb(46, 46, 46); dark gray
