@@ -31,7 +31,7 @@ export default function PostPage({ setError }: { setError: React.Dispatch<React.
                 <>
                     <div className='PostPagePostHeader flex flex-row justify-between'>
                         <div className="flex flex-row ">
-                            <Link to={{ pathname: '' }} className="flex flex-row no-underline text-standard-text">
+                            <Link to={{ pathname: `/user/${post.userId}` }} className="flex flex-row no-underline text-standard-text">
                                 <div><img className="max-w-[5em]" src={`http://localhost:4000/api/getImage/${post.userProfilePicture}`} alt="" /></div>
                                 <div className="PostPageAuthor">{post.author}</div>
                             </Link>

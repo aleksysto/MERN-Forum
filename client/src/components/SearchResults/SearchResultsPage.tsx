@@ -44,7 +44,7 @@ export default function SearchResultsPage() {
 
     }, [posts, order])
     return posts === null ? (<>
-        <div>{message}</div>
+        <div className="text-3xl text-standard-text">{message}</div>
     </>
     ) : (
         <>

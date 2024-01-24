@@ -9,7 +9,7 @@ export default function TopUserListItem({ user, index }: TopUserListItemProps): 
             <li>
                 <div className="TopUser">
                     <div className="TopUserImgName">
-                        <Link to={{ pathname: `/` }}>
+                        <Link to={{ pathname: `/user/${user._id}` }}>
                             <div>
                                 <img
                                     src={`http://localhost:4000/api/getImage/${user.profilePicture}`}

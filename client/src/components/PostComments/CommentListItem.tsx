@@ -20,7 +20,7 @@ export default function CommentListItem({
                 <div className="PostPageCommentListItemContainer">
                     <div className="PostPageCommentHeader flex flex-row justify-between">
                         <div className="PostPageCommentAuthorLink">
-                            <Link to={{}} className="flex flex-row no-underline text-standard-text">
+                            <Link to={{ pathname: `/user/${comment.userId}` }} className="flex flex-row no-underline text-standard-text">
                                 <div className="AuthorImagePostComments max-w-[5em]"><img className="max-w-[5em]" src={`http://localhost:4000/api/getImage/${comment.userProfilePicture}`} alt="" /></div>
                                 <div className="AuthorNamePostComments text-2xl">{comment.author}</div>
                             </Link>

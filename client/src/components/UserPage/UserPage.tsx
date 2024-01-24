@@ -11,7 +11,7 @@ export default function UserPage(): JSX.Element {
         axios.get(`http://localhost:4000/api/users/id/${id}`).then((res) => {
             setUser(res.data.user)
         })
-    }, [])
+    }, [id])
     return user ? (
         <>
             <UserPageGenerator user={user} />

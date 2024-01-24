@@ -2,6 +2,7 @@ import React from 'react'
 import { useUserContext } from '../contexts/UserContext'
 import { UserObject } from '../interfaces/UserObjectContext'
 import AccountTableRow from './AccountTableRow'
+import UserPostList from '../UserPage/UserPostList'
 export default function AccountData(): JSX.Element {
     const { userInfo } = useUserContext()
     const { login, email, posts, comments, lastActive, entryDate } = userInfo
@@ -30,6 +31,13 @@ export default function AccountData(): JSX.Element {
                     </table>
                 </div>
             </div>
+            <div>
+                <div className="AccountPagePostList">
+                    <UserPostList login={login} />
+                </div>
+            </div>
+
+
         </>
     ) : (
         <>
