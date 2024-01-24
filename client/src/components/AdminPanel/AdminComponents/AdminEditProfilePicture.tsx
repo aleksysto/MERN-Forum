@@ -45,8 +45,8 @@ export default function AdminEditProfilePicture({ user, setForm, setEdited }: Ad
                     profilePicture: fileName
                 }, { headers: { 'Authorization': localStorage.getItem('token') } })
                     .then((res: AxiosResponse): void => {
-                        setMessage('Profile picture changed')
                         dispatch({ type: 'setMessage', payload: { message: 'Profile picture changed' } })
+                        setMessage(state.message)
                         setEdited(true)
                     })
                     .catch((err: AxiosError<{ message: string }>): void => {

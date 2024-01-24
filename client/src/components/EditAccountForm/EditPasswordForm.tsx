@@ -5,7 +5,6 @@ import * as Yup from 'yup'
 import { EditFormProps } from '../interfaces/RegisterUserTypes';
 import { useUserContext } from '../contexts/UserContext';
 import { UserObject } from '../interfaces/UserObjectContext';
-import { NavigateFunction, useNavigate } from 'react-router-dom';
 export default function EditPasswordForm({ setForm, setEdited }: EditFormProps): JSX.Element {
     const { userInfo }: { userInfo: UserObject } = useUserContext()
     const formik: FormikProps<{ password: string, confirmPassword: string }> = useFormik<{ password: string, confirmPassword: string }>({

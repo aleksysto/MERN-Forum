@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { AggregatePostObject } from '../interfaces/ForumPosts'
 import axios, { AxiosResponse } from 'axios'
 import { Link, Params, useParams } from 'react-router-dom'
@@ -21,11 +21,11 @@ export default function PostList() {
             .catch((err) => {
                 console.log(err)
             })
-    }, [])
+    }, [])// eslint-disable-line react-hooks/exhaustive-deps
     useEffect((): void => {
         if (posts)
             setPosts([...posts])
-    }, [order])
+    }, [order])// eslint-disable-line react-hooks/exhaustive-deps
     return posts ? (
         <>
             <div className="PostList">
@@ -55,6 +55,6 @@ export default function PostList() {
             </div>
         </>
     ) : (
-        <div className="PostListLoading">Loading...</div>
+        <div className="PostListLoading text-3xl test-standard-text">Loading...</div>
     )
 }

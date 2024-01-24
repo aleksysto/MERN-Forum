@@ -1,5 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'
-import { JwtPayload, jwtDecode } from 'jwt-decode'
+import React, { createContext, useContext } from 'react'
 import { AdminContextType, AppAction, AppState } from '../interfaces/AdminReducerTypes';
 import useAdminReducer, { initialState } from '../reducers/AdminReducer';
 export const adminContext: React.Context<AdminContextType> = createContext<AdminContextType>([

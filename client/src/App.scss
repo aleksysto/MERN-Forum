@@ -102,7 +102,7 @@
         margin-bottom: auto;
         width: 100%;
         display: flex;
-        justify-content: end;
+        justify-content: flex-end;
         div {
           margin-left: 0.5em;
           margin-right: 2em;
@@ -283,7 +283,7 @@
               }
               td {
                 display: flex;
-                justify-content: end;
+                justify-content: flex-end;
               }
             }
           }
@@ -862,12 +862,12 @@
         height: 50%;
         margin-left: 2em;
         font-size: 1em;
-        align-self: end;
-        justify-content: end;
+        align-self: flex-end;
+        justify-content: flex-end;
       }
       .PostPageEdit {
         display: flex;
-        justify-content: end;
+        justify-content: flex-end;
         button {
           width: 9em;
           height: 2.5em;
@@ -1582,7 +1582,7 @@
           .PostPageCommentDate {
             display: flex;
             flex-direction: column;
-            text-align: end;
+            text-align: flex-end;
 
             div {
               height: 50%;
@@ -1882,7 +1882,7 @@
                   }
                   td {
                     display: flex;
-                    justify-content: end;
+                    justify-content: flex-end;
                   }
                 }
               }

@@ -1,10 +1,8 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import {
-  AppState,
   CommentData,
   CommentsResponse,
   ErrorMessage,
-  Payload,
   PostData,
   PostsResponse,
   ReportData,
@@ -12,9 +10,7 @@ import {
   UserData,
   UsersResponse,
 } from "../../../interfaces/AdminReducerTypes";
-import { AggregateCommentObject } from "../../../interfaces/PostComments";
-import { AggregatePostObject } from "../../../interfaces/ForumPosts";
-import { UserObject } from "../../../interfaces/UserObjectContext";
+
 export async function loadUsers(): Promise<UserData> {
   return new Promise<UserData>((resolve, reject) => {
     axios

@@ -43,9 +43,9 @@ export default function ReportedPanel({ report, index }: ReportedPanelProps): JS
         const url: string = createUrl(type)
         axios.delete(url, { headers: { 'Authorization': `${localStorage.getItem('token')}` } })
             .then((res: AxiosResponse<{ message: string }>): void => {
-                dispatch({ type: 'setMessage', payload: { message: "Comment deleted" } })
+                dispatch({ type: 'setMessage', payload: { message: `${type} deleted` } })
                 dispatch({ type: 'removeComment', payload: { id: reportedObject._id } })
-                setHandled('Deleted')
+                setHandled(state.message)
             })
             .catch((err: AxiosError<{ message: string }>): void => {
                 err.response

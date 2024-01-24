@@ -1,6 +1,5 @@
 import * as Yup from "yup";
 import { UserObject } from "./UserObjectContext";
-import { AppAction } from "./AdminReducerTypes";
 export type UserRegisterValidation = Yup.ObjectSchema<{
   image: any;
   login: string;

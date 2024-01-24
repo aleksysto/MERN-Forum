@@ -18,7 +18,7 @@ export default function PostPanel({ post, index }: PostItemProps): JSX.Element {
             .then((res: AxiosResponse<{ message: string }>): void => {
                 dispatch({ type: 'setMessage', payload: { message: "Post deleted" } })
                 dispatch({ type: 'removePost', payload: { id: post._id } })
-                setMessage('Deleted')
+                setMessage(state.message)
             })
             .catch((err: AxiosError<{ message: string }>): void => {
                 err.response

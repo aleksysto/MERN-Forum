@@ -13,7 +13,7 @@ export default function UserPostList({ login }: { login: string }): JSX.Element 
         }).catch((error: AxiosError) => {
             setMessage('Server error')
         })
-    }, [])
+    })
     return posts ? (
         <>
             <ul className="UserPostList">

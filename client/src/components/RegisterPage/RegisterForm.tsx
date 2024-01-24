@@ -5,7 +5,6 @@ import validationSchema from './validationSchema';
 import { RegisterUserObject, RegisterFormValues } from '../interfaces/RegisterUserTypes';
 import { RegisterHookValues } from '../interfaces/useRegisterSuccessTypes';
 import * as uuid from 'uuid';
-import { divide } from 'lodash';
 export default function RegisterForm({ setRegisterSuccess }: RegisterHookValues): JSX.Element {
     const formik: FormikProps<RegisterFormValues> = useFormik<RegisterFormValues>({
         initialValues: {

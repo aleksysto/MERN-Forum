@@ -26,12 +26,13 @@ export default function Posts({ user, index }: UserPanelProps): JSX.Element {
     }
     function handleRemove(): void {
         dispatch({ type: 'removeUser', payload: { id: user._id } })
+        dispatch({ type: 'setMessage', payload: { message: "User removed" } })
         setHandled(true)
     }
     return (action && confirm) || handled ? (
         <>
             <div className="pb-4">
-                User handled
+                {state.message}
             </div>
         </>
     )

@@ -72,9 +72,9 @@ export default function AdminPostEditor({ setMessage, post, setEditing }: EditPo
                 }
                 axios.patch(`http://localhost:4000/api/posts/id/${post._id}`, submitPost, { headers: { 'Authorization': `${localStorage.getItem('token')}` } })
                     .then((res: AxiosResponse<{ message: string }>): void => {
-                        setMessage(res.data.message)
                         dispatch({ type: 'removePost', payload: { id: post._id } })
                         dispatch({ type: 'setMessage', payload: { message: res.data.message } })
+                        setMessage(state.message)
                         setEditing(false)
                     })
                     .catch((err: AxiosError<{ message: string }>): void => {
@@ -87,9 +87,9 @@ export default function AdminPostEditor({ setMessage, post, setEditing }: EditPo
                 }
                 axios.patch(`http://localhost:4000/api/posts/id/${post._id}`, submitPost, { headers: { 'Authorization': `${localStorage.getItem('token')}` } })
                     .then((res: AxiosResponse<{ message: string }>): void => {
-                        setMessage(res.data.message)
                         dispatch({ type: 'removePost', payload: { id: post._id } })
                         dispatch({ type: 'setMessage', payload: { message: res.data.message } })
+                        setMessage(state.message)
                         setEditing(false)
                     })
                     .catch((err: AxiosError<{ message: string }>): void => {

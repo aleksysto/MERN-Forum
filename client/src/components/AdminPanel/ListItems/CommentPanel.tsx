@@ -21,7 +21,7 @@ export default function CommentPanel({
             .then((res: AxiosResponse<{ message: string }>): void => {
                 dispatch({ type: 'setMessage', payload: { message: "Comment deleted" } })
                 dispatch({ type: 'removeComment', payload: { id: comment._id } })
-                setMessage('Deleted')
+                setMessage(state.message)
             })
             .catch((err: AxiosError<{ message: string }>): void => {
                 err.response

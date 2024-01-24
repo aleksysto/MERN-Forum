@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { CommentsDispatch, useCommentsDispatch } from '../reducers/stores/store'
 import { commentsSetPage } from '../reducers/actions/CommentActions'
 

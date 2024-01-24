@@ -39,7 +39,7 @@ export default function SearchResultsPage() {
                     setPosts(null)
                 })
         }
-    }, [searchParams])
+    })
     useEffect((): void => {
 
     }, [posts, order])

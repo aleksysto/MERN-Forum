@@ -54,9 +54,9 @@ export default function AdminCommentEditor({ setMessage, comment, setEditing }: 
             }
             axios.patch(`http://localhost:4000/api/comments/id/${comment._id}`, submitComment, { headers: { 'Authorization': `${token as string}` } })
                 .then((res: AxiosResponse<{ message: string, comment: CommentObject }>): void => {
-                    setMessage(res.data.message)
                     dispatch({ type: 'removeComment', payload: { id: comment._id } })
                     dispatch({ type: 'setMessage', payload: { message: res.data.message } })
+                    setMessage(state.message)
                     setEditing(false)
                 })
                 .catch((err: AxiosError<{ message: string }>): void => {

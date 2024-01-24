@@ -1,12 +1,11 @@
 import React from 'react'
 import { FormikProps, useFormik } from 'formik';
 import axios, { AxiosError, AxiosResponse } from 'axios'
-import { EditUserObject, EditFormValues, EditFormProps } from '../interfaces/RegisterUserTypes';
+import { EditFormProps } from '../interfaces/RegisterUserTypes';
 import * as Yup from 'yup'
 import { testLoginAvailability } from '../RegisterPage/validationSchema';
 import { useUserContext } from '../contexts/UserContext';
 import { UserObject } from '../interfaces/UserObjectContext';
-import { NavigateFunction, useNavigate } from 'react-router-dom';
 export default function EditLoginForm({ setForm, setEdited }: EditFormProps): JSX.Element {
     const { userInfo }: { userInfo: UserObject } = useUserContext()
     const formik: FormikProps<{ login: string }> = useFormik<{ login: string }>({

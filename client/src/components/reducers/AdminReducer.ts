@@ -1,5 +1,4 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
-import React, { Dispatch, useReducer } from "react";
+import { Dispatch, useReducer } from "react";
 import { UserObject } from "../interfaces/UserObjectContext";
 import { AppAction, AppState } from "../interfaces/AdminReducerTypes";
 import { AggregatePostObject } from "../interfaces/ForumPosts";
@@ -207,7 +206,6 @@ function adminReducer(state: AppState, action: AppAction): AppState {
         state,
         action.payload
       );
-      console.log(newReports);
       return typeof newReports === "string"
         ? { ...state, message: newReports }
         : { ...state, reports: newReports };

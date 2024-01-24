@@ -1,5 +1,3 @@
-import { AppAction } from "./AdminReducerTypes";
-
 export interface CommentObject {
   _id: string;
   postId: string;

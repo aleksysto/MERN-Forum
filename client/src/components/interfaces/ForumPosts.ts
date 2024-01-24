@@ -1,5 +1,3 @@
-import { AppAction, AppState } from "./AdminReducerTypes";
-
 export interface PostObject {
   _id: string;
   title: string;

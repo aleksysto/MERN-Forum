@@ -27,7 +27,7 @@ export default function Posts(): JSX.Element {
         }).catch((err: { message: string }): void => {
             dispatch({ type: 'setMessage', payload: { message: err.message } })
         })
-    }, [])
+    }, [])// eslint-disable-line react-hooks/exhaustive-deps
     return (
         <>
             <div>{state.message}</div>

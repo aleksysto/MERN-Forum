@@ -18,7 +18,7 @@ export default function CommentList(): JSX.Element {
     const pageRef = useRef<number>(0)
     useEffect((): void => {
         dispatch(getComments(url))
-    }, [])
+    }, [])// eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <>

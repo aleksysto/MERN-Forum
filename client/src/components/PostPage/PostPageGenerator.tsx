@@ -37,7 +37,7 @@ export default function PostPage({ setError }: { setError: React.Dispatch<React.
                 setError('Post not found')
                 console.log(err, id)
             })
-    }, [])
+    })
     const { userInfo } = useUserContext()
     return post ? (
         <>

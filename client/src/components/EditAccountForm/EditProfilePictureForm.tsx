@@ -7,7 +7,6 @@ import { checkImageSize, checkImageFormat } from '../RegisterPage/validationSche
 import { EditFormProps } from '../interfaces/RegisterUserTypes';
 import { useUserContext } from '../contexts/UserContext';
 import { UserObject } from '../interfaces/UserObjectContext';
-import { NavigateFunction, useNavigate } from 'react-router-dom';
 export default function EditProfilePictureForm({ setForm, setEdited }: EditFormProps): JSX.Element {
     const { userInfo }: { userInfo: UserObject } = useUserContext()
     const formik: FormikProps<{ image: any }> = useFormik<{ image: any }>({

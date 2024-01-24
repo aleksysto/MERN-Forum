@@ -28,8 +28,8 @@ export default function EditLoginForm({ user, setForm, setEdited }: AdminEditFor
                 login: login
             }, { headers: { 'Authorization': localStorage.getItem('token') } })
                 .then((res: AxiosResponse): void => {
-                    setMessage('Login changed')
                     dispatch({ type: 'setMessage', payload: { message: 'Login updated' } })
+                    setMessage(state.message)
                     setEdited(true)
                 })
                 .catch((err: AxiosError<{ message: string }>): void => {

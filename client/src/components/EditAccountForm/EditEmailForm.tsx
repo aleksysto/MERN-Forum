@@ -1,14 +1,11 @@
 import React from 'react'
 import { FormikProps, useFormik } from 'formik';
 import axios, { AxiosError, AxiosResponse } from 'axios'
-import { RegisterUserObject, RegisterFormValues, EditFormProps } from '../interfaces/RegisterUserTypes';
-import { RegisterHookValues } from '../interfaces/useRegisterSuccessTypes';
+import { EditFormProps } from '../interfaces/RegisterUserTypes';
 import * as Yup from 'yup'
-import * as uuid from 'uuid';
 import { testEmailAvailability } from '../RegisterPage/validationSchema';
 import { useUserContext } from '../contexts/UserContext';
 import { UserObject } from '../interfaces/UserObjectContext';
-import { NavigateFunction, useNavigate } from 'react-router-dom';
 export default function EditEmailForm({ setForm, setEdited }: EditFormProps): JSX.Element {
     const { userInfo }: { userInfo: UserObject } = useUserContext()
     const formik: FormikProps<{ email: string }> = useFormik<{ email: string }>({
