@@ -109,10 +109,21 @@ export default function AdminPostEditor({ setMessage, post, setEditing }: EditPo
                     <input type="text" id='title' value={title} onChange={handleTitleChange} />
                     <select value={select} onChange={handleSelectChange}>
                         <option value="">-</option>
-                        <option value="category">Category </option>
-                        <option value="test" >Test</option>
-                        <option value="category" >Category</option>
-                        <option value="category" >Category</option>
+                        <option value="">-Main categories-</option>
+                        <option value="Category 1">Category 1</option>
+                        <option value="Category 2" >Category 2</option>
+                        <option value="Category 3" >Category 3</option>
+                        <option value="Category 4" >Category 4</option>
+                        <option value="Category 5" >Category 5</option>
+                        <option value="">-Side categories-</option>
+                        <option value="Side category 1">Side category 1</option>
+                        <option value="Side category 2">Side category 2</option>
+                        <option value="Side category 3">Side category 3</option>
+                        <option value="Side category 4">Side category 4</option>
+                        <option value="">-Off topic categories-</option>
+                        <option value="Off topic category 1">Off topic category 1</option>
+                        <option value="Off topic category 2">Off topic category 2</option>
+                        <option value="Off topic category 3">Off topic category 3</option>
                     </select>
                     <div id='editor-container'>
                         <ReactQuill

@@ -100,17 +100,29 @@ export default function PostEditor({ setMessage, post, setEditing }: EditPostPro
     return (
         <>
             <div>
-                <div>{errors ? <>{errors}</> : null}</div>
                 <form onSubmit={handleSubmit}>
                     <label htmlFor="title">Post title: </label>
-                    <input type="text" id='title' value={title} onChange={handleTitleChange} />
-                    <select value={select} onChange={handleSelectChange}>
-                        <option value="">-</option>
-                        <option value="category">Category </option>
-                        <option value="test" >Test</option>
-                        <option value="category" >Category</option>
-                        <option value="category" >Category</option>
-                    </select>
+                    <div className="PostPageEditPostSelect">
+                        <input type="text" id='title' value={title} onChange={handleTitleChange} />
+                        <select value={select} onChange={handleSelectChange}>
+                            <option value="">-</option>
+                            <option value="">-Main categories-</option>
+                            <option value="Category 1">Category 1</option>
+                            <option value="Category 2" >Category 2</option>
+                            <option value="Category 3" >Category 3</option>
+                            <option value="Category 4" >Category 4</option>
+                            <option value="Category 5" >Category 5</option>
+                            <option value="">-Side categories-</option>
+                            <option value="Side category 1">Side category 1</option>
+                            <option value="Side category 2">Side category 2</option>
+                            <option value="Side category 3">Side category 3</option>
+                            <option value="Side category 4">Side category 4</option>
+                            <option value="">-Off topic categories-</option>
+                            <option value="Off topic category 1">Off topic category 1</option>
+                            <option value="Off topic category 2">Off topic category 2</option>
+                            <option value="Off topic category 3">Off topic category 3</option>
+                        </select>
+                    </div>
                     <div id='editor-container'>
                         <ReactQuill
                             value={content}
@@ -135,8 +147,9 @@ export default function PostEditor({ setMessage, post, setEditing }: EditPostPro
 
                         />
                     </div>
-                    <input type="submit" />
-                    <button onClick={() => setEditing(false)}>Cancel</button>
+                    <div className="EditPostPageErrors text-center text-2xl pt-2 underline">{errors ? <>{errors}</> : null}</div>
+                    <input type="submit" value="Submit post" />
+                    <button className="CancelPostEditPage" onClick={() => setEditing(false)}>Cancel</button>
                 </form>
             </div>
         </>

@@ -42,17 +42,19 @@ export default function SearchResultsPage() {
     }, [searchParams])
     useEffect((): void => {
 
-    }, [order])
+    }, [posts, order])
     return posts === null ? (<>
         <div>{message}</div>
     </>
     ) : (
         <>
-            <div>
-                <div>
-                    <SortSelection setOrder={setOrder} />
+            <div className="SearchResultsPage">
+                <div className="SearchNav flex flex-row justify-between">
+                    <div className="text-standard-text text-2xl">{message}, results: </div>
+                    <div className="SortSelection">
+                        <SortSelection setOrder={setOrder} />
+                    </div>
                 </div>
-                <div>{message}, results: </div>
                 <div>
                     <ul>
                         {posts.map((post: AggregatePostObject, index: number): JSX.Element => {

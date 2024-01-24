@@ -52,11 +52,21 @@ export default function SearchForm() {
                 </select>
                 <select value={category} onChange={handleCategoryChange}>
                     <option value="">-</option>
-                    <option value="category">Category</option>
-                    <option value="test">Test</option>
-                    <option value="category2" >Category2</option>
-                    <option value="category3" >Category3</option>
-                    <option value="category4" >Category4</option>
+                    <option value="">-Main categories-</option>
+                    <option value="Category 1">Category 1</option>
+                    <option value="Category 2" >Category 2</option>
+                    <option value="Category 3" >Category 3</option>
+                    <option value="Category 4" >Category 4</option>
+                    <option value="Category 5" >Category 5</option>
+                    <option value="">-Side categories-</option>
+                    <option value="Side category 1">Side category 1</option>
+                    <option value="Side category 2">Side category 2</option>
+                    <option value="Side category 3">Side category 3</option>
+                    <option value="Side category 4">Side category 4</option>
+                    <option value="">-Off topic categories-</option>
+                    <option value="Off topic category 1">Off topic category 1</option>
+                    <option value="Off topic category 2">Off topic category 2</option>
+                    <option value="Off topic category 3">Off topic category 3</option>
                 </select>
                 <Link to={{ pathname: '/search', search: search }}><input type="submit" value="Search" id="SearchButton" /></Link>
             </form>

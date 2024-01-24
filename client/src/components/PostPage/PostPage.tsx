@@ -14,15 +14,18 @@ export default function PostPage(): JSX.Element {
         </>
     ) : (
         <>
-            <div>
-                <div>
+            <div className="PostPage text-standard-text flex flex-col">
+                <div className="PostPagePostContainer">
                     <PostPageGenerator setError={setError} />
                 </div>
-                <div>
+                <div className="CommentListPostPage">
                     <CommentList />
                 </div>
+                <div className="CommentCreatorPostPage">
+                    <CommentCreator />
+                </div>
             </div>
-            <CommentCreator />
+
         </>
     )
 }

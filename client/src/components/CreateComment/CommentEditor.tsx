@@ -104,7 +104,7 @@ export default function CommentEditor({ setMessage }: CommentEditorProps): JSX.E
 
                         />
                     </div>
-                    <input type="submit" />
+                    <input type="submit" value="Submit" />
                 </form>
             </div>
         </>

@@ -10,10 +10,10 @@ export default function SortSelection({ setOrder }: { setOrder: (value: string) 
     return (
         <select value={select} onChange={handleOrderChange}>
             <option value="">-</option>
-            <option value="authorAsc">Author &uarr; </option>
-            <option value="authorDesc" >Author &darr;</option>
-            <option value="dateAsc" >Date &uarr;</option>
-            <option value="dateDesc" >Date &darr;</option>
+            <option value="authorDesc" >Author &uarr;</option>
+            <option value="authorAsc">Author &darr; </option>
+            <option value="dateDesc" >Date &uarr;</option>
+            <option value="dateAsc" >Date &darr;</option>
         </select>
     )
 }

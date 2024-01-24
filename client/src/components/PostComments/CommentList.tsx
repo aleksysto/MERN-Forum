@@ -22,17 +22,15 @@ export default function CommentList(): JSX.Element {
 
     return (
         <>
-            <div style={{ margin: "auto", width: "35%" }}>
-                <div>{message}</div>
-                <ul style={{ listStyle: "none" }}>
-                    {comments.map((comment: AggregateCommentObject, index: number): JSX.Element => {
-                        return (
-                            <CommentListItem comment={comment} index={index} key={uuid.v4()} />
-                        )
-                    })}
-                </ul>
-                <div><div>pages:</div> <div><PageButtons length={Math.ceil(commentsLength / 10)} pageRef={pageRef} /></div></div>
-            </div>
+            <div className="text-standard-text text-1xl pt-4">{message}</div>
+            <ul className="mt-5" style={{ listStyle: "none" }}>
+                {comments.map((comment: AggregateCommentObject, index: number): JSX.Element => {
+                    return (
+                        <CommentListItem comment={comment} index={index} key={uuid.v4()} />
+                    )
+                })}
+            </ul>
+            <div className="flex flex-row text-center"> <div className="CommentPageButtons"><PageButtons length={Math.ceil(commentsLength / 10)} pageRef={pageRef} /></div></div>
         </>
     )
 }

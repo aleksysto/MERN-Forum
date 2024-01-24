@@ -48,9 +48,13 @@ export default function useOrderBy(): useOrderByHook {
         if (posts) {
           const newPosts: AggregatePostObject[] = posts.sort((a, b) => {
             if (order.order === "asc") {
-              return a.author.localeCompare(b.author);
+              return a.author
+                .replace(/\D/g, "")
+                .localeCompare(b.author.replace(/\D/g, ""));
             } else {
-              return b.author.localeCompare(a.author);
+              return b.author
+                .replace(/\D/g, "")
+                .localeCompare(a.author.replace(/\D/g, ""));
             }
           });
           setPosts(newPosts);
@@ -60,9 +64,13 @@ export default function useOrderBy(): useOrderByHook {
         if (posts) {
           const newPosts: AggregatePostObject[] = posts.sort((a, b) => {
             if (order.order === "asc") {
-              return new Date(a.date).getTime() - new Date(b.date).getTime();
+              if (new Date(a.date) < new Date(b.date)) return -1;
+              if (new Date(a.date) > new Date(b.date)) return 1;
+              return 0;
             } else {
-              return new Date(b.date).getTime() - new Date(a.date).getTime();
+              if (new Date(a.date) < new Date(b.date)) return 1;
+              if (new Date(a.date) > new Date(b.date)) return -1;
+              return 0;
             }
           });
           setPosts(newPosts);

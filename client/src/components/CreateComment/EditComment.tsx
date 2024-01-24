@@ -95,8 +95,10 @@ export default function EditComment({ setMessage, comment, setEditing }: EditCom
 
                         />
                     </div>
-                    <input type="submit" />
-                    <button onClick={(): void => setEditing(false)}>Cancel</button>
+                    <div>
+                        <input type="submit" value="Submit" />
+                        <button className="CancelCommentEditPage" onClick={(): void => setEditing(false)}>Cancel</button>
+                    </div>
                 </form>
             </div>
         </>

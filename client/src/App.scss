@@ -1,5 +1,4 @@
 @import "~quill/dist/quill.snow.css";
-
 .App {
   background-color: rgb(207, 207, 207);
   color: rgb(0, 0, 0);
@@ -155,6 +154,7 @@
     grid-template-areas: "LeftPanel Middle RightPanel";
     grid-template-columns: 0.5fr 1.5fr 0.5fr;
     background-color: rgb(20, 20, 20);
+
     .LeftPanel {
       grid-area: LeftPanel;
       background-color: rgb(20, 20, 20);
@@ -212,6 +212,685 @@
               color: rgb(241, 241, 241);
             }
           }
+        }
+      }
+    }
+    .author-info {
+      border-bottom: 1px solid rgb(120, 120, 120);
+    }
+    .SearchResultsPage {
+      grid-area: Middle;
+      width: 100%;
+      padding-left: 5em;
+      padding-right: 5em;
+      padding-top: 2em;
+      background-color: rgb(30, 30, 30);
+      ul {
+        list-style: none;
+      }
+      select {
+        border-radius: 10px;
+        margin-bottom: 1em;
+        margin-top: 1em;
+        background-color: rgb(92, 92, 92);
+        color: rgb(201, 201, 201);
+        border: 0;
+        font-size: 1em;
+        height: 1.5em;
+        transition: ease-in 0.1s;
+        width: 10em;
+        align-self: center;
+        text-indent: 1em;
+      }
+      select:hover {
+        cursor: pointer;
+        background-color: rgb(241, 241, 241);
+        color: rgb(47, 47, 47);
+        transition: ease-in 0.1s;
+      }
+      select:focus {
+        outline: none;
+        background-color: rgb(241, 241, 241);
+        color: rgb(47, 47, 47);
+        transition: ease-in 0.1s;
+      }
+    }
+    .PostPage {
+      grid-area: Middle;
+      width: 100%;
+      padding-left: 5em;
+      padding-right: 5em;
+      padding-top: 2em;
+      background-color: rgb(30, 30, 30);
+      .PostPageEditComment {
+        form {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          #editor-container {
+            align-self: center;
+            width: 75%;
+          }
+          .CancelCommentEditPage {
+            width: 50%;
+            height: 1.5em;
+            align-self: center;
+            margin-bottom: 1em;
+            margin-top: 1em;
+            font-weight: bold;
+            font-size: 2em;
+            background-color: rgb(108, 0, 0);
+            color: rgb(201, 201, 201);
+            border: 0;
+            border-right: 1px solid black;
+            transition: ease-in 0.1s;
+            border-radius: 10px;
+          }
+          .CancelCommentEditPage:hover {
+            cursor: pointer;
+            background-color: rgb(181, 0, 0);
+            color: rgb(229, 229, 229);
+          }
+          .CancelPostEditPage {
+            width: 50%;
+            height: 1.5em;
+            align-self: center;
+            margin-bottom: 1em;
+            margin-top: 1em;
+            font-weight: bold;
+            font-size: 2em;
+            background-color: rgb(108, 0, 0);
+            color: rgb(201, 201, 201);
+            border: 0;
+            border-right: 1px solid black;
+            transition: ease-in 0.1s;
+            border-radius: 10px;
+          }
+          .CancelPostEditPage:hover {
+            cursor: pointer;
+            background-color: rgb(181, 0, 0);
+            color: rgb(229, 229, 229);
+          }
+          input {
+            width: 50%;
+            height: 1.5em;
+            align-self: center;
+            margin-bottom: 1em;
+            margin-top: 1em;
+            font-weight: bold;
+            font-size: 2em;
+          }
+          input {
+            background-color: rgb(92, 92, 92);
+            color: rgb(201, 201, 201);
+            border: 0;
+            border-right: 1px solid black;
+            transition: ease-in 0.1s;
+            border-radius: 10px;
+          }
+          input:hover {
+            cursor: pointer;
+            background-color: rgb(241, 241, 241);
+            color: rgb(47, 47, 47);
+            transition: ease-in 0.1s;
+          }
+        }
+      }
+      .CommentCreatorPostPage {
+        text-align: center;
+        form {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          #editor-container {
+            align-self: center;
+            width: 75%;
+          }
+          .CancelPostEditPage {
+            width: 50%;
+            height: 1.5em;
+            align-self: center;
+            margin-bottom: 1em;
+            margin-top: 1em;
+            font-weight: bold;
+            font-size: 2em;
+            background-color: rgb(108, 0, 0);
+            color: rgb(201, 201, 201);
+            border: 0;
+            border-right: 1px solid black;
+            transition: ease-in 0.1s;
+            border-radius: 10px;
+          }
+          .CancelPostEditPage:hover {
+            cursor: pointer;
+            background-color: rgb(181, 0, 0);
+            color: rgb(229, 229, 229);
+          }
+          input {
+            width: 50%;
+            height: 1.5em;
+            align-self: center;
+            margin-bottom: 1em;
+            margin-top: 1em;
+            font-weight: bold;
+            font-size: 2em;
+          }
+          input {
+            background-color: rgb(92, 92, 92);
+            color: rgb(201, 201, 201);
+            border: 0;
+            border-right: 1px solid black;
+            transition: ease-in 0.1s;
+            border-radius: 10px;
+          }
+          input:hover {
+            cursor: pointer;
+            background-color: rgb(241, 241, 241);
+            color: rgb(47, 47, 47);
+            transition: ease-in 0.1s;
+          }
+        }
+      }
+      .PostPageCommentListItem {
+        padding: 1em;
+        border-radius: 10px;
+        margin-bottom: 1.5em;
+        box-shadow: 0 0 7px rgb(120, 120, 120);
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        .PostPageCommentHeader {
+          width: 100%;
+          padding-bottom: 1em;
+          margin-bottom: 1em;
+          border-bottom: 1px solid rgb(120, 120, 120);
+          .PostPageCommentAuthorLink {
+            display: flex;
+            flex-direction: row;
+            text-align: start;
+            a {
+              .AuthorImagePostComments {
+                max-width: 5em;
+              }
+              .AuthorNamePostComments {
+                padding-left: 2em;
+                height: 50%;
+                margin: auto;
+              }
+            }
+          }
+          .PostPageCommentDate {
+            display: flex;
+            flex-direction: column;
+            text-align: end;
+            div {
+              height: 50%;
+              margin: auto;
+              font-size: 1em;
+            }
+            button {
+              width: 9em;
+              height: 2em;
+              margin-top: 1em;
+              color: rgb(207, 207, 207);
+              background-color: rgb(30, 30, 30);
+              border: 1px solid rgb(75, 75, 75);
+              border-radius: 10px;
+              text-align: center;
+              font-size: 1em;
+              transition: all 0.2s ease-in;
+            }
+            button:hover {
+              background-color: rgb(241, 241, 241);
+              color: rgb(29, 29, 29);
+              box-shadow: 0 0 7px rgb(120, 120, 120);
+              cursor: pointer;
+            }
+            .ReportButton {
+              width: 9em;
+              height: 2em;
+              margin-top: 1em;
+              background-color: rgb(108, 0, 0);
+              color: rgb(201, 201, 201);
+              border: 1px solid rgb(75, 75, 75);
+              border-radius: 10px;
+              text-align: center;
+              font-size: 1em;
+              transition: all 0.2s ease-in;
+            }
+            .ReportButton:hover {
+              cursor: pointer;
+              background-color: rgb(181, 0, 0);
+              color: rgb(229, 229, 229);
+            }
+          }
+        }
+      }
+      .DangerousPostPage {
+        img {
+          max-width: 30em;
+          max-height: 30em;
+        }
+      }
+      .PostPagePostContainer {
+        padding: 1em;
+        box-shadow: 0 0 7px rgb(120, 120, 120);
+        border-radius: 10px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        label {
+          font-size: 2em;
+        }
+        form {
+          #editor-container {
+            align-self: center;
+            width: 100%;
+          }
+          .CancelPostEditPage {
+            width: 50%;
+            height: 1.5em;
+            align-self: center;
+            margin-bottom: 1em;
+            margin-top: 1em;
+            font-weight: bold;
+            font-size: 2em;
+            background-color: rgb(108, 0, 0);
+            color: rgb(201, 201, 201);
+            border: 0;
+            border-right: 1px solid black;
+            transition: ease-in 0.1s;
+            border-radius: 10px;
+          }
+          .CancelPostEditPage:hover {
+            cursor: pointer;
+            background-color: rgb(181, 0, 0);
+            color: rgb(229, 229, 229);
+          }
+          input {
+            width: 50%;
+            height: 1.5em;
+            align-self: center;
+            margin-bottom: 1em;
+            margin-top: 1em;
+            font-weight: bold;
+            font-size: 2em;
+          }
+          input {
+            background-color: rgb(92, 92, 92);
+            color: rgb(201, 201, 201);
+            border: 0;
+            border-right: 1px solid black;
+            transition: ease-in 0.1s;
+            border-radius: 10px;
+          }
+          input:hover {
+            cursor: pointer;
+            background-color: rgb(241, 241, 241);
+            color: rgb(47, 47, 47);
+            transition: ease-in 0.1s;
+          }
+        }
+
+        .quill {
+          width: 100%;
+        }
+        .PostPageEditPostSelect {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          select {
+            border-radius: 10px;
+            margin-bottom: 1em;
+            margin-top: 1em;
+            background-color: rgb(92, 92, 92);
+            color: rgb(201, 201, 201);
+            border: 0;
+            font-size: 2em;
+            font-weight: bold;
+            height: 1.5em;
+            transition: ease-in 0.1s;
+            width: 10em;
+            align-self: center;
+          }
+          select:hover {
+            cursor: pointer;
+            background-color: rgb(241, 241, 241);
+            color: rgb(47, 47, 47);
+            transition: ease-in 0.1s;
+          }
+          select:focus {
+            outline: none;
+            background-color: rgb(241, 241, 241);
+            color: rgb(47, 47, 47);
+            transition: ease-in 0.1s;
+          }
+          input {
+            text-indent: 0.5em;
+            width: 60%;
+            height: 1.5em;
+            align-self: center;
+            margin-bottom: 1em;
+            margin-top: 1em;
+            font-weight: bold;
+            font-size: 2em;
+            background-color: rgb(92, 92, 92);
+            color: rgb(201, 201, 201);
+            border: 0;
+            border-right: 1px solid black;
+            transition: ease-in 0.1s;
+          }
+          input:hover {
+            cursor: pointer;
+            background-color: rgb(241, 241, 241);
+            color: rgb(47, 47, 47);
+            transition: ease-in 0.1s;
+          }
+          input:focus {
+            outline: none;
+            background-color: rgb(241, 241, 241);
+            color: rgb(47, 47, 47);
+            transition: ease-in 0.1s;
+          }
+        }
+
+        #editor-container {
+          align-self: center;
+          width: 70em;
+        }
+        .ql-editor {
+          overflow-wrap: break-word;
+          word-wrap: break-word;
+          word-break: break-word;
+          height: 40em;
+          font-size: 1.25em;
+        }
+        .ql-formats button svg {
+          fill: rgb(201, 201, 201);
+          color: rgb(201, 201, 201);
+          background-color: rgb(201, 201, 201);
+          border-radius: 2px;
+        }
+        select {
+          color: rgb(201, 201, 201);
+        }
+        .ql-picker-label {
+          color: rgb(201, 201, 201);
+          svg {
+            .ql-stroke {
+              background-color: rgb(201, 201, 201);
+              stroke: rgb(201, 201, 201);
+            }
+          }
+        }
+      }
+      .CommentListPostPage {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        .CommentPageButtons {
+          button {
+            font-size: 2em;
+            margin: 0.25em;
+            width: 1.5em;
+            color: rgb(207, 207, 207);
+            background-color: rgb(30, 30, 30);
+            border: 1px solid rgb(75, 75, 75);
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.2s ease-in;
+          }
+          button:hover {
+            background-color: rgb(241, 241, 241);
+            color: rgb(29, 29, 29);
+            box-shadow: 0 0 7px rgb(120, 120, 120);
+            cursor: pointer;
+          }
+        }
+        div {
+          width: 100%;
+          margin: 0;
+          overflow-wrap: break-word;
+          word-wrap: break-word;
+          word-break: break-word;
+          .CommentDangerousHtml {
+            img {
+              max-width: 30em;
+              max-height: 30em;
+            }
+          }
+        }
+      }
+      .PostPageAuthor {
+        height: 50%;
+        margin: auto;
+        margin-left: 2em;
+        font-size: 2em;
+      }
+      .PostPagePostHeader {
+        padding-bottom: 1em;
+        border-bottom: 1px solid rgb(120, 120, 120);
+        .ReportButton {
+          width: 9em;
+          height: 2.5em;
+          background-color: rgb(108, 0, 0);
+          color: rgb(201, 201, 201);
+          border: 1px solid rgb(75, 75, 75);
+          border-radius: 10px;
+          text-align: center;
+          font-size: 1em;
+          transition: all 0.2s ease-in;
+        }
+        .ReportButton:hover {
+          cursor: pointer;
+          background-color: rgb(181, 0, 0);
+          color: rgb(229, 229, 229);
+        }
+      }
+      .PostPageDate {
+        height: 50%;
+        margin: auto;
+        margin-left: 2em;
+        font-size: 1em;
+      }
+      .PostPageEdit {
+        display: flex;
+        justify-content: end;
+        button {
+          width: 9em;
+          height: 2.5em;
+          color: rgb(207, 207, 207);
+          background-color: rgb(30, 30, 30);
+          border: 1px solid rgb(75, 75, 75);
+          border-radius: 10px;
+          text-align: center;
+          font-size: 1em;
+          transition: all 0.2s ease-in;
+        }
+        button:hover {
+          background-color: rgb(241, 241, 241);
+          color: rgb(29, 29, 29);
+          box-shadow: 0 0 7px rgb(120, 120, 120);
+          cursor: pointer;
+        }
+      }
+      .ql-editor {
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-word;
+        height: 15em;
+        font-size: 1.25em;
+      }
+      .ql-formats button svg {
+        fill: rgb(201, 201, 201);
+        color: rgb(201, 201, 201);
+        background-color: rgb(201, 201, 201);
+        border-radius: 2px;
+      }
+      .ql-picker-label {
+        color: rgb(201, 201, 201);
+        svg {
+          .ql-stroke {
+            background-color: rgb(201, 201, 201);
+            stroke: rgb(201, 201, 201);
+          }
+        }
+      }
+    }
+    .GoBackToPosts {
+      grid-area: Middle;
+      width: 100%;
+      padding-left: 5em;
+      padding-right: 5em;
+      padding-top: 2em;
+      background-color: rgb(30, 30, 30);
+      color: rgb(201, 201, 201);
+      display: flex;
+      flex-direction: column;
+      div {
+        font-size: 4em;
+        text-align: center;
+      }
+      button {
+        align-self: center;
+        margin-top: 4em;
+        width: 10em;
+        height: 3em;
+        background-color: rgba(0, 0, 0, 0);
+        border: none;
+        font-size: 2em;
+        color: rgb(201, 201, 201);
+        transition: ease-in 0.1s;
+      }
+      button:hover {
+        color: rgb(255, 255, 255);
+        font-size: 3em;
+        margin-top: 2em;
+        cursor: pointer;
+      }
+    }
+    .PostEditor {
+      grid-area: Middle;
+      width: 100%;
+      padding-left: 5em;
+      padding-right: 5em;
+      padding-top: 2em;
+      background-color: rgb(30, 30, 30);
+      color: rgb(201, 201, 201);
+      label {
+        font-size: 2em;
+      }
+      input {
+        width: 60%;
+        height: 1.5em;
+        align-self: center;
+        margin-bottom: 1em;
+        margin-top: 1em;
+        font-weight: bold;
+        font-size: 2em;
+        border-radius: 10px;
+      }
+      input {
+        background-color: rgb(92, 92, 92);
+        color: rgb(201, 201, 201);
+        border: 0;
+        border-right: 1px solid black;
+        transition: ease-in 0.1s;
+      }
+      input:hover {
+        cursor: pointer;
+        background-color: rgb(241, 241, 241);
+        color: rgb(47, 47, 47);
+        transition: ease-in 0.1s;
+      }
+      input:focus {
+        outline: none;
+        background-color: rgb(241, 241, 241);
+        color: rgb(47, 47, 47);
+        transition: ease-in 0.1s;
+      }
+      #editor-container {
+        align-self: center;
+        width: 70em;
+      }
+      .ql-editor {
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-word;
+        height: 40em;
+        font-size: 1.25em;
+      }
+      .ql-formats button svg {
+        fill: rgb(201, 201, 201);
+        color: rgb(201, 201, 201);
+        background-color: rgb(201, 201, 201);
+        border-radius: 2px;
+      }
+      select {
+        color: rgb(201, 201, 201);
+      }
+      .ql-picker-label {
+        color: rgb(201, 201, 201);
+        svg {
+          .ql-stroke {
+            background-color: rgb(201, 201, 201);
+            stroke: rgb(201, 201, 201);
+          }
+        }
+      }
+    }
+    .PostList {
+      grid-area: Middle;
+      width: 100%;
+      padding-left: 5em;
+      padding-right: 5em;
+      padding-top: 2em;
+      background-color: rgb(30, 30, 30);
+      //color: rgb(216, 216, 216);
+      select {
+        background-color: rgb(92, 92, 92);
+        color: rgb(201, 201, 201);
+        border: 0;
+        border-right: 1px solid black;
+        transition: ease-in 0.1s;
+        width: 10em;
+      }
+      select:focus {
+        outline: none;
+        background-color: rgb(241, 241, 241);
+        color: rgb(47, 47, 47);
+        transition: ease-in 0.1s;
+      }
+      li {
+        .author-info {
+          border-bottom: 1px solid rgb(81, 81, 81);
+        }
+      }
+      .CreatePostLink {
+        cursor: pointer;
+        color: rgb(241, 241, 241);
+        transition: all 0.1s ease-in;
+        font-size: 0.9em;
+        background-color: rgb(30, 30, 30);
+        border-radius: 10px;
+        button {
+          width: 10em;
+          height: 2.5em;
+          color: rgb(207, 207, 207);
+          background-color: rgb(30, 30, 30);
+          border: 1px solid rgb(75, 75, 75);
+          border-radius: 10px;
+          text-align: center;
+          font-size: 1em;
+          transition: all 0.2s ease-in;
+        }
+        button:hover,
+        :hover {
+          background-color: rgb(241, 241, 241);
+          color: rgb(29, 29, 29);
+          box-shadow: 0 0 7px rgb(120, 120, 120);
+          cursor: pointer;
         }
       }
     }

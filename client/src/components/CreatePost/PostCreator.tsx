@@ -12,8 +12,10 @@ export default function PostCreator(): JSX.Element {
     }
     return created ? (
         <>
-            <div>{message}</div>
-            <button onClick={handleClick}>Go back to posts</button>
+            <div className="GoBackToPosts">
+                <div>{message}</div>
+                <button onClick={handleClick}>Go back to posts</button>
+            </div>
         </>
     ) : (
         <>

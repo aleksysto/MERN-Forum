@@ -80,13 +80,15 @@ export default function PostEditor({ setCreated, setMessage }: EditorComponentPr
     }
     return (
         <>
-            <div>
-                <div>{errors ? <>{errors}</> : null}</div>
-                <form onSubmit={handleSubmit}>
-                    <label htmlFor="title">Post title: </label>
-                    <input type="text" id='title' onChange={handleTitleChange} />
-                    <div id='editor-container'>
+            <div className="PostEditor text-center">
+                <form onSubmit={handleSubmit} className="flex flex-col justify-center">
+                    <div className="flex flex-col ">
+                        <label htmlFor="title" className="bg-standard text-standard-text">Post title: </label>
+                        <input type="text" id='title' onChange={handleTitleChange} />
+                    </div>
+                    <div id='editor-container' className="flex flex-col justify-center bg-standard text-standard-text">
                         <ReactQuill
+                            className="bg-standard text-standard-text"
                             value={content}
                             onChange={handleQuillChange}
                             modules={{
@@ -109,7 +111,8 @@ export default function PostEditor({ setCreated, setMessage }: EditorComponentPr
 
                         />
                     </div>
-                    <input type="submit" />
+                    <div className="text-center text-2xl pt-2 underline">{errors ? <>{errors}</> : null}</div>
+                    <input type="submit" value="Submit post" />
                 </form>
             </div>
         </>
