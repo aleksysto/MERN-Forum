@@ -11,6 +11,13 @@ export interface UserObject {
   entryDate: Date;
   profilePicture: "";
 }
+export interface UserProfileObject {
+  login: string;
+  posts: number;
+  comments: number;
+  lastActive: Date;
+  entryDate: Date;
+}
 export interface UserContextType {
   loggedIn: boolean;
   setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;

@@ -8,7 +8,7 @@ export default function PostListItem({ post, index }: PostItemProps): JSX.Elemen
 
             <div className="text-2xl text-standard-text flex flex-col p-10">
                 <div className="author-info flex flex-row  justify-between pb-5">
-                    <Link to={{}} className="text-standard-text no-underline flex flex-row justify-between w-100">
+                    <Link to={{ pathname: `/user/${post.userId}` }} className="text-standard-text no-underline flex flex-row justify-between w-100">
                         <img className="max-w-[3em]" src={`http://localhost:4000/api/getImage/${post.userProfilePicture}`} alt="." />
                         <div className="ml-20">{post.author}</div>
                     </Link>

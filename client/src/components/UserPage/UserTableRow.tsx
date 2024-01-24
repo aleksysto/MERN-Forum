@@ -6,11 +6,11 @@ import EditLoginForm from '../EditAccountForm/EditLoginForm'
 import EditPasswordForm from '../EditAccountForm/EditPasswordForm'
 import EditEmailForm from '../EditAccountForm/EditEmailForm'
 
-export default function AccountTableRow({ propKey, idx, userInfo }: { propKey: string, idx: number, userInfo: UserObject[keyof UserObject] }): JSX.Element {
+export default function UserTableRow({ propKey, idx, userInfo }: { propKey: string, idx: number, userInfo: UserObject[keyof UserObject] }): JSX.Element {
     return propKey === 'lastActive' || propKey === 'entryDate' ? (
         <>
             <tr key={idx}>
-                <th>{propKey === 'lastActive' ? "Your last activity" : "Your registration date"}:</th>
+                <th>{propKey === 'lastActive' ? "Last activity" : "Registration date"}:</th>
                 <td><DateCreator date={userInfo as Date} /></td>
             </tr>
         </>
