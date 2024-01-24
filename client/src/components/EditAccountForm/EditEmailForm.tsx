@@ -34,6 +34,7 @@ export default function EditEmailForm({ setForm, setEdited }: EditFormProps): JS
                     axios.post('http://localhost:4000/api/generateToken', { id: userInfo._id }).then((tokenRes: AxiosResponse<{ token: string }>): void => {
                         const token: string = tokenRes.data.token
                         localStorage.setItem("token", token)
+                        setEdited(true)
                         setForm(null)
                     }
                     ).catch((err: AxiosError<{ message: string }>): void => {
@@ -49,13 +50,15 @@ export default function EditEmailForm({ setForm, setEdited }: EditFormProps): JS
     return (
         <>
             <div>Change your Email</div>
-            <div>
+            <div className="AccountPageEditFormContainer">
                 <form onSubmit={formik.handleSubmit}>
-                    <label htmlFor="email">Your email: </label>
-                    <input type="text" id="email" {...formik.getFieldProps('email')} />
-                    {formik.touched.email && formik.errors.email ? (
-                        <div>{formik.errors.email}</div>
-                    ) : null}
+                    <label htmlFor="email">Your new email: </label>
+                    <div className="AccountPageEditInputAndErrors">
+                        <input type="text" id="email" {...formik.getFieldProps('email')} />
+                        {formik.touched.email && formik.errors.email ? (
+                            <div>{formik.errors.email}</div>
+                        ) : null}
+                    </div>
                     <button type="submit" onClick={() => console.log(formik.errors)}>Submit</button>
                 </form>
             </div>

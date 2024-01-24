@@ -10,7 +10,7 @@ export default function RegisterPage(): JSX.Element {
 
   return registerSuccess ? (
     <>
-      <div>
+      <div className="FinishedRegister">
         <div>Your account has been created</div>
         <Link to={{ pathname: "/login" }}>You can log into your account here</Link>
       </div>

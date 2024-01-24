@@ -31,6 +31,7 @@ export default function EditLoginForm({ setForm, setEdited }: EditFormProps): JS
                         const token: string = tokenRes.data.token
                         localStorage.removeItem("token")
                         localStorage.setItem("token", token)
+                        setEdited(true)
                         setForm(null)
                     }
                     ).catch((err: AxiosError<{ message: string }>): void => {
@@ -48,14 +49,16 @@ export default function EditLoginForm({ setForm, setEdited }: EditFormProps): JS
     return (
         <>
             <div>Change your login</div>
-            <div>
+            <div className="AccountPageEditFormContainer">
                 <form onSubmit={formik.handleSubmit}>
-                    <label htmlFor="login">Your login: </label>
-                    <input type="text" id="login" {...formik.getFieldProps('login')} />
-                    {formik.touched.login && formik.errors.login ? (
-                        <div>{formik.errors.login}</div>
-                    ) : null}
+                    <label htmlFor="login">Your new login: </label>
 
+                    <div className="AccountPageEditInputAndErrors">
+                        <input type="text" id="login" {...formik.getFieldProps('login')} />
+                        {formik.touched.login && formik.errors.login ? (
+                            <div>{formik.errors.login}</div>
+                        ) : null}
+                    </div>
                     <button type="submit">Submit</button>
                 </form>
             </div>

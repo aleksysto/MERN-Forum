@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FormikProps, useFormik } from 'formik';
 import axios, { AxiosError, AxiosResponse } from 'axios'
 import * as Yup from 'yup'
@@ -20,21 +20,15 @@ export default function EditProfilePictureForm({ setForm, setEdited }: EditFormP
                 .test("fileSize", "File size is too large", checkImageSize)
                 .test("fileType", "Unsupported file format", checkImageFormat),
         }),
-        validateOnChange: false,
         onSubmit: async (values: { image: any }): Promise<void> => {
             const { image }: { image: File | null } = values
             if (image) {
                 const imageId: string = uuid.v4()
-                const fileType: string = image.type.split("/")[1]
                 const fileExt: string = image.name.split('.').slice(-1).join('')
                 const fileName: string = `${imageId}.${fileExt}`
                 const formData = new FormData()
                 formData.append('image', image)
-                axios.post(`http://localhost:4000/api/uploadImage/${imageId}`, formData, {
-                    headers: {
-                        'Content-Type': 'image/png'
-                    }
-                }).then((res) => {
+                axios.post(`http://localhost:4000/api/uploadImage/${imageId}`, formData).then((res) => {
                     console.log(res)
                 })
                     .catch((err) => {
@@ -48,6 +42,7 @@ export default function EditProfilePictureForm({ setForm, setEdited }: EditFormP
                         axios.post('http://localhost:4000/api/generateToken', { id: userInfo._id }).then((tokenRes: AxiosResponse<{ token: string }>): void => {
                             const token: string = tokenRes.data.token
                             localStorage.setItem("token", token)
+                            setEdited(true)
                             setForm(null)
                         }
                         ).catch((err: AxiosError<{ message: string }>): void => {
@@ -61,12 +56,24 @@ export default function EditProfilePictureForm({ setForm, setEdited }: EditFormP
             formik.resetForm()
         }
     })
+    const [imageUrl, setImageUrl] = React.useState<string | null | ArrayBuffer>('')
+    useEffect(() => {
+        if (formik.values.image) {
+            const reader = new FileReader()
+            reader.onload = (event: ProgressEvent<FileReader>) => {
+                if (event.target) {
+                    setImageUrl(event.target.result)
+                }
+            }
+            reader.readAsDataURL(formik.values.image)
+        }
+    }, [formik.values.image])
     return (
         <>
             <div>Change your profile picture</div>
-            <div>
+            <div className="AccountPageEditFormContainer">
                 <form onSubmit={formik.handleSubmit}>
-                    <label htmlFor="image">Your avatar: </label>
+                    <label htmlFor="image">&uarr; upload &uarr;</label>
                     <input type="file" id="image" onChange={(event) => {
                         event.preventDefault()
                         const files: FileList | null = event.currentTarget.files
@@ -81,7 +88,7 @@ export default function EditProfilePictureForm({ setForm, setEdited }: EditFormP
                                 String(formik.errors.image)
                         }</div>
                     )}
-
+                    <div className="LoginPageUserPfpChange"><img src={typeof imageUrl === 'string' ? imageUrl : undefined} alt="" /></div>
                     <button type="submit" onClick={() => console.log(formik.errors)}>Submit</button>
                 </form>
             </div>

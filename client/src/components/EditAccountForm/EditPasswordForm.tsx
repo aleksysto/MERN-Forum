@@ -34,6 +34,7 @@ export default function EditPasswordForm({ setForm, setEdited }: EditFormProps):
                     axios.post('http://localhost:4000/api/generateToken', { id: userInfo._id }).then((tokenRes: AxiosResponse<{ token: string }>): void => {
                         const token: string = tokenRes.data.token
                         localStorage.setItem("token", token)
+                        setEdited(true)
                         setForm(null)
                     }
                     ).catch((err: AxiosError<{ message: string }>): void => {
@@ -49,20 +50,23 @@ export default function EditPasswordForm({ setForm, setEdited }: EditFormProps):
     return (
         <>
             <div>Change your password</div>
-            <div>
+            <div className="AccountPageEditFormContainer">
                 <form onSubmit={formik.handleSubmit}>
-                    <label htmlFor="password">Your password: </label>
-                    <input type="password" id="password" {...formik.getFieldProps('password')} />
-                    {formik.touched.password && formik.errors.password ? (
-                        <div>{formik.errors.password}</div>
-                    ) : null}
+                    <label htmlFor="password">Your new password: </label>
 
-                    <label htmlFor="confirmPassword">Confirm your password: </label>
-                    <input type="password" id="confirmPassword" {...formik.getFieldProps('confirmPassword')} />
-                    {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
-                        <div>{formik.errors.confirmPassword}</div>
-                    ) : null}
-
+                    <div className="AccountPageEditInputAndErrors">
+                        <input type="password" id="password" {...formik.getFieldProps('password')} />
+                        {formik.touched.password && formik.errors.password ? (
+                            <div>{formik.errors.password}</div>
+                        ) : null}
+                    </div>
+                    <label htmlFor="confirmPassword">Confirm your new password: </label>
+                    <div className="AccountPageEditInputAndErrors">
+                        <input type="password" id="confirmPassword" {...formik.getFieldProps('confirmPassword')} />
+                        {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
+                            <div>{formik.errors.confirmPassword}</div>
+                        ) : null}
+                    </div>
                     <button type="submit" onClick={() => console.log(formik.errors)}>Submit</button>
                 </form>
             </div>

@@ -280,6 +280,215 @@
         }
       }
     }
+    .AccountPage {
+      grid-area: Middle;
+      background-color: rgb(30, 30, 30);
+      color: rgb(238, 238, 238);
+      width: 100%;
+      padding-left: 5em;
+      padding-right: 5em;
+      padding-top: 2em;
+      display: grid;
+      grid-template-rows: 0.07fr 1fr;
+      justify-content: center;
+      .AccountPageHeader {
+        text-align: center;
+        .AccountPageChangesSaved {
+          font-size: 1em;
+          color: rgb(255, 255, 255);
+          margin-bottom: 0.5em;
+        }
+        .AccountPageEditNav {
+          display: flex;
+          justify-content: space-evenly;
+          width: 100%;
+          button {
+            display: flex;
+            justify-content: center;
+            padding: 0.5em;
+            align-self: center;
+            border: 0;
+            border-radius: 10px;
+            height: 50%;
+            background-color: rgb(75, 75, 75);
+            color: rgb(238, 238, 238);
+            transition: all 0.2s ease-in;
+          }
+          button:hover {
+            cursor: pointer;
+            background-color: rgb(241, 241, 241);
+            color: rgb(29, 29, 29);
+          }
+        }
+        .AccountPageEditForm {
+          display: flex;
+          flex-direction: column;
+          margin-bottom: 1em;
+          div {
+            button {
+              margin-top: 1em;
+              width: 15%;
+              align-self: center;
+              border: 0;
+              border-radius: 10px;
+              font-size: 1.15em;
+              background-color: rgb(141, 0, 0);
+              color: rgb(238, 238, 238);
+              transition: all 0.2s ease-in;
+            }
+            button:hover {
+              cursor: pointer;
+              background-color: rgb(207, 10, 10);
+              color: rgb(241, 241, 241);
+            }
+          }
+          .AccountPageEditFormContainer {
+            form {
+              display: flex;
+              flex-direction: column;
+              text-align: center;
+              .LoginPageUserPfpChange {
+                img {
+                  max-width: 20em;
+                }
+              }
+              .AccountPageEditInputAndErrors {
+                height: 5em;
+              }
+              input {
+                width: 20%;
+                align-self: center;
+                background-color: rgb(75, 75, 75);
+                color: rgb(238, 238, 238);
+                transition: all 0.2s ease-in;
+                border: 0;
+                border-radius: 10px;
+                height: 1.5em;
+                padding-left: 1em;
+                padding-right: 1em;
+                margin-top: 0.5em;
+                margin-bottom: 1em;
+              }
+              button {
+                width: 15%;
+                align-self: center;
+                border: 0;
+                border-radius: 10px;
+                height: 1.5em;
+                background-color: rgb(75, 75, 75);
+                color: rgb(238, 238, 238);
+                transition: all 0.2s ease-in;
+              }
+              input:focus {
+                outline: none;
+                background-color: rgb(241, 241, 241);
+                color: rgb(29, 29, 29);
+              }
+              input:hover {
+                cursor: pointer;
+                background-color: rgb(241, 241, 241);
+                color: rgb(29, 29, 29);
+              }
+              button:hover {
+                cursor: pointer;
+                background-color: rgb(241, 241, 241);
+                color: rgb(29, 29, 29);
+              }
+              button[type="submit"] {
+                font-size: 1em;
+                width: 15%;
+                overflow: hidden;
+              }
+              input[type="file"],
+              input[type="file"]:hover {
+                display: none;
+              }
+              label[for="image"] {
+                display: block;
+                background-color: rgb(75, 75, 75);
+                align-self: center;
+                margin-bottom: 0.5em;
+                margin-top: 0.5em;
+                border-radius: 10px;
+                width: 20%;
+                height: 1.5em;
+                overflow: hidden;
+                transition: all 0.2s ease-in;
+              }
+              label[for="image"]:hover {
+                background-color: rgb(241, 241, 241);
+                color: rgb(29, 29, 29);
+                position: relative;
+                margin-bottom: 0.5em;
+                cursor: pointer;
+                // transition: all 0.2 ease-in;
+              }
+            }
+          }
+        }
+      }
+      .AccountPageData {
+        .AccountPageTable {
+          .AccountPageImage {
+            display: flex;
+            justify-content: center;
+            img {
+              max-width: 30em;
+              border-radius: 10px;
+            }
+          }
+          .AccountPageTableBody {
+            margin-top: 1em;
+            font-size: 1.5em;
+            table {
+              tbody {
+                tr {
+                  display: grid;
+                  padding: 0.5em;
+                  grid-template-columns: 1fr 1fr;
+                  border-radius: 10px;
+                  box-shadow: 0 0 7px rgb(120, 120, 120);
+                  margin-bottom: 0.75em;
+                  th {
+                    display: flex;
+                    flex-direction: row;
+                  }
+                  td {
+                    display: flex;
+                    justify-content: end;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    .GoBackFromLogin {
+      grid-area: Middle;
+      background-color: rgb(30, 30, 30);
+      color: rgb(238, 238, 238);
+      width: 100%;
+      padding-left: 5em;
+      padding-right: 5em;
+      padding-top: 2em;
+      display: flex;
+      justify-content: center;
+      a {
+        text-decoration: none;
+        color: rgb(230, 230, 230);
+        margin-top: 2em;
+        height: fit-content;
+        font-size: 4em;
+        transition: ease-in 0.3s;
+        -webkit-text-stroke: 1px rgb(0, 0, 0);
+      }
+      a:hover {
+        color: rgb(255, 255, 255);
+        font-size: 4.5em;
+        margin-top: 1.75em;
+      }
+    }
     .LoginForm {
       grid-area: Middle;
       width: 100%;
@@ -340,7 +549,43 @@
         button[type="submit"] {
           font-size: 1.25em;
           width: 10%;
+          overflow: hidden;
         }
+      }
+    }
+    .FinishedRegister {
+      grid-area: Middle;
+      background-color: rgb(30, 30, 30);
+      color: rgb(238, 238, 238);
+      width: 100%;
+      padding-left: 5em;
+      padding-right: 5em;
+      padding-top: 2em;
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      div {
+        text-decoration: none;
+        color: rgb(230, 230, 230);
+        margin-top: 2em;
+        height: fit-content;
+        font-size: 4em;
+        transition: ease-in 0.3s;
+        -webkit-text-stroke: 1px rgb(0, 0, 0);
+      }
+      a {
+        text-decoration: none;
+        color: rgb(230, 230, 230);
+        margin-top: 2em;
+        height: fit-content;
+        font-size: 4em;
+        transition: ease-in 0.3s;
+        -webkit-text-stroke: 1px rgb(0, 0, 0);
+      }
+      a:hover {
+        color: rgb(255, 255, 255);
+        font-size: 4.5em;
+        margin-top: 1.75em;
       }
     }
     .RegisterForm {

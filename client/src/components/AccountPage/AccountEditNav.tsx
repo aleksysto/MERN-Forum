@@ -7,7 +7,7 @@ export default function AccountEditNav({ setEdited }: { setEdited: React.Dispatc
     const [form, setForm] = useState<null | JSX.Element>(null)
     return (
         <>
-            <div>
+            <div className="AccountPageEditNav">
                 <button onClick={() => setForm(<EditLoginForm setForm={setForm} setEdited={setEdited} />)}>
                     Change login
                 </button>
@@ -21,7 +21,9 @@ export default function AccountEditNav({ setEdited }: { setEdited: React.Dispatc
                     Change profile picture
                 </button>
             </div>
-            {form ? form : null}
+            <div className="AccountPageEditForm">
+                {form ? form : null}
+            </div>
         </>
     )
 }

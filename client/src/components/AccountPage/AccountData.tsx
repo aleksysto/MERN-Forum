@@ -9,22 +9,26 @@ export default function AccountData(): JSX.Element {
     const avatarUrl: string = `http://localhost:4000/api/getImage/${userInfo.profilePicture}`
     return userInfo._id ? (
         <>
-            <div>
-                <img src={avatarUrl} alt="avatar" />
-                <table>
-                    <tbody>
-                        {Object.keys(mapData).map((key: string, idx: number) => {
-                            return key !== 'profilePicture' ? (
-                                <AccountTableRow
-                                    key={idx}
-                                    propKey={key}
-                                    idx={idx}
-                                    userInfo={userInfo[key as keyof UserObject]}
-                                />
-                            ) : null
-                        })}
-                    </tbody>
-                </table>
+            <div className="AccountPageTable">
+                <div className="AccountPageImage">
+                    <img src={avatarUrl} alt="avatar" />
+                </div>
+                <div className="AccountPageTableBody">
+                    <table>
+                        <tbody>
+                            {Object.keys(mapData).map((key: string, idx: number) => {
+                                return key !== 'profilePicture' ? (
+                                    <AccountTableRow
+                                        key={idx}
+                                        propKey={key}
+                                        idx={idx}
+                                        userInfo={userInfo[key as keyof UserObject]}
+                                    />
+                                ) : null
+                            })}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </>
     ) : (
