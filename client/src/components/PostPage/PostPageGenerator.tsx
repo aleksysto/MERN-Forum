@@ -7,6 +7,7 @@ import { useUserContext } from '../contexts/UserContext'
 import { checkAdmin, checkAuthor } from '../utils/CheckPermissions'
 import EditPost from '../CreatePost/EditPost'
 import ReportButton from '../utils/ReportButton'
+import DeleteButton from '../utils/DeleteButton'
 
 export default function PostPage({ setError }: { setError: React.Dispatch<React.SetStateAction<string | null>> }): JSX.Element {
     const { id }: Readonly<Params<string>> = useParams()
@@ -14,6 +15,19 @@ export default function PostPage({ setError }: { setError: React.Dispatch<React.
     const [editing, setEditing] = useState<boolean>(false)
     const [message, setMessage] = useState<string>('')
     const [reported, setReported] = useState<boolean>(false)
+    const [action, setAction] = useState<boolean>(false);
+    const [confirm, setConfirm] = useState<boolean>(false);
+    function handleDelete() {
+        axios.delete(`http://localhost:4000/api/posts/id/${post?._id}`, { headers: { 'Authorization': `${localStorage.getItem('token')}` } })
+            .then((res: AxiosResponse) => {
+                setMessage('Deleted')
+            })
+            .catch((err: AxiosError<{ message: string }>) => {
+                err.response
+                    ? setError(`${err.response.data.message} please refresh the page`)
+                    : setError('Server Error')
+            })
+    }
     useEffect((): void => {
         axios.get(`http://localhost:4000/api/posts/id/${id}`)
             .then((res: AxiosResponse<{ message: string, post: AggregatePostObject[] }>): void => {
@@ -39,11 +53,19 @@ export default function PostPage({ setError }: { setError: React.Dispatch<React.
                         <div className="flex flex-col">
                             <div className="PostPageDate"><DateCreator date={post.date} /></div>
                             <div className="flex flex-row">
+                                <div className="PostDeleteButton">
+                                    {!confirm ?
+                                        (checkAuthor(userInfo, post.author) || checkAdmin(userInfo) ? <DeleteButton action={action} setAction={setAction} confirm={confirm} setConfirm={setConfirm} handleAction={handleDelete} /> : null)
+                                        : (
+                                            <div>{message}</div>
+                                        )
+                                    }
+                                </div>
                                 <div className="pr-3">
                                     {reported ? <div className="pt-2 mr-1 underline ">Post reported</div> : <ReportButton reported={reported} setReported={setReported} type={'post'} id={post._id} />}
                                 </div>
                                 <div className="PostPageEdit">
-                                    {checkAuthor(userInfo, post.author) || checkAdmin(userInfo) ? <button onClick={() => setEditing(!editing)}>edit</button> : null}
+                                    {checkAuthor(userInfo, post.author) || checkAdmin(userInfo) ? <button onClick={() => setEditing(!editing)}>Edit</button> : null}
                                 </div>
 
                             </div>

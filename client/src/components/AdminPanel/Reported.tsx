@@ -47,7 +47,7 @@ export default function Comments(): JSX.Element {
                     <option value="desc">Date &darr;</option>
                 </select>
             </div>
-            <div>
+            <div className="AdminPanelReports">
                 <ul>
                     {state.displayReports.map((report: ReportObject, idx: number): JSX.Element => {
                         return (

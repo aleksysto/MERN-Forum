@@ -70,7 +70,7 @@ export default function AdminCommentEditor({ setMessage, comment, setEditing }: 
         <>
             <div>
                 <div>{errors ? <>{errors}</> : null}</div>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className="AdminPanelEditCommentForm">
                     <div id='editor-container'>
                         <ReactQuill
                             value={content}
@@ -95,10 +95,10 @@ export default function AdminCommentEditor({ setMessage, comment, setEditing }: 
 
                         />
                     </div>
-                    <input type="submit" />
-                    <button onClick={(): void => setEditing(false)}>Cancel</button>
+                    <input type="submit" value="Submit" />
+                    <button onClick={(): void => setEditing(false)} className="AdminPanelCancelComment">Cancel</button>
                 </form>
-            </div>
+            </div >
         </>
     )
 }

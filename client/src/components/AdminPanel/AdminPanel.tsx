@@ -8,7 +8,7 @@ export default function AdminPanel(): JSX.Element {
     }
     return (
         <>
-            <div>
+            <div className="AdminPanel">
                 <div>
                     <select value={select} onChange={handleSelect}>
                         <option value="posts" >Posts</option>

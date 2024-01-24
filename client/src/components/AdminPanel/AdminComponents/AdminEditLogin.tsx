@@ -41,20 +41,22 @@ export default function EditLoginForm({ user, setForm, setEdited }: AdminEditFor
     })
     return (
         <>
-            <div>Change your login</div>
-            <div>{message}</div>
-            <div>
-                <form onSubmit={formik.handleSubmit}>
-                    <label htmlFor="login">Your login: </label>
-                    <input type="text" id="login" {...formik.getFieldProps('login')} />
-                    {formik.touched.login && formik.errors.login ? (
-                        <div>{formik.errors.login}</div>
-                    ) : null}
+            <div className="AdminEditLogin flex flex-col">
+                <div>Change user login</div>
+                <div>{message}</div>
+                <div>
+                    <form onSubmit={formik.handleSubmit}>
+                        <label htmlFor="login">New login: </label>
+                        <input type="text" id="login" {...formik.getFieldProps('login')} />
+                        {formik.touched.login && formik.errors.login ? (
+                            <div>{formik.errors.login}</div>
+                        ) : null}
 
-                    <button type="submit">Submit</button>
-                </form>
+                        <button type="submit">Submit</button>
+                    </form>
+                </div>
+                <div><button onClick={() => setForm(null)}>Cancel</button></div>
             </div>
-            <div><button onClick={() => setForm(null)}>Cancel</button></div>
         </>
     )
 }

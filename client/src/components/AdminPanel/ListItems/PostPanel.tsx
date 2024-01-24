@@ -7,6 +7,7 @@ import DeleteButton from '../../utils/DeleteButton'
 import useConfirm from '../../hooks/useConfirm'
 import AdminPostEditor from '../AdminComponents/AdminPostEditor'
 import { PostItemProps } from '../../interfaces/ForumPosts'
+import { Link } from 'react-router-dom'
 export default function PostPanel({ post, index }: PostItemProps): JSX.Element {
     const { action, setAction, confirm, setConfirm } = useConfirm()
     const [state, dispatch]: [AppState, React.Dispatch<AppAction>] = useAdminContext()
@@ -28,7 +29,7 @@ export default function PostPanel({ post, index }: PostItemProps): JSX.Element {
 
     return (action && confirm) || message.length > 0 ? (
         <>
-            <div>
+            <div className="pb-4">
                 {message}
             </div>
         </>
@@ -44,13 +45,28 @@ export default function PostPanel({ post, index }: PostItemProps): JSX.Element {
                     </>
                 ) : (
                     <>
-                        <div><div>{post.author}</div><div><DateCreator date={post.date} /></div></div>
-                        <h2>{post.title}</h2>
-                        <div><div dangerouslySetInnerHTML={{ __html: post.content }}></div></div>
+                        <div className='AdminPanelPost'>
+                            <div className="flex flex-row justify-between">
+                                <div>
+                                    <Link className="no-underline text-standard-text flex flex-row" to={{ pathname: `/user/${post.userId}` }}>
+                                        <div><img src={`http://localhost:4000/api/getImage/${post.userProfilePicture}`} alt="" /></div>
+                                        <div className="text-2xl h-[50%] m-auto ml-2">{post.author}</div>
+                                    </Link>
+                                </div>
+                                <div>
+                                    <DateCreator date={post.date} />
+                                </div>
+                                <div className="AdminPostButtons flex flex-row">
+                                    <button onClick={() => setEditing(!editing)}>Edit</button>
+                                    <DeleteButton {...{ action, setAction, confirm, setConfirm, handleAction: handleDelete }} />
+                                </div>
+                            </div>
+                            <h2>{post.title}</h2>
+                            <div ><div className="DangerousAdminPostHtml" dangerouslySetInnerHTML={{ __html: post.content }}></div></div>
+                        </div>
                     </>
                 )}
-                <button onClick={() => setEditing(!editing)}>Edit</button>
-                <DeleteButton {...{ action, setAction, confirm, setConfirm, handleAction: handleDelete }} />
+
             </li >
         </>
 

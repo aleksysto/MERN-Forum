@@ -10,7 +10,7 @@ export default function PostPage(): JSX.Element {
     const [error, setError] = useState<string | null>(null)
     return error ? (
         <>
-            <div>{error}</div>
+            <div className="text-standard-text text-4xl">{error}</div>
         </>
     ) : (
         <>

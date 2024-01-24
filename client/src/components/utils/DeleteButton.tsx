@@ -17,21 +17,21 @@ export default function DeleteButton({ action, setAction, confirm, setConfirm, h
                         </button>
                     ) : (
                         <>
-                            <div>
+                            <div className="DeleteButtonComponent flex flex-row">
                                 {
                                     !confirm ?
                                         (
                                             <>
-                                                <div>
+                                                <div className="AreYouSure">
                                                     Are you sure?
                                                 </div>
-                                                <button onClick={() => {
+                                                <button className="Confirm" onClick={() => {
                                                     setConfirm(true)
                                                     handleAction()
                                                 }}>
                                                     Confirm
                                                 </button>
-                                                <button onClick={() => setAction(false)}>
+                                                <button className="Cancel" onClick={() => setAction(false)}>
                                                     Cancel
                                                 </button>
                                             </>

@@ -30,7 +30,7 @@ export default function Posts({ user, index }: UserPanelProps): JSX.Element {
     }
     return (action && confirm) || handled ? (
         <>
-            <div>
+            <div className="pb-4">
                 User handled
             </div>
         </>
@@ -38,20 +38,22 @@ export default function Posts({ user, index }: UserPanelProps): JSX.Element {
         : (
             <>
                 <li key={index}>
-                    <div><button onClick={handleRemove}>Remove from list</button></div>
-                    <div>{edited ? 'Changes saved' : null}</div>
-                    <div>
-                        <AdminAccountEditNav user={user} setEdited={setEdited} />
-                        <DeleteButton {...{ action, setAction, confirm, setConfirm, handleAction: handleDelete }} />
-                    </div>
-                    <div>
-                        <div><img src={`http://localhost:4000/api/getImage/${user.profilePicture}`} alt="" /></div>
-                        <div>Login: {user.login}</div>
-                        <div>Email: {user.email}</div>
-                        <div>Last active: <DateCreator date={user.lastActive} /></div>
-                        <div>Created: <DateCreator date={user.entryDate} /></div>
-                        <div>Posts: {user.posts}</div>
-                        <div>Comments: {user.comments}</div>
+                    <div className="AdminPanelUser">
+                        <div><button onClick={handleRemove} className='mb-4'>Remove from list</button></div>
+                        <div>{edited ? 'Changes saved' : null}</div>
+                        <div>
+                            <div className="AdminPanelUserImageContainer"><img className="AdminPanelUserImage" src={`http://localhost:4000/api/getImage/${user.profilePicture}`} alt="" /></div>
+                            <div>Login: {user.login}</div>
+                            <div>Email: {user.email}</div>
+                            <div>Last active: <DateCreator date={user.lastActive} /></div>
+                            <div>Created: <DateCreator date={user.entryDate} /></div>
+                            <div>Posts: {user.posts}</div>
+                            <div>Comments: {user.comments}</div>
+                        </div>
+                        <div className="flex flex-row">
+                            <AdminAccountEditNav user={user} setEdited={setEdited} />
+                            <DeleteButton {...{ action, setAction, confirm, setConfirm, handleAction: handleDelete }} />
+                        </div>
                     </div>
                 </li>
             </>

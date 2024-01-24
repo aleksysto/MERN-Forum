@@ -7,6 +7,7 @@ import useConfirm from "../../hooks/useConfirm";
 import DeleteButton from "../../utils/DeleteButton";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import AdminCommentEditor from "../AdminComponents/AdminCommentEditor";
+import { Link } from "react-router-dom";
 export default function CommentPanel({
     comment,
     index,
@@ -30,7 +31,7 @@ export default function CommentPanel({
     }
     return (action && confirm) || message.length > 0 ? (
         <>
-            <div>
+            <div className="pb-4">
                 {message}
             </div>
         </>
@@ -39,19 +40,26 @@ export default function CommentPanel({
             <li key={index}>
                 {!editing ? (
                     <>
-                        <div>
-                            <button onClick={() => setEditing(!editing)}>edit</button>
-                            <div style={{ display: "flex", justifyContent: "space-between", width: "100%", margin: "auto" }}>
-                                <div>{comment.author}</div><img style={{ width: "30px", height: "30px" }} src={`http://localhost:4000/api/getImage/${comment.userProfilePicture}`} alt="" /> <div><DateCreator date={comment.date} /></div>
+                        <div className="AdminPanelComment">
+
+                            <div className="AdminPanelCommentHeader flex flex-row justify-between">
+                                <Link to={{ pathname: `/user/${comment.userId}` }} className="CommentAuthorLinkAdmin text-2xl flex flex-row no-underline text-standard-text">
+                                    <div className="AdminPanelCommentPictureContainer"><img className="AdminPanelCommentPicture" src={`http://localhost:4000/api/getImage/${comment.userProfilePicture}`} alt="" /></div>
+                                    <div className="AdminPanelCommentAuthor">{comment.author}</div>
+                                </Link>
+                                <div className="AdminPanelCommentDate flex flex-col">
+                                    <div className="AdminPanelCommentDate flex flex-row justify-end"><DateCreator date={comment.date} /></div>
+                                    <div className="flex flex-row justify-end"><button onClick={() => setEditing(!editing)}>edit</button></div>
+                                    <DeleteButton {...{ action, setAction, confirm, setConfirm, handleAction: handleDelete }} />
+                                </div>
                             </div>
-                            <div dangerouslySetInnerHTML={{ __html: comment.content }}></div>
+                            <div className="DangerousAdminCommentHtml" dangerouslySetInnerHTML={{ __html: comment.content }}></div>
                         </div>
                     </>
                 ) : (
                     <>
                         <div>{message}</div>
                         <AdminCommentEditor setMessage={setMessage} comment={comment} setEditing={setEditing} />
-                        <DeleteButton {...{ action, setAction, confirm, setConfirm, handleAction: handleDelete }} />
                     </>
                 )}
             </li>

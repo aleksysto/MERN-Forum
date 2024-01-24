@@ -535,6 +535,45 @@
               background-color: rgb(181, 0, 0);
               color: rgb(229, 229, 229);
             }
+            .AreYouSure {
+              margin-top: 1.25em;
+            }
+            .Cancel {
+              width: 9em;
+              height: 2em;
+              margin-top: 1em;
+              margin-left: 1em;
+              color: rgb(207, 207, 207);
+              background-color: rgb(61, 0, 0);
+              border: 1px solid rgb(75, 75, 75);
+              border-radius: 10px;
+              text-align: center;
+              font-size: 1em;
+              transition: all 0.2s ease-in;
+            }
+            .Cancel:hover {
+              cursor: pointer;
+              color: rgb(233, 233, 233);
+              background-color: rgb(130, 0, 0);
+            }
+            .Confirm {
+              width: 9em;
+              height: 2em;
+              margin-top: 1em;
+              margin-left: 1em;
+              color: rgb(207, 207, 207);
+              background-color: rgb(3, 93, 0);
+              border: 1px solid rgb(75, 75, 75);
+              border-radius: 10px;
+              text-align: center;
+              font-size: 1em;
+              transition: all 0.2s ease-in;
+            }
+            .Confirm:hover {
+              cursor: pointer;
+              color: rgb(246, 246, 246);
+              background-color: rgb(3, 130, 0);
+            }
           }
         }
       }
@@ -552,6 +591,7 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
+
         label {
           font-size: 2em;
         }
@@ -749,6 +789,7 @@
           background-color: rgb(108, 0, 0);
           color: rgb(201, 201, 201);
           border: 1px solid rgb(75, 75, 75);
+          margin-left: 1em;
           border-radius: 10px;
           text-align: center;
           font-size: 1em;
@@ -759,12 +800,70 @@
           background-color: rgb(181, 0, 0);
           color: rgb(229, 229, 229);
         }
+        .PostDeleteButton {
+          button {
+            width: 9em;
+            height: 2.5em;
+            color: rgb(207, 207, 207);
+            background-color: rgb(30, 30, 30);
+            border: 1px solid rgb(75, 75, 75);
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1em;
+            transition: all 0.2s ease-in;
+          }
+          button:hover {
+            background-color: rgb(241, 241, 241);
+            color: rgb(29, 29, 29);
+            box-shadow: 0 0 7px rgb(120, 120, 120);
+            cursor: pointer;
+          }
+          .AreYouSure {
+            margin-top: 0.5em;
+          }
+          .Cancel {
+            width: 9em;
+            height: 2.5em;
+            margin-left: 1em;
+            color: rgb(207, 207, 207);
+            background-color: rgb(61, 0, 0);
+            border: 1px solid rgb(75, 75, 75);
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1em;
+            transition: all 0.2s ease-in;
+          }
+          .Cancel:hover {
+            cursor: pointer;
+            color: rgb(233, 233, 233);
+            background-color: rgb(130, 0, 0);
+          }
+          .Confirm {
+            width: 9em;
+            height: 2.5em;
+            margin-left: 1em;
+            color: rgb(207, 207, 207);
+            background-color: rgb(3, 93, 0);
+            border: 1px solid rgb(75, 75, 75);
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1em;
+            transition: all 0.2s ease-in;
+          }
+          .Confirm:hover {
+            cursor: pointer;
+            color: rgb(246, 246, 246);
+            background-color: rgb(3, 130, 0);
+          }
+        }
       }
       .PostPageDate {
+        display: flex;
         height: 50%;
-        margin: auto;
         margin-left: 2em;
         font-size: 1em;
+        align-self: end;
+        justify-content: end;
       }
       .PostPageEdit {
         display: flex;
@@ -1031,6 +1130,541 @@
         }
       }
     }
+    .AdminPanel {
+      grid-area: Middle;
+      background-color: rgb(30, 30, 30);
+      color: rgb(238, 238, 238);
+      width: 100%;
+      padding-left: 5em;
+      padding-right: 5em;
+      padding-top: 2em;
+      display: flex;
+      flex-direction: column;
+      .AdminPanelReports {
+        .ReportedListItem {
+          box-shadow: 0 0 7px rgb(120, 120, 120);
+          padding: 1em;
+          margin-bottom: 1.5em;
+          border-radius: 10px;
+          .ReportedDangerousHtml {
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            word-break: break-word;
+            img {
+              max-width: 30em;
+              max-height: 30em;
+            }
+          }
+          .ReportedButtons {
+            display: flex;
+          }
+          button {
+            width: 12em;
+            height: 2em;
+            margin-top: 1em;
+            margin-bottom: 1em;
+            margin-right: 1em;
+            color: rgb(207, 207, 207);
+            background-color: rgb(30, 30, 30);
+            border: 1px solid rgb(75, 75, 75);
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1em;
+            transition: all 0.2s ease-in;
+          }
+          button:hover {
+            cursor: pointer;
+            background-color: rgb(241, 241, 241);
+            color: rgb(29, 29, 29);
+          }
+          .AreYouSure {
+            display: flex;
+            height: 20%;
+            margin: auto;
+          }
+          .Cancel {
+            width: 9em;
+            height: 2em;
+            margin-top: 1em;
+            color: rgb(207, 207, 207);
+            background-color: rgb(61, 0, 0);
+            border: 1px solid rgb(75, 75, 75);
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1em;
+            transition: all 0.2s ease-in;
+          }
+          .Cancel:hover {
+            cursor: pointer;
+            color: rgb(233, 233, 233);
+            background-color: rgb(130, 0, 0);
+          }
+          .Confirm {
+            width: 9em;
+            height: 2em;
+            margin-top: 1em;
+            margin-left: 1em;
+            color: rgb(207, 207, 207);
+            background-color: rgb(3, 93, 0);
+            border: 1px solid rgb(75, 75, 75);
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1em;
+            transition: all 0.2s ease-in;
+          }
+          .Confirm:hover {
+            cursor: pointer;
+            color: rgb(246, 246, 246);
+            background-color: rgb(3, 130, 0);
+          }
+        }
+      }
+      .AdminPanelPost {
+        box-shadow: 0 0 7px rgb(120, 120, 120);
+        padding: 1em;
+        margin-bottom: 1.5em;
+        border-radius: 10px;
+        .AdminPostButtons {
+          button {
+            width: 12em;
+            height: 2em;
+            margin-top: 1em;
+            color: rgb(207, 207, 207);
+            background-color: rgb(30, 30, 30);
+            border: 1px solid rgb(75, 75, 75);
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1em;
+            transition: all 0.2s ease-in;
+          }
+          button:hover {
+            cursor: pointer;
+            background-color: rgb(241, 241, 241);
+            color: rgb(29, 29, 29);
+          }
+          .AreYouSure {
+            display: flex;
+            height: 20%;
+            margin-top: 1.5em;
+          }
+          .Cancel {
+            width: 9em;
+            height: 2em;
+            margin-top: 1em;
+            color: rgb(207, 207, 207);
+            background-color: rgb(61, 0, 0);
+            border: 1px solid rgb(75, 75, 75);
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1em;
+            transition: all 0.2s ease-in;
+          }
+          .Cancel:hover {
+            cursor: pointer;
+            color: rgb(233, 233, 233);
+            background-color: rgb(130, 0, 0);
+          }
+          .Confirm {
+            width: 9em;
+            height: 2em;
+            margin-top: 1em;
+            color: rgb(207, 207, 207);
+            background-color: rgb(3, 93, 0);
+            border: 1px solid rgb(75, 75, 75);
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1em;
+            transition: all 0.2s ease-in;
+          }
+          .Confirm:hover {
+            cursor: pointer;
+            color: rgb(246, 246, 246);
+            background-color: rgb(3, 130, 0);
+          }
+        }
+        .DangerousAdminPostHtml {
+          overflow-wrap: break-word;
+          word-wrap: break-word;
+          word-break: break-word;
+          img {
+            max-width: 30em;
+            max-height: 30em;
+          }
+        }
+      }
+      .AdminPanelUser {
+        box-shadow: 0 0 7px rgb(120, 120, 120);
+        padding: 1em;
+        margin-bottom: 1.5em;
+        border-radius: 10px;
+
+        button {
+          width: 12em;
+          height: 2em;
+          margin-top: 1em;
+          margin-right: 1em;
+          color: rgb(207, 207, 207);
+          background-color: rgb(30, 30, 30);
+          border: 1px solid rgb(75, 75, 75);
+          border-radius: 10px;
+          text-align: center;
+          font-size: 1em;
+          transition: all 0.2s ease-in;
+        }
+        button:hover {
+          cursor: pointer;
+          background-color: rgb(241, 241, 241);
+          color: rgb(29, 29, 29);
+        }
+        .AreYouSure {
+          height: 20%;
+          margin-top: 1.5em;
+        }
+        .Cancel {
+          width: 9em;
+          height: 2em;
+          margin-top: 1em;
+          color: rgb(207, 207, 207);
+          background-color: rgb(61, 0, 0);
+          border: 1px solid rgb(75, 75, 75);
+          border-radius: 10px;
+          text-align: center;
+          font-size: 1em;
+          transition: all 0.2s ease-in;
+        }
+        .Cancel:hover {
+          cursor: pointer;
+          color: rgb(233, 233, 233);
+          background-color: rgb(130, 0, 0);
+        }
+        .Confirm {
+          width: 9em;
+          height: 2em;
+          margin-top: 1em;
+          margin-left: 1em;
+          color: rgb(207, 207, 207);
+          background-color: rgb(3, 93, 0);
+          border: 1px solid rgb(75, 75, 75);
+          border-radius: 10px;
+          text-align: center;
+          font-size: 1em;
+          transition: all 0.2s ease-in;
+        }
+        .Confirm:hover {
+          cursor: pointer;
+          color: rgb(246, 246, 246);
+          background-color: rgb(3, 130, 0);
+        }
+        form {
+          display: flex;
+          flex-direction: column;
+          input[type="file"],
+          input[type="file"]:hover {
+            display: none;
+          }
+          .AdminPictureErrors {
+            font-size: 30em;
+          }
+          label[for="image"] {
+            display: block;
+            background-color: rgb(75, 75, 75);
+            margin-bottom: 0.5em;
+            margin-top: 0.5em;
+            border-radius: 10px;
+            text-align: center;
+            width: 25%;
+            height: 1.5em;
+            overflow: hidden;
+            transition: all 0.2s ease-in;
+          }
+          label[for="image"]:hover {
+            background-color: rgb(241, 241, 241);
+            color: rgb(29, 29, 29);
+            position: relative;
+            margin-bottom: 0.5em;
+            cursor: pointer;
+            // transition: all 0.2 ease-in;
+          }
+        }
+        .AdminPanelUserImageContainer {
+          max-width: 5em;
+          .AdminPanelUserImage {
+            max-width: 5em;
+          }
+        }
+        div {
+          font-size: 1em;
+        }
+      }
+      #editor-container {
+        align-self: center;
+        width: 100%;
+      }
+      .AdminPanelEditCommentForm {
+        input[type="submit"] {
+          height: 1.5em;
+          margin-top: 1em;
+          color: rgb(207, 207, 207);
+          background-color: rgb(30, 30, 30);
+          border: 1px solid rgb(75, 75, 75);
+          border-radius: 10px;
+          text-align: center;
+          font-size: 1em;
+          transition: all 0.2s ease-in;
+        }
+        input[type="submit"]:hover {
+          background-color: rgb(241, 241, 241);
+          color: rgb(29, 29, 29);
+          box-shadow: 0 0 7px rgb(120, 120, 120);
+          cursor: pointer;
+        }
+        .AdminPanelCancelComment {
+          height: 1.5em;
+          align-self: center;
+          margin-bottom: 1em;
+          margin-top: 1em;
+          font-weight: bold;
+          font-size: 1em;
+          background-color: rgb(108, 0, 0);
+          color: rgb(201, 201, 201);
+          border: 0;
+          border-right: 1px solid black;
+          transition: ease-in 0.1s;
+          border-radius: 10px;
+        }
+        .AdminPanelCancelComment:hover {
+          cursor: pointer;
+          background-color: rgb(181, 0, 0);
+          color: rgb(229, 229, 229);
+        }
+      }
+      .ql-editor {
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-word;
+        height: 40em;
+        font-size: 1.25em;
+      }
+      .ql-formats button svg {
+        fill: rgb(201, 201, 201);
+        color: rgb(201, 201, 201);
+        background-color: rgb(201, 201, 201);
+        border-radius: 2px;
+      }
+      select {
+        color: rgb(201, 201, 201);
+      }
+      .ql-picker-label {
+        color: rgb(201, 201, 201);
+        svg {
+          .ql-stroke {
+            background-color: rgb(201, 201, 201);
+            stroke: rgb(201, 201, 201);
+          }
+        }
+      }
+      ul {
+        list-style: none;
+      }
+      .AdminPanelComment {
+        box-shadow: 0 0 7px rgb(200, 200, 200);
+        padding: 1em;
+        border-radius: 10px;
+        margin-bottom: 1.5em;
+        box-shadow: 0 0 7px rgb(120, 120, 120);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        .DangerousAdminCommentHtml {
+          overflow-wrap: break-word;
+          word-wrap: break-word;
+          word-break: break-word;
+
+          img {
+            max-width: 30em;
+            max-height: 30em;
+          }
+        }
+        .AdminPanelCommentHeader {
+          width: 100%;
+          padding-bottom: 1em;
+          margin-bottom: 1em;
+          border-bottom: 1px solid rgb(120, 120, 120);
+          .CommentAuthorLinkAdmin {
+            display: flex;
+            flex-direction: row;
+            text-align: start;
+
+            .AdminPanelCommentPictureContainer {
+              max-width: 5em;
+            }
+            .AdminPanelCommentAuthor {
+              padding-left: 2em;
+              height: 50%;
+              margin: auto;
+            }
+          }
+          .AdminPanelCommentDate {
+            button {
+              width: 9em;
+              height: 2em;
+              margin-top: 1em;
+              margin-left: 1em;
+              color: rgb(207, 207, 207);
+              background-color: rgb(30, 30, 30);
+              border: 1px solid rgb(75, 75, 75);
+              border-radius: 10px;
+              text-align: center;
+              font-size: 1em;
+              transition: all 0.2s ease-in;
+            }
+            button:hover {
+              background-color: rgb(241, 241, 241);
+              color: rgb(29, 29, 29);
+              box-shadow: 0 0 7px rgb(120, 120, 120);
+              cursor: pointer;
+            }
+            .AreYouSure {
+              display: flex;
+              height: 20%;
+              margin: auto;
+            }
+            .Cancel {
+              width: 9em;
+              height: 2em;
+              margin-top: 1em;
+              color: rgb(207, 207, 207);
+              background-color: rgb(61, 0, 0);
+              border: 1px solid rgb(75, 75, 75);
+              border-radius: 10px;
+              text-align: center;
+              font-size: 1em;
+              transition: all 0.2s ease-in;
+            }
+            .Cancel:hover {
+              cursor: pointer;
+              color: rgb(233, 233, 233);
+              background-color: rgb(130, 0, 0);
+            }
+            .Confirm {
+              width: 9em;
+              height: 2em;
+              margin-top: 1em;
+              color: rgb(207, 207, 207);
+              background-color: rgb(3, 93, 0);
+              border: 1px solid rgb(75, 75, 75);
+              border-radius: 10px;
+              text-align: center;
+              font-size: 1em;
+              transition: all 0.2s ease-in;
+            }
+            .Confirm:hover {
+              cursor: pointer;
+              color: rgb(246, 246, 246);
+              background-color: rgb(3, 130, 0);
+            }
+          }
+          .PostPanelCommentAuthorLink {
+            display: flex;
+            flex-direction: row;
+            text-align: start;
+            a {
+              .AuthorImagePostComments {
+                max-width: 5em;
+              }
+              .AuthorNamePostComments {
+                padding-left: 2em;
+                height: 50%;
+                margin: auto;
+              }
+            }
+          }
+          .PostPageCommentDate {
+            display: flex;
+            flex-direction: column;
+            text-align: end;
+
+            div {
+              height: 50%;
+              margin: auto;
+              font-size: 1em;
+            }
+            button {
+              width: 9em;
+              height: 2em;
+              margin-top: 1em;
+              color: rgb(207, 207, 207);
+              background-color: rgb(30, 30, 30);
+              border: 1px solid rgb(75, 75, 75);
+              border-radius: 10px;
+              text-align: center;
+              font-size: 1em;
+              transition: all 0.2s ease-in;
+            }
+            button:hover {
+              background-color: rgb(241, 241, 241);
+              color: rgb(29, 29, 29);
+              box-shadow: 0 0 7px rgb(120, 120, 120);
+              cursor: pointer;
+            }
+
+            .ReportButton:hover {
+              cursor: pointer;
+              background-color: rgb(181, 0, 0);
+              color: rgb(229, 229, 229);
+            }
+          }
+        }
+      }
+      select {
+        border-radius: 10px;
+        margin-bottom: 1em;
+        margin-top: 1em;
+        background-color: rgb(92, 92, 92);
+        color: rgb(201, 201, 201);
+        border: 0;
+        font-size: 1em;
+        height: 1.5em;
+        transition: ease-in 0.1s;
+        width: 10em;
+        align-self: center;
+        text-indent: 1em;
+      }
+      select:hover {
+        cursor: pointer;
+        background-color: rgb(241, 241, 241);
+        color: rgb(47, 47, 47);
+        transition: ease-in 0.1s;
+      }
+      select:focus {
+        outline: none;
+        background-color: rgb(241, 241, 241);
+        color: rgb(47, 47, 47);
+        transition: ease-in 0.1s;
+      }
+      input {
+        background-color: rgb(75, 75, 75);
+        color: rgb(238, 238, 238);
+        transition: all 0.2s ease-in;
+        border: 0;
+        border-radius: 10px;
+        height: 1.5em;
+        padding-left: 1em;
+        padding-right: 1em;
+        margin-top: 0.5em;
+        margin-bottom: 1em;
+      }
+      input:focus {
+        outline: none;
+        background-color: rgb(241, 241, 241);
+        color: rgb(29, 29, 29);
+      }
+      input:hover {
+        cursor: pointer;
+        background-color: rgb(241, 241, 241);
+        color: rgb(29, 29, 29);
+      }
+    }
     .AccountPage {
       grid-area: Middle;
       background-color: rgb(30, 30, 30);
@@ -1069,6 +1703,46 @@
             cursor: pointer;
             background-color: rgb(241, 241, 241);
             color: rgb(29, 29, 29);
+          }
+          .AreYouSure {
+            display: flex;
+            height: 20%;
+            margin-top: 1.25em;
+          }
+          .Cancel {
+            width: 9em;
+            height: 2em;
+            margin-top: 1em;
+            color: rgb(207, 207, 207);
+            background-color: rgb(61, 0, 0);
+            border: 1px solid rgb(75, 75, 75);
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1em;
+            transition: all 0.2s ease-in;
+          }
+          .Cancel:hover {
+            cursor: pointer;
+            color: rgb(233, 233, 233);
+            background-color: rgb(130, 0, 0);
+          }
+          .Confirm {
+            width: 9em;
+            height: 2em;
+            margin-top: 1em;
+            margin-left: 1em;
+            color: rgb(207, 207, 207);
+            background-color: rgb(3, 93, 0);
+            border: 1px solid rgb(75, 75, 75);
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1em;
+            transition: all 0.2s ease-in;
+          }
+          .Confirm:hover {
+            cursor: pointer;
+            color: rgb(246, 246, 246);
+            background-color: rgb(3, 130, 0);
           }
         }
         .AccountPageEditForm {

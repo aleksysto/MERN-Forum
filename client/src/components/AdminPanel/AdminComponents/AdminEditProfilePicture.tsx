@@ -59,11 +59,11 @@ export default function AdminEditProfilePicture({ user, setForm, setEdited }: Ad
     })
     return (
         <>
-            <div>Change your profile picture</div>
+            <div>Change user profile picture</div>
             <div>{message}</div>
             <div>
                 <form onSubmit={formik.handleSubmit}>
-                    <label htmlFor="image">Your avatar: </label>
+                    <label htmlFor="image">&uarr; Upload &uarr;</label>
                     <input type="file" id="image" onChange={(event) => {
                         event.preventDefault()
                         const files: FileList | null = event.currentTarget.files
@@ -72,7 +72,7 @@ export default function AdminEditProfilePicture({ user, setForm, setEdited }: Ad
                         }
                     }} />
                     {(
-                        <div>{
+                        <div className="AdminPictureErrors">{
                             String(formik.errors.image) === 'undefined' || String(formik.errors.image) === 'image cannot be null' ?
                                 '' :
                                 String(formik.errors.image)

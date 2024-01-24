@@ -65,16 +65,16 @@ export default function ReportedPanel({ report, index }: ReportedPanelProps): JS
     }
     return handled ? (
         <>
-            <div>
+            <div className="pb-4">
                 {handled}
             </div>
         </>
     ) : (
         <>
-            <li>
+            <li className="ReportedListItem">
                 <div>
                     <div>Reported on: <DateCreator date={report.reportedOn} /></div>
-                    <div>
+                    <div className="ReportedButtons">
                         <button onClick={handleApprove}>Approve</button>
                         <DeleteButton {...{ action, setAction, confirm, setConfirm, handleAction: handleDelete }} />
                     </div>
@@ -93,7 +93,7 @@ export default function ReportedPanel({ report, index }: ReportedPanelProps): JS
                             <div>
                                 <div><div>{reportedObject.author}</div><div><DateCreator date={reportedObject.date} /></div></div>
                                 <h2>{reportedObject.title}</h2>
-                                <div><div dangerouslySetInnerHTML={{ __html: reportedObject.content }}></div></div>
+                                <div><div className="ReportedDangerousHtml" dangerouslySetInnerHTML={{ __html: reportedObject.content }}></div></div>
                             </div>
                         ) : (
                             <div>
@@ -101,7 +101,7 @@ export default function ReportedPanel({ report, index }: ReportedPanelProps): JS
                                     <div style={{ display: "flex", justifyContent: "space-between", width: "100%", margin: "auto" }}>
                                         <div>{reportedObject.author}</div> <div><DateCreator date={reportedObject.date} /></div>
                                     </div>
-                                    <div dangerouslySetInnerHTML={{ __html: reportedObject.content }}></div>
+                                    <div className="ReportedDangerousHtml" dangerouslySetInnerHTML={{ __html: reportedObject.content }}></div>
                                 </div>
                             </div>
                         )
