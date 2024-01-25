@@ -226,6 +226,31 @@
       padding-right: 5em;
       padding-top: 2em;
       background-color: rgb(30, 30, 30);
+      .AccountPageReport {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 1em;
+        .ReportButton {
+          width: 9em;
+          height: 2em;
+          margin-top: 1em;
+          background-color: rgb(108, 0, 0);
+          color: rgb(201, 201, 201);
+          border: 1px solid rgb(75, 75, 75);
+          border-radius: 10px;
+          text-align: center;
+          justify-content: center;
+          align-self: center;
+          font-size: 1em;
+          transition: all 0.2s ease-in;
+        }
+        .ReportButton:hover {
+          cursor: pointer;
+          background-color: rgb(181, 0, 0);
+          color: rgb(229, 229, 229);
+        }
+      }
+
       .UserPostList {
         list-style: none;
         .UserPostListItem {
