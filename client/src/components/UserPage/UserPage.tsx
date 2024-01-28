@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Params, useParams } from 'react-router-dom'
 import { UserObject } from '../interfaces/UserObjectContext'
@@ -10,6 +10,8 @@ export default function UserPage(): JSX.Element {
     useEffect((): void => {
         axios.get(`http://localhost:4000/api/users/id/${id}`).then((res) => {
             setUser(res.data.user)
+        }).catch((error: AxiosError) => {
+            console.log(error)
         })
     }, [id])
     return user ? (

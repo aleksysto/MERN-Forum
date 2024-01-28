@@ -281,5 +281,4 @@ router.delete(
 router.use(user);
 router.use(post);
 router.use(comment);
-
 module.exports = router;

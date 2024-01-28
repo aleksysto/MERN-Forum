@@ -10,6 +10,7 @@
     padding: 0.25em;
     border-bottom: 1px solid rgb(100, 100, 100);
     box-shadow: 0 0 5px rgb(100, 100, 100);
+
     nav {
       display: grid;
       grid-template-areas: "Logo Search Buttons";
@@ -103,6 +104,30 @@
         width: 100%;
         display: flex;
         justify-content: flex-end;
+        .DropDown {
+          position: absolute;
+          .DropDownNotifs {
+            position: absolute;
+            background-color: rgb(20, 20, 20);
+            border-radius: 10px;
+            max-height: 15em;
+            overflow-y: scroll;
+            .NotifItem {
+              box-shadow: 0 0 5px rgb(100, 100, 100);
+              background-color: rgb(20, 20, 20);
+              font-size: 0.7em;
+              a {
+                text-decoration: none;
+                color: rgb(207, 207, 207);
+                div {
+                  padding: 1em;
+                  border: none;
+                  box-shadow: none;
+                }
+              }
+            }
+          }
+        }
         div {
           margin-left: 0.5em;
           margin-right: 2em;
@@ -327,6 +352,23 @@
             }
           }
         }
+      }
+    }
+    .RandomPost {
+      color: rgb(238, 238, 238);
+      grid-area: Middle;
+      width: 100%;
+      height: 10%;
+      padding-left: 5em;
+      padding-right: 5em;
+      padding-top: 2em;
+      margin-top: 1em;
+      margin-bottom: 18em;
+      padding-bottom: 2em;
+      background-color: rgb(30, 30, 30);
+      .RANDOMBORDER {
+        box-shadow: 0 0 7px rgb(120, 120, 120);
+        border-radius: 10px;
       }
     }
     .author-info {
@@ -1209,6 +1251,7 @@
       width: 100%;
       padding-left: 5em;
       padding-right: 5em;
+      margin-top: 20em;
       padding-top: 2em;
       background-color: rgb(30, 30, 30);
       ul {

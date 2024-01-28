@@ -163,13 +163,40 @@ const Reports: InferSchemaType<typeof reportSchema> = mongoose.model(
   reportSchema,
   "reports"
 );
-
+const notificationSchema = new Schema({
+  userId: {
+    type: String,
+    required: true,
+  },
+  postId: {
+    type: String,
+    required: true,
+  },
+  from: {
+    type: String,
+    required: true,
+  },
+  postTitle: {
+    type: String,
+    required: true,
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+});
+const Notifications = mongoose.model(
+  "Notifications",
+  notificationSchema,
+  "notifications"
+);
 interface schemasObject {
   Users: InferSchemaType<typeof userSchema>;
   Posts: InferSchemaType<typeof postSchema>;
   Comments: InferSchemaType<typeof commentSchema>;
   Reports: InferSchemaType<typeof reportSchema>;
   Messages: InferSchemaType<typeof messageSchema>;
+  Notifications: InferSchemaType<typeof notificationSchema>;
 }
 
 const mySchemas: schemasObject = {
@@ -178,5 +205,6 @@ const mySchemas: schemasObject = {
   Comments: Comments,
   Reports: Reports,
   Messages: Messages,
+  Notifications: Notifications,
 };
 module.exports = mySchemas;

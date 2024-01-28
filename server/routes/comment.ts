@@ -66,8 +66,53 @@ router.post(
         return res.status(500).json({ message: "Error creating comment" });
       }
 
+      const mqttServer = mqtt.connect("mqtt://0.0.0.0:1883");
+      mqttServer.on("connect", function () {
+        console.log("connect");
+      });
+      const post = await schemas.Posts.aggregate([
+        {
+          $match: {
+            _id: new ObjectId(postId),
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "author",
+            foreignField: "login",
+            as: "user",
+          },
+        },
+        {
+          $project: {
+            _id: 1,
+            authorId: { $arrayElemAt: ["$user._id", 0] },
+            title: 1,
+          },
+        },
+      ]);
+      if (post[0].authorId.toString() === postingUser._id.toString()) {
+        return res
+          .status(200)
+          .json({ message: "Comment created", comment: savedComment });
+      }
+      console.log(post);
+      const newNotif = {
+        userId: post[0].authorId,
+        postId: post[0]._id,
+        postTitle: post[0].title,
+        from: postingUser.login,
+      };
+      const schemaNotif = new schemas.Notifications(newNotif);
+      const saveNotif = await schemaNotif.save();
+      mqttServer.publish(
+        "getNotifs",
+        JSON.stringify({ userId: newNotif.userId })
+      );
       res.json({ message: "Comment created", comment: savedComment });
     } catch (error) {
+      console.log(error);
       res.status(500).json({ message: "Server Error" });
     }
   }

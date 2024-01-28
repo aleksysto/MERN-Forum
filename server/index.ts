@@ -4,6 +4,7 @@ import cors, { CorsOptions } from "cors";
 const router = require("./routes/router");
 const express = require("express");
 const bodyParser = require("body-parser");
+const ObjectId = require("mongoose").Types.ObjectId;
 const mongoose = require("mongoose");
 import * as types from "./interfaces/RouterTypes";
 import { error } from "console";
@@ -48,6 +49,10 @@ serverMqtt.on("connect", (err: Error) => {
   }
 });
 
+function randomInt(max: number): number {
+  return Math.floor(Math.random() * max);
+}
+
 serverMqtt.subscribe("postMessages", (err: Error) => {
   if (!err) {
     console.log("subscribed to messages");
@@ -67,6 +72,57 @@ serverMqtt.subscribe("deleteMessages", (err: Error) => {
   if (!err) {
     console.log("subscribed to messages");
   }
+});
+serverMqtt.subscribe("randomPost", (err: Error) => {
+  if (!err) {
+    console.log("subscribed to posts");
+  }
+});
+serverMqtt.subscribe("getNotifs", (err: Error) => {
+  if (!err) {
+    console.log("subscribed to notifs");
+  }
+});
+serverMqtt.subscribe("dataNotifs", (err: Error) => {
+  if (!err) {
+    console.log("subscribed to notifs");
+  }
+});
+serverMqtt.subscribe("deleteNotifs", (err: Error) => {
+  if (!err) {
+    console.log("subscribed to notifs");
+  }
+});
+const posts = schemas.Posts.aggregate([
+  {
+    $lookup: {
+      from: "users",
+      localField: "author",
+      foreignField: "login",
+      as: "user",
+    },
+  },
+  {
+    $project: {
+      _id: 1,
+      category: 1,
+      title: 1,
+      content: 1,
+      author: 1,
+      date: 1,
+      userId: { $arrayElemAt: ["$user._id", 0] },
+      userProfilePicture: { $arrayElemAt: ["$user.profilePicture", 0] },
+    },
+  },
+]).then((postRes: any) => {
+  setInterval(() => {
+    if (postRes) {
+      const randomPost: types.AggregatePostObject =
+        postRes[randomInt(postRes.length)];
+      const data = { data: randomPost };
+      serverMqtt.publish("randomPost", JSON.stringify(data));
+    }
+  }, 5000);
 });
 
 serverMqtt.on("message", async (topic: string, message: string) => {
@@ -136,6 +192,49 @@ serverMqtt.on("message", async (topic: string, message: string) => {
 
         const messagesAfter = await schemas.Messages.find({}).sort({ date: 1 });
         serverMqtt.publish("getMessages", "New message");
+        break;
+      case "getNotifs":
+        const notifsId = JSON.parse(message).userId;
+        const notifs = await schemas.Notifications.find({
+          userId: notifsId,
+        });
+        const notifsData = { data: notifs };
+        serverMqtt.publish("dataNotifs", JSON.stringify(notifsData));
+        break;
+      case "deleteNotifs":
+        console.log("delete fireed");
+        const deleteNotifData = JSON.parse(message);
+        const deletingNotifToken = deleteNotifData.token;
+        if (!deletingNotifToken || !checkTokenValidity(deletingNotifToken)) {
+          break;
+        }
+        const decodedNotifToken = jwt.verify(deletingNotifToken, secretKey);
+        if (typeof decodedNotifToken === "string") {
+          break;
+        }
+        const deletingNotifUserId = decodedNotifToken._id;
+
+        const deletingNotifUser = await schemas.Users.find({
+          _id: deletingNotifUserId,
+        });
+        const newId = deletingNotifUser[0]._id.toString();
+
+        if (
+          !deletingNotifUser ||
+          (deleteNotifData.userId !== newId && !checkIfAdmin(deletingNotifUser))
+        ) {
+          break;
+        }
+
+        const deletedNotif = await schemas.Notifications.deleteOne({
+          _id: deleteNotifData.id,
+        });
+
+        console.log("before publish");
+        serverMqtt.publish(
+          "getNotifs",
+          JSON.stringify({ userId: deleteNotifData.userId })
+        );
         break;
       default:
         break;

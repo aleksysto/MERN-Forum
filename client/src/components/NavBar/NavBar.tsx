@@ -8,6 +8,7 @@ import RegisterButton from './RegisterButton'
 import LoginButton from './LoginButton'
 import AccountButton from './AccountButton'
 import AdminPanelButton from './AdminButton'
+import Notifications from './Notifications'
 
 export default function NavBar() {
     const { loggedIn }: UserContextType = useUserContext()
@@ -29,6 +30,9 @@ export default function NavBar() {
                         <SearchBar />
                     </div>
                     <div className="NavButtons">
+                        <div>
+                            {loggedIn ? <Notifications /> : null}
+                        </div>
                         <div>
                             <AdminPanelButton />
                         </div>
