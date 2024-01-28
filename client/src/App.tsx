@@ -2,6 +2,7 @@ import React from 'react';
 import './App.scss';
 import NavBar from './components/NavBar/NavBar';
 import TopUsersList from './components/LeftSidePanel/TopUsersList';
+import ChatBox from './components/Chatbox/Chatbox';
 
 function App({ children }: { children: JSX.Element }): JSX.Element {
   return (
@@ -10,7 +11,9 @@ function App({ children }: { children: JSX.Element }): JSX.Element {
         <NavBar />
         <div className="Body">
           <TopUsersList />
+          <ChatBox />
           {children}
+
         </div>
       </div>
     </>

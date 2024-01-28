@@ -1,6 +1,11 @@
 import { Request, Response } from "express";
 import { Send } from "express-serve-static-core";
-import { CommentObject, PostObject, UserObject } from "./ModelTypes";
+import {
+  CommentObject,
+  PostObject,
+  UserObject,
+  messageObject,
+} from "./ModelTypes";
 import { InferSchemaType } from "mongoose";
 const schemas = require("../models/schemas");
 export interface DbUserObject extends UserObject {
@@ -250,3 +255,19 @@ export type UsersArrayResBody =
 export type PatchResBody = {
   message: string;
 };
+
+export interface MessageObject {
+  content: string;
+  author: string;
+  date: Date;
+  userId: string;
+  userProfilePicture: string;
+}
+
+export interface MQTTMessagePost extends MessageObject {
+  token: string;
+}
+
+export interface MQTTDeleteMessage extends MQTTMessagePost {
+  _id: string;
+}

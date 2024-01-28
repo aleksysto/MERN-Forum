@@ -11,7 +11,6 @@ export default function PostEditor({ setMessage, post, setEditing }: EditPostPro
     const [errors, setErrors] = useState<null | string>(null)
     const [select, setSelect] = useState<string>('')
     const navigate: NavigateFunction = useNavigate()
-    console.log(select)
     function handleQuillChange(value: string, delta: DeltaStatic, source: Sources, editor: UnprivilegedEditor): void {
         const images: DeltaOperation[] | undefined = editor.getContents().ops?.filter((op: DeltaOperation): boolean => op.insert?.image)
         if (images && images.length > 0) {

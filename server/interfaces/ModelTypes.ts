@@ -33,3 +33,11 @@ export interface ReportObject {
   reportedOn: Date;
   reportedObject: PostObject | UserObject | CommentObject;
 }
+
+export interface messageObject {
+  content: string;
+  author: string;
+  date: Date;
+  userId: string;
+  userProfilePicture: string;
+}

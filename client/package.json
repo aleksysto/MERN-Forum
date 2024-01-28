@@ -20,6 +20,8 @@
     "formik": "^2.4.5",
     "jwt-decode": "^4.0.0",
     "lodash": "^4.17.21",
+    "mqtt": "^5.3.5",
+    "precompiled-mqtt": "^4.3.14-beta",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-quill": "^2.0.0",

@@ -152,9 +152,123 @@
     padding-top: 3em;
     display: grid;
     grid-template-areas: "LeftPanel Middle RightPanel";
-    grid-template-columns: 0.5fr 1.5fr 0.5fr;
+    grid-template-columns: 0.5fr 1.5fr 0.7fr;
     background-color: rgb(20, 20, 20);
 
+    .ChatBoxContainer {
+      grid-area: RightPanel;
+      width: 70%;
+      padding-left: 2em;
+      margin-left: 10em;
+      background-color: rgb(20, 20, 20);
+      color: rgb(207, 207, 207);
+      form {
+        margin-top: 1em;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 30em;
+        input[type="submit"] {
+          width: 15%;
+          align-self: center;
+        }
+        #editor-container {
+          align-self: center;
+          width: 20em;
+        }
+        .ql-editor {
+          overflow-wrap: break-word;
+          word-wrap: break-word;
+          word-break: break-word;
+          height: 5em;
+          font-size: 1.25em;
+        }
+        .ql-formats button svg {
+          fill: rgb(201, 201, 201);
+          color: rgb(201, 201, 201);
+          background-color: rgb(201, 201, 201);
+          border-radius: 2px;
+        }
+      }
+      .ChatMessages {
+        width: 90%;
+        box-shadow: 0 0 7px rgb(120, 120, 120);
+        border-radius: 10px;
+        padding: 1em;
+        overflow: auto;
+        max-height: 50vh;
+        display: flex;
+        flex-direction: column;
+        .OwnMessage {
+          padding: 0.3em;
+          margin-bottom: 1em;
+          margin-left: 1.5em;
+          border: 1px solid white;
+          border-top-right-radius: 10px;
+          border-top-left-radius: 10px;
+          border-bottom-left-radius: 10px;
+          font-size: 1em;
+          overflow-wrap: break-word;
+          word-wrap: break-word;
+          word-break: break-word;
+          .MessageAuthorPicture {
+            max-width: 1em;
+            border-radius: 10px;
+            img {
+              max-width: 1em;
+              border-radius: 10px;
+            }
+          }
+          .MessageContent {
+            padding-left: 0.25em;
+          }
+          .MessageAuthorBox {
+            padding: 0.25em;
+            display: flex;
+            .MessageAuthor {
+              margin-right: 0.5em;
+            }
+            .MessageTime {
+              font-size: 0.8em;
+            }
+          }
+        }
+        .Message {
+          padding: 0.3em;
+          margin-bottom: 1em;
+          margin-right: 1.5em;
+          border: 1px solid white;
+          border-top-right-radius: 10px;
+          border-top-left-radius: 10px;
+          border-bottom-right-radius: 10px;
+          font-size: 1em;
+          overflow-wrap: break-word;
+          word-wrap: break-word;
+          word-break: break-word;
+          .MessageAuthorPicture {
+            max-width: 1em;
+            border-radius: 10px;
+            img {
+              max-width: 1em;
+              border-radius: 10px;
+            }
+          }
+          .MessageContent {
+            padding-left: 0.25em;
+          }
+          .MessageAuthorBox {
+            padding: 0.25em;
+            display: flex;
+            .MessageAuthor {
+              margin-right: 0.5em;
+            }
+            .MessageTime {
+              font-size: 0.8em;
+            }
+          }
+        }
+      }
+    }
     .LeftPanel {
       grid-area: LeftPanel;
       background-color: rgb(20, 20, 20);

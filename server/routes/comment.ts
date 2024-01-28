@@ -12,6 +12,8 @@ import {
 import jwt, { JwtPayload } from "jsonwebtoken";
 const ObjectId = require("mongoose").Types.ObjectId;
 const router: Router = express.Router();
+const mqtt = require("mqtt");
+const mqttServer = mqtt.connect("mqtt://0.0.0.0:1883");
 // HTTP POST to post comments
 router.post(
   "/api/posts/id/:postId/comment",

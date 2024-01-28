@@ -5,6 +5,7 @@ import {
   PostObject,
   ReportObject,
   UserObject,
+  messageObject,
 } from "../interfaces/ModelTypes";
 import { CommonConnectionOptions } from "tls";
 
@@ -46,6 +47,7 @@ const userSchema = new Schema<UserObject>({
     default: "default.jpg",
   },
 });
+
 const Users: InferSchemaType<typeof userSchema> = mongoose.model(
   "Users",
   userSchema,
@@ -102,6 +104,34 @@ const commentSchema = new Schema<CommentObject>({
   },
 });
 
+const messageSchema = new Schema<messageObject>({
+  content: {
+    type: String,
+    required: true,
+  },
+  author: {
+    type: String,
+    required: true,
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+  userId: {
+    type: String,
+    required: true,
+  },
+  userProfilePicture: {
+    type: String,
+    required: true,
+  },
+});
+const Messages: InferSchemaType<typeof messageSchema> = mongoose.model(
+  "Messages",
+  messageSchema,
+  "messages"
+);
+
 const Comments: InferSchemaType<typeof commentSchema> = mongoose.model(
   "Comments",
   commentSchema,
@@ -139,6 +169,7 @@ interface schemasObject {
   Posts: InferSchemaType<typeof postSchema>;
   Comments: InferSchemaType<typeof commentSchema>;
   Reports: InferSchemaType<typeof reportSchema>;
+  Messages: InferSchemaType<typeof messageSchema>;
 }
 
 const mySchemas: schemasObject = {
@@ -146,5 +177,6 @@ const mySchemas: schemasObject = {
   Posts: Posts,
   Comments: Comments,
   Reports: Reports,
+  Messages: Messages,
 };
 module.exports = mySchemas;

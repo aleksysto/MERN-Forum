@@ -1,0 +1,198 @@
+GET http://localhost:4000/api/posts/id/6599cd981b406e5166500a10
+
+###
+
+GET http://localhost:4000/api/posts/sort?orderBy=author&order=asc
+
+###
+
+GET http://localhost:4000/api/posts/id/6599cd981b406e5166500a10
+
+###
+GET http://localhost:4000/api/posts/id/65a47b9158bd6f3b0382c040
+
+###
+
+POST http://localhost:4000/api/posts/Off%20topic%20category%201
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWIxYTUyMzIyMmVlYTQyMWFmYTFjZTMiLCJsb2dpbiI6IlRlc3RBY2MxMiIsImVtYWlsIjoiVGVzdEVtYWlsMTJAZ21haWwuY29tIiwicG9zdHMiOjAsImNvbW1lbnRzIjowLCJ0eXBlIjoidXNlciIsImxhc3RBY3RpdmUiOiIyMDI0LTAxLTI1VDAwOjAyOjQzLjAyMVoiLCJlbnRyeURhdGUiOiIyMDI0LTAxLTI1VDAwOjAyOjQzLjAyMVoiLCJwcm9maWxlUGljdHVyZSI6ImRlZmF1bHQuanBnIiwiaWF0IjoxNzA2MTQwOTYzLCJleHAiOjE3MDY3NDU3NjN9.h1yk5WWa4wJSNdmchMF117QZUnK60CJxsy5pSGX8vEU
+
+{
+    "title": "Sit lorem dolor ipsum 27",
+    "author": "TestAcc12",
+    "content": "<ol><li><b>Lorem ipsum dolor sit amet</b>, consectetuer adipiscing elit.</li><li>Aliquam tincidunt mauris eu risus.</li><li>Vestibulum auctor dapibus neque.</li></ol>"
+}
+
+###
+POST http://localhost:4000/api/register
+Content-Type: application/json 
+
+{
+    "login": "TestAcc12",
+    "email": "TestEmail12@gmail.com",
+    "password": "Haslo123!"
+}
+###
+POST http://localhost:4000/api/login
+Content-Type: application/json
+
+{
+    "login": "TestAcc12",
+    "password": "Haslo123!"
+}
+
+###
+
+POST http://localhost:4000/api/posts/id/65b1a134222eea421afa18cb/comment
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWIxYTI1NjIyMmVlYTQyMWFmYTE5Y2QiLCJsb2dpbiI6IlRlc3RBY2M1IiwiZW1haWwiOiJUZXN0RW1haWw1QGdtYWlsLmNvbSIsInBvc3RzIjowLCJjb21tZW50cyI6MCwidHlwZSI6InVzZXIiLCJsYXN0QWN0aXZlIjoiMjAyNC0wMS0yNFQyMzo1MDo0Ni40MDRaIiwiZW50cnlEYXRlIjoiMjAyNC0wMS0yNFQyMzo1MDo0Ni40MDRaIiwicHJvZmlsZVBpY3R1cmUiOiJkZWZhdWx0LmpwZyIsImlhdCI6MTcwNjE0MDI0NywiZXhwIjoxNzA2NzQ1MDQ3fQ.HmjwUzZsLJKtESF0k-1U-dQ0_fkJ71DkeQv78aYuC7M
+
+{
+    "author": "TestAcc5",
+    "content": "<ul><li>Lorem ipsum dolor sit amet 28, consectetuer adipiscing elit.</li><li>Aliquam tincidunt mauris eu risus.</li><li>Vestibulum auctor dapibus neque.</li></ul>"
+}
+
+###
+
+GET http://localhost:4000/api/posts
+
+###
+
+GET http://localhost:4000/api/posts/author/aleksy
+
+###
+
+GET http://localhost:4000/api/users/combinedActivity
+
+###
+GET http://localhost:4000/api/comments/test
+
+###
+
+GET http://localhost:4000/api/posts/65a47b9158bd6f3b0382c040/comments
+
+###
+
+GET http://localhost:4000/api/comments/brajan%20B)
+
+### 
+
+GET http://localhost:4000/api/users/mostactive
+
+###
+
+GET http://localhost:4000/api/users/combinedActivity
+###
+
+DELETE http://localhost:4000/api/posts/id/659c3e61fd3c002fe4c070ec
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWE0NzgwYzU4YmQ2ZjNiMDM4MmJmNmUiLCJsb2dpbiI6Inppb21pc2xhdyIsImVtYWlsIjoiemlvbWlzbGF3MkBtYWlsLmNvbSIsInBvc3RzIjozLCJjb21tZW50cyI6MzAsInR5cGUiOiJhZG1pbiIsImxhc3RBY3RpdmUiOiIyMDI0LTAxLTE1VDAwOjEwOjUyLjc0MloiLCJlbnRyeURhdGUiOiIyMDI0LTAxLTE1VDAwOjEwOjUyLjc0MloiLCJwcm9maWxlUGljdHVyZSI6IjMyNTA5NGY5LTIwZDMtNDE5Mi1iM2EwLWU4OWYyY2VmNGMwOS5wbmciLCJpYXQiOjE3MDU4NjAyODQsImV4cCI6MTcwNjQ2NTA4NH0.uflxVTcS6YMq-KKY4YJDlAmvfGkwdfAsw_vLV998WTs
+###
+DELETE http://localhost:4000/api/comments/id/65a06cf3332b90dce41735de
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWE0NzgwYzU4YmQ2ZjNiMDM4MmJmNmUiLCJsb2dpbiI6Inppb21pc2xhdyIsImVtYWlsIjoiemlvbWlzbGF3MkBtYWlsLmNvbSIsInBvc3RzIjozLCJjb21tZW50cyI6MzAsInR5cGUiOiJhZG1pbiIsImxhc3RBY3RpdmUiOiIyMDI0LTAxLTE1VDAwOjEwOjUyLjc0MloiLCJlbnRyeURhdGUiOiIyMDI0LTAxLTE1VDAwOjEwOjUyLjc0MloiLCJwcm9maWxlUGljdHVyZSI6IjMyNTA5NGY5LTIwZDMtNDE5Mi1iM2EwLWU4OWYyY2VmNGMwOS5wbmciLCJpYXQiOjE3MDU4NjAyODQsImV4cCI6MTcwNjQ2NTA4NH0.uflxVTcS6YMq-KKY4YJDlAmvfGkwdfAsw_vLV998WTs
+### 
+DELETE http://localhost:4000/api/users/id/659f2c3fb0d775c2456b2063
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1OTc1NGVhMTI3MTA4MzUyZmRmYWM5YiIsImxvZ2luIjoiYWxla3N5MiIsImVtYWlsIjoiYWxla3N5c3RvMkBnbWFpbC5jb20iLCJ0eXBlIjoidXNlciIsImlhdCI6MTcwNDkyMTEyOCwiZXhwIjoxNzA1NTI1OTI4fQ.pMZy4RJ2GCK_6uM3cfLR0pq7rTGw4saLFqFuDmGytlY
+
+### 
+DELETE http://localhost:4000/api/users/id/659dd8e4282c0f9d28b4a311
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWE0NzgwYzU4YmQ2ZjNiMDM4MmJmNmUiLCJsb2dpbiI6Inppb21pc2xhdyIsImVtYWlsIjoiemlvbWlzbGF3MkBtYWlsLmNvbSIsInBvc3RzIjozLCJjb21tZW50cyI6MzAsInR5cGUiOiJhZG1pbiIsImxhc3RBY3RpdmUiOiIyMDI0LTAxLTE1VDAwOjEwOjUyLjc0MloiLCJlbnRyeURhdGUiOiIyMDI0LTAxLTE1VDAwOjEwOjUyLjc0MloiLCJwcm9maWxlUGljdHVyZSI6IjMyNTA5NGY5LTIwZDMtNDE5Mi1iM2EwLWU4OWYyY2VmNGMwOS5wbmciLCJpYXQiOjE3MDU4NjAyODQsImV4cCI6MTcwNjQ2NTA4NH0.uflxVTcS6YMq-KKY4YJDlAmvfGkwdfAsw_vLV998WTs
+
+
+### 
+
+PATCH http://localhost:4000/api/posts/id/65a6d7d99f9ddd2d73811298
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWE0NzgwYzU4YmQ2ZjNiMDM4MmJmNmUiLCJsb2dpbiI6Inppb21pc2xhdyIsImVtYWlsIjoiemlvbWlzbGF3MkBtYWlsLmNvbSIsInBvc3RzIjozLCJjb21tZW50cyI6MzAsInR5cGUiOiJhZG1pbiIsImxhc3RBY3RpdmUiOiIyMDI0LTAxLTE1VDAwOjEwOjUyLjc0MloiLCJlbnRyeURhdGUiOiIyMDI0LTAxLTE1VDAwOjEwOjUyLjc0MloiLCJwcm9maWxlUGljdHVyZSI6IjMyNTA5NGY5LTIwZDMtNDE5Mi1iM2EwLWU4OWYyY2VmNGMwOS5wbmciLCJpYXQiOjE3MDU4NjAyODQsImV4cCI6MTcwNjQ2NTA4NH0.uflxVTcS6YMq-KKY4YJDlAmvfGkwdfAsw_vLV998WTs
+
+{
+    "content": "aadasdadadwdadwawdawdawdaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaawdadasdadadwdadwawdawdawdawdwadwadawawddasdasdadawdaddadadasd",
+    "elo": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "category": ""
+}
+
+###
+
+PATCH http://localhost:4000/api/comments/id/659f3035b0d775c2456b2066
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1OTc1NGVhMTI3MTA4MzUyZmRmYWM5YiIsImxvZ2luIjoiYWxla3N5MiIsImVtYWlsIjoiYWxla3N5c3RvMkBnbWFpbC5jb20iLCJ0eXBlIjoidXNlciIsImlhdCI6MTcwNDkyMTEyOCwiZXhwIjoxNzA1NTI1OTI4fQ.pMZy4RJ2GCK_6uM3cfLR0pq7rTGw4saLFqFuDmGytlY
+
+{
+    "content": "zegnam",
+    "elo": "elo",
+    "category": "newCategory"
+}
+
+###
+
+PATCH http://localhost:4000/api/users/id/659dd8e4282c0f9d28b4a311
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1OWYzMWQ3YjBkNzc1YzI0NTZiMjA2NyIsImxvZ2luIjoibmV3IiwiZW1haWwiOiJ3aXRhbSIsInR5cGUiOiJ1c2VyIiwiaWF0IjoxNzA0OTMxODI1LCJleHAiOjE3MDU1MzY2MjV9.Ok_BDJlvM85x1TFVvRJcZ8GJ3bAbskmzZWbhLvcu1oI
+
+{
+    "content": "zegnam",
+    "elo": "elo",
+    "category": "newCategory",
+    "login": "newlogin",
+    "password": "newpass",
+    "email": "witam",
+    "comments": "true",
+    "type": "admin"
+}
+
+###
+
+GET http://localhost:4000/api/search?keywords=witam
+
+###
+GET http://localhost:4000/api/search?field=date&q=2024-01-11&category=category
+###
+GET http://localhost:4000/api/search?field=&category=
+###
+
+GET http://localhost:4000/api/search?field=author&q=aleksy&category=
+###
+
+GET http://localhost:4000/api/getImage/default.jpg
+
+###
+
+GET http://localhost:4000/api/posts/category/test
+
+###
+
+GET http://localhost:4000/api/generateToken
+Content-Type: application/json
+
+{
+    "id": "65a320af71faf38fd19de005"
+}
+
+### 
+
+GET http://localhost:4000/api/posts/sort?orderBy=author&order=desc
+
+###
+
+GET http://localhost:4000/api/posts
+
+###
+
+POST http://localhost:4000/api/reports
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWE0NzgwYzU4YmQ2ZjNiMDM4MmJmNmUiLCJsb2dpbiI6Inppb21pc2xhdyIsImVtYWlsIjoiemlvbWlzbGF3MkBtYWlsLmNvbSIsInBvc3RzIjo1LCJjb21tZW50cyI6MzAsInR5cGUiOiJhZG1pbiIsImxhc3RBY3RpdmUiOiIyMDI0LTAxLTE1VDAwOjEwOjUyLjc0MloiLCJlbnRyeURhdGUiOiIyMDI0LTAxLTE1VDAwOjEwOjUyLjc0MloiLCJwcm9maWxlUGljdHVyZSI6IjMyNTA5NGY5LTIwZDMtNDE5Mi1iM2EwLWU4OWYyY2VmNGMwOS5wbmciLCJpYXQiOjE3MDU2MTQ2MjYsImV4cCI6MTcwNjIxOTQyNn0.jL47lxeseLjvHy6ydwopnMrMOMPGhv9B2e1Cz-pATXs
+
+{
+    "type": "type",
+    "reportedId": "659db55303f90140552eef90"
+}
+
+###
+
+GET http://localhost:4000/api/reports
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWE0NzgwYzU4YmQ2ZjNiMDM4MmJmNmUiLCJsb2dpbiI6Inppb21pc2xhdyIsImVtYWlsIjoiemlvbWlzbGF3MkBtYWlsLmNvbSIsInBvc3RzIjo1LCJjb21tZW50cyI6MzAsInR5cGUiOiJhZG1pbiIsImxhc3RBY3RpdmUiOiIyMDI0LTAxLTE1VDAwOjEwOjUyLjc0MloiLCJlbnRyeURhdGUiOiIyMDI0LTAxLTE1VDAwOjEwOjUyLjc0MloiLCJwcm9maWxlUGljdHVyZSI6IjMyNTA5NGY5LTIwZDMtNDE5Mi1iM2EwLWU4OWYyY2VmNGMwOS5wbmciLCJpYXQiOjE3MDU2MTQ2MjYsImV4cCI6MTcwNjIxOTQyNn0.jL47lxeseLjvHy6ydwopnMrMOMPGhv9B2e1Cz-pATXs
+
+
+###
+DELETE http://localhost:4000/api/reports/65aabe722aacfe7ec1a41109
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1OWYzMWQ3YjBkNzc1YzI0NTZiMjA2NyIsImxvZ2luIjoibmV3IiwiZW1haWwiOiJ3aXRhbSIsInR5cGUiOiJ1c2VyIiwiaWF0IjoxNzA0OTMxODI1LCJleHAiOjE3MDU1MzY2MjV9.Ok_BDJlvM85x1TFVvRJcZ8GJ3bAbskmzZWbhLvcu1oI
+
