@@ -2,12 +2,14 @@ import React, { useState } from 'react'
 import { useUserContext } from '../contexts/UserContext'
 import axios, { AxiosError, AxiosResponse } from 'axios'
 import { UserObject } from '../interfaces/UserObjectContext'
+import { useCookies } from 'react-cookie'
 
 export default function LoginForm(): JSX.Element {
     const [login, setLogin] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const [message, setMessage] = useState<string>('')
     const { setLoggedIn, setUserInfo } = useUserContext()
+    const [cookies, setCookie] = useCookies()
     function handleLoginChange(event: React.ChangeEvent<HTMLInputElement>): void {
         event.preventDefault()
         setLogin(event.target.value)
@@ -25,6 +27,7 @@ export default function LoginForm(): JSX.Element {
                 setUserInfo({ _id, login, email, posts, comments, type, lastActive, entryDate, profilePicture })
                 localStorage.setItem("token", res.data.token)
                 localStorage.setItem("user", JSON.stringify(res.data.user))
+                setCookie('token', res.data.token, { expires: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000) })
             })
             .catch((err: AxiosError): void => {
                 setLoggedIn(false)

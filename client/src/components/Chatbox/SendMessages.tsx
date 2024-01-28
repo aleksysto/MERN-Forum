@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import ReactQuill from 'react-quill'
 import DOMPurify from 'dompurify'
 import { useUserContext } from '../contexts/UserContext'
+import { useCookies } from 'react-cookie'
 const mqtt = require('precompiled-mqtt')
 const client = mqtt.connect("ws://localhost:8000/mqtt");
 client.subscribe("postMessages", (err: Error) => {
@@ -12,6 +13,7 @@ client.subscribe("postMessages", (err: Error) => {
 export default function MessageEditor(): JSX.Element {
     const [content, setContent] = useState<string>('')
     const [errors, setErrors] = useState<null | string>(null)
+    const [cookies, setCookie] = useCookies()
     const { userInfo, loggedIn } = useUserContext()
     function handleQuillChange(value: string): void {
 
@@ -20,16 +22,17 @@ export default function MessageEditor(): JSX.Element {
         } else {
             setErrors(null)
         }
-
+        console.log(cookies.token)
         setContent(value)
     }
+
 
     function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault()
         if (!errors) {
             const sanitizedContent: string = DOMPurify.sanitize(content)
             const submitMessage = {
-                token: localStorage.getItem('token'),
+                token: cookies.token,
                 content: sanitizedContent,
                 author: userInfo.login,
                 userId: userInfo._id,

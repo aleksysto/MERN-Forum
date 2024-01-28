@@ -23,6 +23,7 @@ import AdminProvider from './components/contexts/AdminContext';
 import AdminRoute from './components/utils/AdminRoute';
 import MainPage from './components/MainPage';
 import UserPage from './components/UserPage/UserPage';
+import { CookiesProvider } from 'react-cookie';
 
 const root: Root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -116,9 +117,11 @@ const router = createBrowserRouter([
 
 root.render(
   <React.StrictMode>
-    <UserProvider>
-      <RouterProvider router={router} />
-    </UserProvider>
+    <CookiesProvider>
+      <UserProvider>
+        <RouterProvider router={router} />
+      </UserProvider>
+    </CookiesProvider>
   </React.StrictMode>
 );
 

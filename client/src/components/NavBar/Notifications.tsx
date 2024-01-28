@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useUserContext } from '../contexts/UserContext';
 import DateCreator from '../DateCreator/DateCreator';
+import { useCookies } from 'react-cookie';
 const mqtt = require('precompiled-mqtt')
 const client = mqtt.connect("ws://localhost:8000/mqtt");
 client.subscribe("dataNotifs", (err: Error) => {
@@ -13,8 +14,9 @@ export default function Notifications() {
     const { userInfo } = useUserContext()
     const [display, setDisplay] = useState<boolean>(false)
     const [notifs, setNotifs] = useState([])
+    const [cookies, setCookie] = useCookies()
     function deleteNotif(id: string) {
-        client.publish("deleteNotifs", JSON.stringify({ id: id, token: localStorage.getItem('token'), userId: userInfo._id }))
+        client.publish("deleteNotifs", JSON.stringify({ id: id, token: cookies.token, userId: userInfo._id }))
     }
 
     useEffect(() => {

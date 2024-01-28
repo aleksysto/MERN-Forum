@@ -7,9 +7,11 @@ import { CommentObject } from '../interfaces/PostComments'
 import { EditedComment, EditCommentProps } from '../interfaces/EditorComponent'
 import { CommentsDispatch, useCommentsDispatch } from '../reducers/stores/store'
 import { getComments } from '../reducers/actions/CommentActions'
+import { useCookies } from 'react-cookie'
 export default function EditComment({ setMessage, comment, setEditing }: EditCommentProps): JSX.Element {
     const [content, setContent] = useState<string>(comment.content)
     const [errors, setErrors] = useState<null | string>(null)
+    const [cookies, setCookie] = useCookies()
     const dispatch: CommentsDispatch = useCommentsDispatch()
     const token: string | null = localStorage.getItem('token')
     function handleQuillChange(value: string, delta: DeltaStatic, source: Sources, editor: UnprivilegedEditor): void {
@@ -53,7 +55,7 @@ export default function EditComment({ setMessage, comment, setEditing }: EditCom
             const submitComment: EditedComment = {
                 content: sanitizedContent
             }
-            axios.patch(`http://localhost:4000/api/comments/id/${comment._id}`, submitComment, { headers: { 'Authorization': `${token as string}` } })
+            axios.patch(`http://localhost:4000/api/comments/id/${comment._id}`, submitComment, { headers: { 'Authorization': cookies.token } })
                 .then((res: AxiosResponse<{ message: string, comment: CommentObject }>): void => {
                     setMessage(res.data.message)
                     setEditing(false)

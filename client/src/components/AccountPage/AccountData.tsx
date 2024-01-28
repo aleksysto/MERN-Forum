@@ -3,8 +3,10 @@ import { useUserContext } from '../contexts/UserContext'
 import { UserObject } from '../interfaces/UserObjectContext'
 import AccountTableRow from './AccountTableRow'
 import UserPostList from '../UserPage/UserPostList'
+import { useCookies } from 'react-cookie'
 export default function AccountData(): JSX.Element {
     const { userInfo } = useUserContext()
+    const [cookies, setCookie] = useCookies()
     const { login, email, posts, comments, lastActive, entryDate } = userInfo
     const mapData = { login, email, posts, comments, lastActive, entryDate }
     const avatarUrl: string = `http://localhost:4000/api/getImage/${userInfo.profilePicture}`
@@ -27,6 +29,10 @@ export default function AccountData(): JSX.Element {
                                     />
                                 ) : null
                             })}
+                            <tr key={984532}>
+                                <th>Your visits:</th>
+                                <td>{cookies.visits}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

@@ -23,6 +23,7 @@
     "mqtt": "^5.3.5",
     "precompiled-mqtt": "^4.3.14-beta",
     "react": "^18.2.0",
+    "react-cookie": "^7.0.2",
     "react-dom": "^18.2.0",
     "react-quill": "^2.0.0",
     "react-redux": "^9.1.0",
